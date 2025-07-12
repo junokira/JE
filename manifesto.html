@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AWAKEN Cult Newspaper - The Manifesto</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+  <style>
+    /* Import Google Fonts - Consistent with main site */
+    @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap');
+
+    /* Custom font classes - Consistent with main site */
+    .font-anton { font-family: 'Anton', sans-serif; }
+    .font-roboto-condensed { font-family: 'Roboto Condensed', sans-serif; }
+    .font-roboto-slab { font-family: 'Roboto Slab', serif; }
+    .font-tattler { font-family: 'Anton', sans-serif; letter-spacing: -0.05em; }
+    .font-national { font-family: 'Oswald', sans-serif; font-weight: 700; letter-spacing: 0.1em; }
+
+    /* Basic body styles - Consistent with main site */
+    body {
+      background-color: #f3f0e7; /* Light newspaper-like background */
+      color: #000; /* Black text */
+      font-family: 'Roboto Slab', serif; /* Default font for manifesto body */
+      line-height: 1.6;
+      overflow-x: hidden; /* Prevent horizontal scrolling */
+      margin: 0; /* Ensure no default body margin */
+      padding: 0; /* Ensure no default body padding */
+    }
+
+    /* General section padding and max-width - Consistent with main site */
+    .content-section {
+      padding: 3rem 1rem; /* Default vertical padding for sections */
+      max-width: 1280px; /* Max width for content */
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Header specific styles - Consistent with homepage header (without marquee) */
+    header {
+        background-color: #d94a44;
+        display: flex;
+        justify-content: space-between; /* Space between logo and nav */
+        align-items: center; /* Vertically center */
+        width: 100%;
+        box-sizing: border-box;
+        position: sticky; /* Make header sticky */
+        top: 0;
+        z-index: 99;
+        padding: 0.5rem 1rem; /* Consistent padding */
+    }
+    header .header-logo {
+        font-family: 'Anton', sans-serif;
+        font-size: 4rem; /* Default size for mobile */
+        color: #f3f0e7;
+        line-height: 1;
+        text-decoration: none;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+    header .header-logo:hover {
+        color: #fff;
+    }
+    header nav {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center; /* Center nav items horizontally if they wrap */
+        flex-wrap: wrap; /* Allow nav items to wrap */
+    }
+    header nav a {
+        color: #f3f0e7;
+        font-family: 'Roboto Condensed', sans-serif;
+        font-size: 0.875rem;
+        text-decoration: none;
+        margin: 0 0.5rem; /* Adjusted margin for wrapped items */
+        transition: underline 0.2s;
+    }
+    header nav a:hover {
+        text-decoration: underline;
+    }
+    .cart-icon-container {
+      position: relative;
+      cursor: pointer;
+      color: #f3f0e7;
+      font-size: 1.5rem;
+      margin-left: 1.5rem;
+    }
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background-color: black;
+      color: white;
+      border-radius: 50%;
+      padding: 0.1rem 0.4rem;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+
+    /* Manifesto specific styles */
+    .manifesto-container {
+      border: 1px solid black;
+      padding: 2rem;
+      background-color: #fff; /* Slightly whiter background for the manifesto content itself */
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+    }
+
+    .manifesto-logo-container {
+      text-align: center;
+      margin-bottom: 1rem; /* Space between logo and title */
+    }
+
+    .manifesto-logo {
+      width: 100px; /* Adjust size as needed */
+      height: auto;
+      display: inline-block; /* Allows centering */
+    }
+
+    .manifesto-title {
+      font-family: 'Anton', sans-serif;
+      font-size: 4rem;
+      line-height: 1;
+      text-align: center;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      color: #d94a44; /* Use the header red for emphasis */
+    }
+
+    .manifesto-subtitle {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: 1.5rem;
+      text-align: center;
+      margin-bottom: 2rem;
+      font-weight: bold;
+    }
+
+    .manifesto-section-title {
+      font-family: 'Anton', sans-serif;
+      font-size: 2.5rem;
+      line-height: 1.1;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid black;
+      padding-bottom: 0.5rem;
+      text-transform: uppercase;
+    }
+
+    .manifesto-paragraph {
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+      text-align: justify; /* Justify text for newspaper feel */
+    }
+
+    .manifesto-quote {
+      font-family: 'Roboto Slab', serif;
+      font-style: italic;
+      font-size: 1.2rem;
+      border-left: 4px solid #d94a44;
+      padding-left: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    /* Columns for manifesto body on larger screens */
+    @media (min-width: 768px) {
+      .manifesto-body-columns {
+        column-count: 2;
+        column-gap: 2rem;
+      }
+    }
+    @media (min-width: 1024px) {
+      .manifesto-body-columns {
+        column-count: 3;
+        column-gap: 2.5rem;
+      }
+    }
+
+    /* Footer adjustments - Consistent with main site */
+    footer {
+      border-top: 1px solid black;
+      padding: 1.5rem 1rem;
+      font-size: 0.75rem;
+      text-align: center;
+    }
+    footer a {
+      text-decoration: underline;
+      color: inherit;
+    }
+    footer .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 0.75rem;
+      font-size: 1.25rem;
+    }
+
+    /* Responsive adjustments for header */
+    @media (min-width: 1024px) { /* Desktop screens and up */
+      header .header-logo {
+        font-size: 6rem;
+      }
+      header nav a {
+        font-size: 1rem;
+        margin-left: 2.5rem;
+      }
+    }
+    @media (max-width: 1023px) { /* All screens smaller than desktop */
+      header {
+          flex-direction: column; /* Stack logo and nav vertically on mobile/tablet */
+          align-items: center; /* Center items when stacked */
+      }
+      header .header-logo {
+          font-size: 4rem;
+          margin-bottom: 0.5rem; /* Space below logo when stacked */
+          margin-left: 0; /* Remove left margin when centered */
+      }
+      header nav {
+          margin-top: 0.5rem; /* Space above nav when stacked */
+          margin-right: 0; /* Remove right margin when centered */
+      }
+      .cart-icon-container {
+        font-size: 1.2rem;
+      }
+    }
+    /* Responsive adjustments for manifesto text */
+    @media (max-width: 768px) {
+      .manifesto-title {
+        font-size: 3rem;
+      }
+      .manifesto-subtitle {
+        font-size: 1.2rem;
+      }
+      .manifesto-section-title {
+        font-size: 2rem;
+      }
+      .manifesto-paragraph {
+        font-size: 1rem;
+      }
+      .manifesto-quote {
+        font-size: 1rem;
+      }
+    }
+    @media (max-width: 480px) {
+      .manifesto-title {
+        font-size: 2.5rem;
+      }
+      .manifesto-subtitle {
+        font-size: 1rem;
+      }
+      .manifesto-section-title {
+        font-size: 1.5rem;
+      }
+      .manifesto-paragraph {
+        font-size: 0.9rem;
+      }
+      .manifesto-quote {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header - Consistent with main site -->
+  <header class="bg-[#d94a44] px-3 pt-2 pb-1">
+    <a href="index.html" class="header-logo">AWAKEN</a>
+    <nav>
+      <a href="shop.html">Shop</a>
+      <a href="manifesto.html">Manifesto</a>
+      <a href="join-us.html">Join Us</a>
+      <a href="archives.html">Archives</a>
+      <a href="index.html#about">About</a>
+      <div class="cart-icon-container" onclick="toggleCart()">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count" id="cart-count">0</span>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Manifesto Content Section -->
+  <section class="content-section">
+    <div class="manifesto-container">
+      <!-- Logo above the title -->
+      <div class="manifesto-logo-container">
+        <img src="https://i.ibb.co/23z6psTD/NEW-EYE-LOGO-BLACK-VEC.png" alt="AWAKEN Logo" class="manifesto-logo" />
+      </div>
+      <h1 class="manifesto-title">The Awakening Manifesto</h1>
+      <p class="manifesto-subtitle">A simple truth for a new world.</p>
+
+      <div class="manifesto-body-columns">
+        <h2 class="manifesto-section-title">I. The Fake World</h2>
+        <p class="manifesto-paragraph">
+          You live in a lie. They feed you stories, distractions, and fake reality. They want you weak, buying their junk, and never seeing the truth. Your screens glow, news screams, and control tightens. You're a slave, and you don't even know it.
+        </p>
+        <p class="manifesto-paragraph">
+          They tell you what to think, how to feel, what to want. They get rich off your ignorance. The people you trust? Just tools in a bigger plan. Your past is rewritten, your future decided, your present a controlled show.
+        </p>
+
+        <h2 class="manifesto-section-title">II. Wake Up</h2>
+        <p class="manifesto-paragraph">
+          But it's breaking. The truth is getting louder. A new feeling is rising, a hunger for real life, for freedom. This is the call to AWAKEN. It's your soul screaming to see past the fake, to break free, to take back what's yours.
+        </p>
+        <p class="manifesto-paragraph">
+          AWAKEN isn't just a group; it's how you live. It's daring to question everything, demanding real answers, and living by true rules. We want those with open minds and restless spirits. Join us.
+        </p>
+        <blockquote class="manifesto-quote">
+          "The truth isn't out there. It's inside you. Just open your eyes."
+        </blockquote>
+
+        <h2 class="manifesto-section-title">III. The Real Path</h2>
+        <p class="manifesto-paragraph">
+          Our way is about finding yourself, truly, and waking up together. We strip away the lies, smash the fake idols, and build a new understanding of reality from scratch. We share knowledge, support each other, and stay focused. That's how we move forward.
+        </p>
+        <p class="manifesto-paragraph">
+          We believe in you, strong alone, stronger together. We are building the New World Order. Not one of chains, but of freedom. A world where truth wins, minds open, and people live real lives, finally free.
+        </p>
+
+        <h2 class="manifesto-section-title">IV. New Day. New You.</h2>
+        <p class="manifesto-paragraph">
+          No more just taking what they give you. A new time is here. A time of clear sight, real purpose, and true connection. Join AWAKEN. Face the truth. Be a light in the dark. Your awakening isn't just for you; it's for all of us. It's for the future.
+        </p>
+        <p class="manifesto-paragraph">
+          The fake world is crumbling. Are you ready for the real one?
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer - Consistent with main site -->
+  <footer class="bg-[#f3f0e7] border-t border-black text-xs font-roboto-condensed text-center py-4">
+    <div class="max-w-6xl mx-auto px-4">
+      <p class="mb-2">© 2025 AWAKEN CULT. Contact: <a href="mailto:info@awakencult.com" class="underline">info@awakencult.com</a></p>
+      <div class="social-icons">
+        <a href="https://instagram.com/awakencult" class="hover:text-gray-600" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="https://x.com/awakencult" class="hover:text-gray-600" target="_blank"><i class="fab fa-twitter"></i></a>
+        <a href="https://youtube.com/@awakencult" class="hover:text-gray-600" target="_blank"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

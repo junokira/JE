@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AWAKEN Cult Newspaper - Underground Market</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+  <style>
+    /* Import Google Fonts - Consistent with main site */
+    @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Playfair+Display&family=Verdana:wght@400;700&display=swap'); /* Added homepage fonts */
+
+    /* Custom font classes - Consistent with main site */
+    .font-anton { font-family: 'Anton', sans-serif; }
+    .font-roboto-condensed { font-family: 'Roboto Condensed', sans-serif; }
+    .font-roboto-slab { font-family: 'Roboto Slab', serif; }
+    .font-tattler { font-family: 'Anton', sans-serif; letter-spacing: -0.05em; }
+    .font-national { font-family: 'Oswald', sans-serif; font-weight: 700; letter-spacing: 0.1em; }
+    /* Homepage specific fonts */
+    .font-alfa-slab-one { font-family: 'Alfa Slab One', cursive; }
+    .font-playfair-display { font-family: 'Playfair Display', serif; }
+    .font-verdana { font-family: Verdana, sans-serif; }
+
+
+    /* Basic body styles - Consistent with main site */
+    body {
+      background-color: #f3f0e7; /* Light newspaper-like background */
+      color: #000; /* Black text */
+      font-family: 'Roboto Condensed', sans-serif; /* Default font for body */
+      line-height: 1.6;
+      overflow-x: hidden; /* Prevent horizontal scrolling */
+      margin: 0; /* Ensure no default body margin */
+      padding: 0; /* Ensure no default body padding */
+    }
+
+    /* Marquee animation - Consistent with homepage */
+    @keyframes marquee {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(var(--marquee-distance)); }
+    }
+    .marquee-container {
+        width: 100%;
+        overflow: hidden;
+        background-color: black;
+        color: white;
+        font-family: 'Roboto Condensed', sans-serif;
+        padding: 0.25rem 0;
+    }
+    .marquee-content-wrapper {
+        display: flex;
+        width: max-content;
+        animation: marquee var(--marquee-speed) linear infinite;
+    }
+    .marquee-text {
+        white-space: nowrap;
+        padding-right: 2rem;
+        flex-shrink: 0;
+    }
+
+    /* General section padding and max-width - Consistent with main site */
+    .content-section {
+      padding: 3rem 1rem; /* Default vertical padding for sections */
+      max-width: 1280px; /* Max width for content */
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Header specific styles - Consistent with main site */
+    header {
+        background-color: #d94a44;
+        display: flex;
+        flex-direction: column; /* Stack logo/nav and marquee vertically */
+        width: 100%;
+        box-sizing: border-box;
+        position: sticky; /* Make header sticky */
+        top: 0;
+        z-index: 99; /* Above other content */
+    }
+    .header-top-row {
+        padding: 0.5rem 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    header .header-logo {
+        font-family: 'Anton', sans-serif;
+        font-size: 4rem;
+        color: #f3f0e7;
+        line-height: 1;
+        text-decoration: none;
+        cursor: pointer;
+        transition: color 0.2s;
+        margin-left: 1rem;
+    }
+    header .header-logo:hover {
+        color: #fff;
+    }
+    header nav {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        margin-right: 1rem;
+    }
+    header nav a {
+        color: #f3f0e7;
+        font-family: 'Roboto Condensed', sans-serif;
+        font-size: 0.875rem;
+        text-decoration: none;
+        margin-left: 1.5rem;
+        transition: underline 0.2s;
+    }
+    header nav a:hover {
+        text-decoration: underline;
+    }
+    .cart-icon-container {
+      position: relative;
+      cursor: pointer;
+      color: #f3f0e7;
+      font-size: 1.5rem;
+      margin-left: 1.5rem;
+    }
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background-color: black;
+      color: white;
+      border-radius: 50%;
+      padding: 0.1rem 0.4rem;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+
+    /* Shop Page Hero Section */
+    .shop-hero-section {
+      background-color: #000;
+      color: #f3f0e7;
+      padding: 4rem 1rem;
+      text-align: center;
+      /* Removed border-bottom: 2px solid #d94a44; */
+    }
+    .shop-hero-title {
+      font-family: 'Anton', sans-serif;
+      font-size: 5rem;
+      line-height: 1;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .shop-hero-subtitle {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: 1.5rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* New: Image Grid below hero text (on black background) - Adjusted for mobile */
+    .underground-market-image-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr); /* Always 3 columns */
+      gap: 0; /* No gap between images */
+      padding: 0 0.5rem; /* Horizontal padding */
+      width: 100%;
+      background-color: black; /* Black background for this section */
+      box-sizing: border-box; /* Include padding in width */
+    }
+    .underground-market-image-grid img {
+      width: 100%;
+      height: auto;
+      display: block; /* Remove extra space below image */
+      object-fit: cover; /* Ensure images cover the area */
+      flex-shrink: 0; /* Prevent images from shrinking */
+    }
+    /* Removed old media query for this grid as it's now universal */
+
+
+    .product-grid-section {
+      padding-top: 3rem;
+    }
+
+    /* Product Card Styles - NOW EXACTLY MATCHING HOMEPAGE .shop-product-card */
+    .product-card {
+      border: 1px solid black; /* Matches homepage */
+      padding: 1rem; /* Matches homepage */
+      text-align: center; /* Matches homepage */
+      display: flex; /* Matches homepage */
+      flex-direction: column; /* Matches homepage */
+      justify-content: space-between; /* Matches homepage */
+      align-items: center; /* Matches homepage */
+      background: transparent; /* Matches homepage */
+    }
+
+    /* Apply aspect-square only on large screens and up */
+    @media (min-width: 1024px) { /* Desktop screens and up */
+      .product-card {
+        aspect-ratio: 1 / 1; /* Make cards square on desktop - Matches homepage */
+      }
+    }
+
+    .product-card .product-image-container {
+      width: 100%; /* Matches homepage */
+      height: auto; /* Default for mobile/tablet, allows height to adjust - Matches homepage */
+      min-height: 12rem; /* Minimum height for better mobile/tablet appearance - Matches homepage */
+      display: flex; /* Matches homepage */
+      align-items: center; /* Matches homepage */
+      justify-content: center; /* Matches homepage */
+      overflow: hidden; /* Matches homepage */
+      flex-grow: 1; /* Allow container to grow to fill space - Matches homepage */
+    }
+
+    @media (min-width: 1024px) { /* Desktop screens and up */
+      .product-card .product-image-container {
+        height: 16rem; /* Fixed height for desktop to fit square card - Matches homepage */
+        min-height: unset; /* Remove min-height override for desktop - Matches homepage */
+      }
+    }
+
+    .product-card img {
+      max-width: 100%; /* Matches homepage */
+      max-height: 100%; /* Ensure image fits within container without cropping - Matches homepage */
+      height: auto; /* Ensure image height adjusts proportionally - Matches homepage */
+      object-fit: contain; /* Ensure the entire image is visible - Matches homepage */
+      margin: 0 auto; /* Center image - Matches homepage */
+      display: block; /* Ensure it behaves as block for full width - Matches homepage */
+    }
+
+    .product-card h3 {
+      font-family: 'Arial Black', sans-serif; /* Matches homepage */
+      font-size: 1.25rem; /* Equivalent to homepage's text-xl */
+      font-weight: bold; /* Matches homepage */
+      margin-top: 0.75rem; /* Equivalent to homepage's mt-3 */
+      margin-bottom: 0.25rem; /* Adjusted for consistent spacing */
+    }
+    .product-card p.price { /* Specific for price paragraph */
+      font-family: 'Arial Black', sans-serif; /* Matches homepage */
+      font-size: 0.875rem; /* Equivalent to homepage's text-sm */
+      font-weight: bold; /* Matches homepage */
+      color: black; /* Keep black as requested */
+      margin-bottom: 0.5rem; /* Equivalent to homepage's mb-2 */
+    }
+    .product-card p { /* General paragraph in card */
+        margin: 0.5rem 0; /* Space for product name/price */
+        line-height: 1.3;
+        color: #111; /* Ensure text color is dark */
+    }
+
+
+    .product-card .view-artifact-btn {
+      background-color: black; /* Matches homepage */
+      color: white; /* Matches homepage */
+      padding: 0.5rem 1rem; /* Matches homepage */
+      font-weight: bold; /* Matches homepage */
+      text-transform: uppercase; /* Matches homepage */
+      font-size: 0.875rem; /* Matches homepage */
+      border: none; /* Matches homepage */
+      cursor: pointer; /* Matches homepage */
+      transition: background-color 0.2s; /* Matches homepage */
+      width: calc(100% - 2rem); /* Adjusted width to be less long, similar to Shop All button - Matches homepage */
+      max-width: 150px; /* Max width for consistency - Matches homepage */
+      margin: 0.5rem auto 0 auto; /* Center button and add top margin - Matches homepage */
+      display: block; /* Ensure it takes full width of its container - Matches homepage */
+    }
+    .product-card .view-artifact-btn:hover {
+      background-color: #333; /* Matches homepage */
+    }
+
+
+    /* New Newspaper Article/Propaganda Section Styles */
+    .newspaper-article-card {
+      border: 1px solid black;
+      padding: 1.5rem;
+      background-color: #fff;
+      text-align: left;
+      margin-bottom: 2rem;
+      border-radius: 0; /* Ensure sharp corners */
+    }
+    .newspaper-article-card .headline {
+      font-family: 'Anton', sans-serif;
+      font-size: 2.2rem;
+      line-height: 1.1;
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      color: #d94a44;
+    }
+    .newspaper-article-card .sub-headline {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: 1rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    .newspaper-article-card img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 0; /* Ensure sharp corners */
+    }
+    .newspaper-article-card p {
+      font-family: 'Roboto Slab', serif;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      text-align: justify;
+    }
+    .newspaper-article-card .read-more {
+      display: inline-block;
+      margin-top: 1rem;
+      font-weight: bold;
+      color: black;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    /* Cart Overlay - Consistent with main site */
+    .cart-overlay {
+      position: fixed;
+      top: 0;
+      right: -400px; /* Hidden off-screen */
+      width: 350px; /* Fixed width for the cart */
+      height: 100%;
+      background-color: #f3f0e7;
+      border-left: 2px solid black;
+      box-shadow: -4px 0 8px rgba(0,0,0,0.2);
+      z-index: 999;
+      transition: right 0.3s ease-in-out;
+      display: flex;
+      flex-direction: column;
+    }
+    .cart-overlay.active {
+      right: 0; /* Slide in */
+    }
+    .cart-header {
+      background-color: black;
+      color: white;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Anton', sans-serif;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+    }
+    .cart-close-button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    .cart-items {
+      flex-grow: 1;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+    .cart-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px dashed #ccc;
+      padding-bottom: 0.5rem;
+    }
+    .cart-item-image {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      margin-right: 0.75rem;
+      border: 1px solid #eee;
+    }
+    .cart-item-details {
+      flex-grow: 1;
+      text-align: left;
+    }
+    .cart-item-details h4 {
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+    .cart-item-details p {
+      font-size: 0.85rem;
+      color: #555;
+    }
+    .cart-item-remove {
+      background-color: #d94a44;
+      color: white;
+      border: none;
+      padding: 0.3rem 0.6rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+      border-radius: 0; /* Ensure sharp corners */
+    }
+    .cart-summary {
+      padding: 1rem;
+      border-top: 2px solid black;
+      font-family: 'Roboto Slab', serif;
+    }
+    .cart-summary p {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+    .cart-checkout-btn {
+      background-color: #d94a44;
+      color: white;
+      padding: 1rem;
+      width: 100%;
+      text-align: center;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      border-radius: 0; /* Ensure sharp corners */
+    }
+    .cart-checkout-btn:hover {
+      background-color: #b92a1e;
+    }
+    .empty-cart-message {
+      text-align: center;
+      padding: 2rem;
+      color: #777;
+    }
+
+    /* Footer adjustments - Consistent with main site */
+    footer {
+      border-top: 1px solid black;
+      padding: 1.5rem 1rem;
+      font-size: 0.75rem;
+      text-align: center;
+    }
+    footer a {
+      text-decoration: underline;
+      color: inherit;
+    }
+    footer .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 0.75rem;
+      font-size: 1.25rem;
+    }
+
+    /* Responsive adjustments for header */
+    @media (min-width: 1024px) { /* Desktop screens and up */
+      header .header-logo {
+          font-size: 6rem;
+      }
+      header nav a {
+          font-size: 1rem;
+          margin-left: 2.5rem;
+      }
+      /* Desktop 3-column grid for products */
+      #product-list {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      /* Propaganda Posters Section - Desktop */
+      .propaganda-poster-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem; /* Gap between posters on desktop */
+      }
+      .propaganda-poster-card {
+        border: 1px solid black;
+        padding: 0.75rem;
+        background-color: #fff;
+        aspect-ratio: 2 / 3; /* Maintain aspect ratio on desktop */
+      }
+      .propaganda-poster-card img {
+        margin-bottom: 0.5rem;
+        border: none;
+      }
+      .propaganda-poster-card p {
+        padding: 0; /* Remove horizontal padding on desktop */
+      }
+    }
+    @media (max-width: 1023px) { /* All screens smaller than desktop */
+      header .header-top-row {
+          flex-direction: column;
+          padding: 0.5rem 1rem;
+      }
+      header .header-logo {
+          font-size: 4rem;
+          margin-left: 0;
+          margin-bottom: 0.5rem;
+      }
+      header nav {
+          text-align: center;
+          width: 100%;
+          margin-top: 0.5rem;
+          margin-right: 0;
+          justify-content: center;
+          flex-wrap: wrap;
+      }
+      header nav a {
+          font-size: 0.875rem;
+          margin: 0 0.5rem;
+      }
+      .cart-icon-container {
+          font-size: 1.2rem;
+          margin-left: 0.5rem;
+      }
+      .marquee-container {
+          top: auto;
+          position: relative;
+      }
+      .shop-hero-title {
+        font-size: 3rem;
+      }
+      .shop-hero-subtitle {
+        font-size: 1.2rem;
+      }
+      /* Mobile 1-column grid for products */
+      #product-list {
+        grid-template-columns: 1fr; /* Single column for mobile */
+      }
+      .product-card {
+        padding: 0.75rem; /* Matches homepage .shop-item padding */
+        width: 100%; /* Take full width of its container */
+        margin: 0 auto; /* Center the card */
+        aspect-ratio: auto; /* Remove fixed aspect ratio for mobile */
+        height: auto; /* Allow height to adjust */
+      }
+      .product-card .product-image-container {
+        height: auto; /* Allow height to adjust */
+        min-height: 12rem; /* Keep a minimum height for images */
+        margin-bottom: 0.5rem; /* More space below image */
+      }
+      .product-card h3 {
+        font-size: 1rem; /* Matches homepage .shop-item p font size */
+        margin-bottom: 0.25rem; /* Adjusted margin */
+      }
+      .product-card .price {
+        font-size: 1rem; /* Matches homepage .shop-item p font size */
+        margin-bottom: 0.5rem; /* Adjusted margin */
+      }
+      .product-card .view-artifact-btn {
+        font-size: 0.9rem; /* Matches homepage button font size */
+        padding: 0.4rem 1rem; /* Matches homepage button padding */
+        width: fit-content; /* Make button width fit content */
+      }
+      .newspaper-article-card .headline {
+        font-size: 1.8rem;
+      }
+      .newspaper-article-card .sub-headline {
+        font-size: 0.9rem;
+      }
+      .newspaper-article-card p {
+        font-size: 0.85rem;
+      }
+      .cart-overlay {
+        width: 100%; /* Full width on mobile */
+        right: -100vw;
+      }
+      .cart-overlay.active {
+        right: 0;
+      }
+      /* Propaganda Posters Section - Mobile */
+      .propaganda-poster-grid {
+        grid-template-columns: 1fr; /* Single column for mobile */
+        gap: 1.5rem; /* Gap between posters on mobile */
+      }
+      .propaganda-poster-card {
+        border: 1px solid black; /* Re-add border for mobile */
+        padding: 0.75rem; /* Re-add padding for mobile */
+        background-color: #fff; /* Re-add background for mobile */
+        aspect-ratio: auto; /* Remove fixed aspect ratio on mobile */
+        height: auto; /* Allow height to adjust based on content */
+      }
+      .propaganda-poster-card img {
+        margin-bottom: 0.5rem; /* Re-add bottom margin for image */
+        border: 1px solid #ccc; /* Add subtle border to image */
+      }
+      .propaganda-poster-card p {
+        padding: 0; /* No horizontal padding on caption */
+        margin-top: 0.5rem; /* Keep some space for caption */
+      }
+    }
+
+    /* Very small mobile adjustments (matching homepage 480px breakpoint) */
+    @media (max-width: 480px) {
+      .product-card {
+        padding: 0.5rem; /* Matches homepage .shop-item padding */
+      }
+      .product-card h3 {
+        font-size: 0.9rem; /* Matches homepage .shop-item p font size */
+      }
+      .product-card .price {
+        font-size: 0.9rem; /* Matches homepage .shop-item p font size */
+      }
+      .product-card .view-artifact-btn {
+        font-size: 0.8rem; /* Matches homepage button font size */
+        padding: 0.4rem 1rem; /* Matches homepage button padding */
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header - Consistent with main site -->
+  <header>
+    <div class="header-top-row">
+      <a href="index.html" class="header-logo">AWAKEN</a>
+      <nav>
+        <a href="shop.html">Shop</a>
+        <a href="manifesto.html">Manifesto</a>
+        <a href="join-us.html">Join Us</a>
+        <a href="archives.html">Archives</a>
+        <a href="index.html#about">About</a>
+        <div class="cart-icon-container" onclick="toggleCart()">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="cart-count">0</span>
+        </div>
+      </nav>
+    </div>
+    <div class="marquee-container">
+      <div class="marquee-content-wrapper">
+        <span class="marquee-text">ENLIGHTENMENT IS A CHOICE • JOIN THE CULT • AWAKEN • THE NEW WORLD ORDER IS HERE • BUY THE MESSAGE • BURN THE MASK • REVEAL THE TRUTH •</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Shop Hero Section -->
+  <section class="shop-hero-section">
+    <h1 class="shop-hero-title font-tattler">UNDERGROUND MARKET</h1>
+    <p class="shop-hero-subtitle">
+      Acquire the artifacts of awakening. Each garment, each symbol, a step closer to true perception.
+      These are not mere clothes; they are declarations.
+    </p>
+  </section>
+
+  <!-- New Image Grid below Hero Section (on black background) -->
+  <section class="underground-market-image-grid">
+    <img src="https://i.ibb.co/Yrm6S69/awaken-new-1.webp" alt="Market Image 1" />
+    <img src="https://i.ibb.co/K1p3Mhr/awakewn-needs-you.webp" alt="Market Image 2" />
+    <img src="https://i.ibb.co/N2ZQQh1F/mcga-v8.webp" alt="Market Image 3" />
+  </section>
+
+  <!-- Product Grid Section -->
+  <section class="content-section product-grid-section">
+    <h2 class="text-3xl font-anton text-center mb-8">Latest Revelations</h2>
+    <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+      <!-- Product cards will be injected here by JavaScript -->
+    </div>
+  </section>
+
+  <!-- New Article Section: Dispatches from the Field -->
+  <section class="content-section">
+    <h2 class="text-3xl font-anton text-center mb-8">Dispatches From The Field</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="newspaper-article-card">
+        <h3 class="headline">The Veil of Digital Silence</h3>
+        <p class="sub-headline">Reports from Sector 4 indicate increased algorithmic suppression of truth-bearing content.</p>
+        <img src="https://placehold.co/600x400/808080/FFF?text=DIGITAL+SILENCE" alt="Digital Silence Graphic" />
+        <p>
+          Our operatives confirm a disturbing trend: independent channels disseminating unvarnished truths are being systematically de-platformed. The digital realm, once a beacon of free exchange, is now a meticulously curated echo chamber. This suppression directly targets those who question the official narrative, proving the power of the message we carry.
+        </p>
+        <span class="read-more">Read More on the Network &raquo;</span>
+      </div>
+      <div class="newspaper-article-card">
+        <h3 class="headline">New Artifacts Discovered in The Void</h3>
+        <p class="sub-headline">Mysterious garments emerge, imbued with properties of resistance and clarity.</p>
+        <img src="https://placehold.co/600x400/A0A0A0/FFF?text=MYSTERIOUS+GARMENTS" alt="Mysterious Garments Graphic" />
+        <p>
+          Deep within the hidden folds of the unseen, new apparel has surfaced. These are not mere textiles; they are conduits. Each stitch, each fiber, resonates with the frequency of awakening. Early wearers report heightened senses and a profound sense of detachment from the illusions of the old world. These artifacts are now available for acquisition.
+        </p>
+        <span class="read-more">Explore New Artifacts &raquo;</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Product / Editorial Showcase -->
+  <section class="content-section mt-12">
+    <h2 class="text-3xl font-anton text-center mb-8">The Awakened Wardrobe: Featured Artifact</h2>
+    <div class="border border-black p-4 flex flex-col md:flex-row items-center gap-6 bg-white">
+      <div class="md:w-1/2">
+        <img src="https://i.ibb.co/mrTy6Mhw/fake-news-hoodie.webp" alt="Featured Fake News Hoodie" class="w-full h-auto object-cover border border-gray-300" />
+      </div>
+      <div class="md:w-1/2 text-center md:text-left">
+        <h3 class="font-anton text-4xl uppercase mb-3">The "Fake News" Hoodie</h3>
+        <p class="font-roboto-slab text-lg italic mb-4">"They feed you lies. We wear the truth."</p>
+        <p class="font-roboto-condensed text-base mb-4">
+          In an era saturated with manufactured narratives, the "Fake News" Hoodie stands as a defiant emblem of critical thought. Crafted for comfort in the coming storm, its bold declaration is a shield against deception and a beacon for those who question. Join the ranks of the discerning.
+        </p>
+        <button class="bg-black text-white px-6 py-3 font-bold uppercase hover:bg-gray-800 transition-colors" onclick="window.location.href='product-detail.html?id=p2'">Unveil This Truth</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- New Propaganda Poster Section -->
+  <section class="content-section mt-12"> <!-- Reverted to content-section for max-width and padding -->
+    <h2 class="text-3xl font-anton text-center mb-8">Propaganda Dispatches</h2>
+    <div class="propaganda-poster-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"> <!-- Added propaganda-poster-grid and gap -->
+      <div class="propaganda-poster-card">
+        <img src="https://i.ibb.co/Yrm6S69/awaken-new-1.webp" alt="Propaganda Poster 1" />
+        <p class="text-xs font-roboto-condensed mt-2">"The Hand of Truth" - Circulated in Sector 7, 2025.</p>
+      </div>
+      <div class="propaganda-poster-card">
+        <img src="https://i.ibb.co/K1p3Mhr/awakewn-needs-you.webp" alt="Propaganda Poster 2" />
+        <p class="text-xs font-roboto-condensed mt-2">"They Need You Blind" - Found near the Central Spire, 2024.</p>
+      </div>
+      <div class="propaganda-poster-card">
+        <img src="https://i.ibb.co/N2ZQQh1F/mcga-v8.webp" alt="Propaganda Poster 3" />
+        <p class="text-xs font-roboto-condensed mt-2">"Wake Up Now" - Discovered in the Old World Archives, 2023.</p>
+      </div>
+      <div class="propaganda-poster-card">
+        <img src="https://i.ibb.co/rNKgtcW/sunny.png" alt="Propaganda Poster 4" />
+        <p class="text-xs font-roboto-condensed mt-2">"The All-Seeing Eye" - A timeless symbol of vigilance.</p>
+      </div>
+      <div class="propaganda-poster-card">
+        <img src="https://i.ibb.co/Gf1H8NGS/awaken-cultttt.webp" alt="Propaganda Poster 5" />
+        <p class="text-xs font-roboto-condensed mt-2">"Cult of Truth" - Embrace the collective consciousness.</p>
+      </div>
+      <div class="propaganda-poster-card">
+        <img src="https://i.ibb.co/tD3B9Q3/eye-awaken.png" alt="Propaganda Poster 6" />
+        <p class="text-xs font-roboto-condensed mt-2">"Awaken Your Inner Eye" - See beyond the illusion.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Shopping Cart Overlay -->
+  <div id="cart-overlay" class="cart-overlay">
+    <div class="cart-header">
+      <span>Your Artifacts</span>
+      <button class="cart-close-button" onclick="toggleCart()">&times;</button>
+    </div>
+    <div id="cart-items" class="cart-items">
+      <!-- Cart items will be injected here by JavaScript -->
+      <p class="empty-cart-message" id="empty-cart-message">Your cart is empty. Acquire some truth.</p>
+    </div>
+    <div class="cart-summary">
+      <p>Total: <span id="cart-total">$0.00</span></p>
+      <button class="cart-checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout</button>
+    </div>
+  </div>
+
+  <!-- Footer - Consistent with main site -->
+  <footer class="bg-[#f3f0e7] border-t border-black text-xs font-roboto-condensed text-center py-4">
+    <div class="max-w-6xl mx-auto px-4">
+      <p class="mb-2">© 2025 AWAKEN CULT. Contact: <a href="mailto:info@awakencult.com" class="underline">info@awakencult.com</a></p>
+      <div class="social-icons">
+        <a href="https://instagram.com/awakencult" class="hover:text-gray-600" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="https://x.com/awakencult" class="hover:text-gray-600" target="_blank"><i class="fab fa-twitter"></i></a>
+        <a href="https://youtube.com/@awakencult" class="hover:text-gray-600" target="_blank"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Product Data
+    const products = [
+      {
+        id: 'p1',
+        name: 'MCGA Cap',
+        price: 50,
+        image: 'https://i.ibb.co/GvhVTBTc/MCGA-CAP.webp',
+        description: 'Make Cults Great Again. This cap is a bold declaration, a nod to the resurgence of true belief and collective action. Wear it proudly as a member of the AWAKEN movement.',
+        sizes: ['One Size'],
+        lore: "A rallying cry from the early days of the movement, repurposed for the modern awakened."
+      },
+      {
+        id: 'p2',
+        name: 'Fake News Hoodie',
+        price: 150,
+        image: 'https://i.ibb.co/mrTy6Mhw/fake-news-hoodie.webp',
+        description: 'In an era saturated with manufactured narratives, the "Fake News" Hoodie stands as a defiant emblem of critical thought. Crafted for comfort in the coming storm, its bold declaration is a shield against deception and a beacon for those who question. Join the ranks of the discerning.',
+        sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+        lore: "A staple among the truth-seekers, this hoodie was first seen during the 'Information Purge' of 2023."
+      },
+      {
+        id: 'p3',
+        name: 'XTCY Tee',
+        price: 75,
+        image: 'https://i.ibb.co/twNrP2xF/XTCYYYY.webp',
+        description: 'Embrace the euphoria of truth with the XTCY Tee. Crafted for comfort and clarity, this garment is a statement of your awakened state. Limited run for true believers.',
+        sizes: ['S', 'M', 'L'],
+        lore: "Rumored to be inspired by ancient glyphs discovered in the 'Forbidden Archives', promoting heightened awareness."
+      },
+      {
+        id: 'p4',
+        name: 'Visions Hoodie',
+        price: 180,
+        image: 'https://i.ibb.co/JFyXsdVv/vzn-jacket.webp',
+        description: 'Experience clarity with the Visions Hoodie. Its unique design represents the unfolding of hidden realities, offering warmth and comfort as you navigate the complexities of the awakened world.',
+        sizes: ['M', 'L', 'XL', 'XXL'],
+        lore: "This design appeared to our founder in a profound vision, depicting the layers of reality peeling away."
+      },
+      {
+        id: 'p5',
+        name: 'Burn Balaclava',
+        price: 75,
+        image: 'https://i.ibb.co/V0FTWqC1/oberyyy.webp',
+        description: 'Conceal your identity, reveal your true self. The Burn Balaclava is a symbol of rebellion against the system, a statement that you are ready to shed the old world and embrace the new.',
+        sizes: ['One Size'],
+        lore: "First donned by the anonymous 'Shadow Collective' during their silent protests against the illusion."
+      },
+      {
+        id: 'p6',
+        name: 'Awareness Tee',
+        price: 120,
+        image: 'https://i.ibb.co/JRsBZr2d/BURN-BALACLAVAAA.webp',
+        description: 'The Awareness Tee is more than fabric; it\'s a canvas for your expanded consciousness. Featuring intricate designs that hint at deeper truths, it invites inquiry and recognition from fellow awakened souls.',
+        sizes: ['S', 'M', 'L'],
+        lore: "Rumored to be inspired by ancient glyphs discovered in the 'Forbidden Archives', promoting heightened awareness."
+      },
+      {
+        id: 'p7',
+        name: 'Truth Seeker Backpack',
+        price: 90,
+        image: 'https://placehold.co/300x300/A0A0A0/FFF?text=BACKPACK',
+        description: 'Carry your revelations with you. This durable backpack is designed for the journey of truth-seeking, with hidden compartments for your most sacred findings.',
+        sizes: ['One Size'],
+        lore: "Equipped for the long road ahead, used by our scouts in their expeditions for ancient knowledge."
+      },
+      {
+        id: 'p8',
+        name: 'Cipher Gloves',
+        price: 40,
+        image: 'https://placehold.co/300x300/B0B0B0/FFF?text=GLOVES',
+        description: 'Protect your hands as you dismantle the old world. These gloves offer comfort and grip, perfect for handling the delicate threads of reality.',
+        sizes: ['S', 'M', 'L'],
+        lore: "Worn by code-breakers and truth-weavers, essential for intricate work in the digital realm."
+      },
+      {
+        id: 'p9',
+        name: 'Enlightenment Mug',
+        price: 25,
+        image: 'https://placehold.co/300x300/C0C0C0/FFF?text=MUG',
+        description: 'Start your day with a dose of truth. This mug is inscribed with ancient symbols of awakening, perfect for your morning rituals.',
+        sizes: ['One Size'],
+        lore: "Used in the daily ceremonies of clarity, helping initiates focus their intentions."
+      },
+      {
+        id: 'p10',
+        name: 'Reality Filter Glasses',
+        price: 60,
+        image: 'https://placehold.co/300x300/D0D0D0/FFF?text=GLASSES',
+        description: 'See the world as it truly is. These glasses are designed to cut through the static and reveal the hidden patterns of control.',
+        sizes: ['One Size'],
+        lore: "Engineered by our perception specialists to aid in the discernment of true reality."
+      },
+      {
+        id: 'p11',
+        name: 'Truth Serum Vial',
+        price: 100,
+        image: 'https://placehold.co/300x300/E0E0E0/FFF?text=VIAL',
+        description: 'A potent concoction designed to unlock dormant memories and accelerate your awakening. Use with caution.',
+        sizes: ['One Size'],
+        lore: "A rare elixir, distilled from the tears of forgotten prophets and the essence of pure truth."
+      },
+      {
+        id: 'p12',
+        name: 'Consciousness Compass',
+        price: 85,
+        image: 'https://placehold.co/300x300/F0F0F0/FFF?text=COMPASS',
+        description: 'Navigate the labyrinth of perception. This compass points not to cardinal directions, but to the true north of your inner being.',
+        sizes: ['One Size'],
+        lore: "An ancient artifact, rediscovered and re-calibrated to guide the awakened through the shifting landscapes of reality."
+      }
+    ];
+
+    let cart = JSON.parse(localStorage.getItem('awakenCart')) || []; // Load cart from local storage
+
+    // Function to render products on the page
+    function renderProducts() {
+      const productListDiv = document.getElementById('product-list');
+      productListDiv.innerHTML = ''; // Clear existing products
+      products.forEach(product => {
+        const productCard = document.createElement('div');
+        productCard.className = 'product-card';
+        // Changed onclick to navigate to product-detail.html
+        productCard.innerHTML = `
+          <div class="product-image-container">
+            <img src="${product.image}" alt="${product.name}" />
+          </div>
+          <h3 class="text-xl font-bold mt-3">${product.name}</h3>
+          <p class="text-sm mb-2">$${product.price.toFixed(2)}</p>
+          <button class="view-artifact-btn" onclick="window.location.href='product-detail.html?id=${product.id}'">Buy Now</button>
+        `;
+        productListDiv.appendChild(productCard);
+      });
+    }
+
+    // Cart Overlay Functions (consistent with other pages)
+    const cartOverlay = document.getElementById('cart-overlay');
+    const cartCountSpan = document.getElementById('cart-count');
+    const cartItemsDiv = document.getElementById('cart-items');
+    const cartTotalSpan = document.getElementById('cart-total');
+    const emptyCartMessage = document.getElementById('empty-cart-message');
+
+    function toggleCart() {
+      cartOverlay.classList.toggle('active');
+    }
+
+    function updateCartDisplay() {
+      cartItemsDiv.innerHTML = ''; // Clear current items
+      let total = 0;
+
+      if (cart.length === 0) {
+        emptyCartMessage.style.display = 'block';
+      } else {
+        emptyCartMessage.style.display = 'none';
+        cart.forEach((item, index) => {
+          const cartItemDiv = document.createElement('div');
+          cartItemDiv.className = 'cart-item';
+          cartItemDiv.innerHTML = `
+            <img src="${item.image}" alt="${item.name}" class="cart-item-image" />
+            <div class="cart-item-details">
+              <h4>${item.name} (${item.size})</h4>
+              <p>$${item.price.toFixed(2)} x ${item.quantity}</p>
+            </div>
+            <button class="cart-item-remove" onclick="removeFromCart(${index})">Remove</button>
+          `;
+          cartItemsDiv.appendChild(cartItemDiv);
+          total += item.price * item.quantity;
+        });
+      }
+
+      cartTotalSpan.textContent = `$${total.toFixed(2)}`;
+      cartCountSpan.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+      localStorage.setItem('awakenCart', JSON.stringify(cart)); // Save cart to local storage
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCartDisplay();
+    }
+
+    function proceedToCheckout() {
+      if (cart.length > 0) {
+        alert('Proceeding to checkout! Your artifacts are on their way to awaken you further.');
+        cart = []; // Clear cart after "checkout"
+        updateCartDisplay();
+        toggleCart(); // Close cart
+      } else {
+        alert('Your cart is empty. Please add some artifacts before checking out.');
+      }
+    }
+
+    // Marquee functionality - Consistent with homepage
+    const marqueeContentWrapper = document.querySelector('.marquee-content-wrapper');
+    const originalMarqueeText = document.querySelector('.marquee-text');
+
+    const updateMarquee = () => {
+        if (marqueeContentWrapper && originalMarqueeText) {
+            const originalContentHTML = originalMarqueeText.innerHTML;
+            marqueeContentWrapper.style.animation = 'none';
+            marqueeContentWrapper.innerHTML = '';
+            for (let i = 0; i < 4; i++) {
+                const copy = document.createElement('span');
+                copy.className = 'marquee-text';
+                copy.innerHTML = originalContentHTML;
+                marqueeContentWrapper.appendChild(copy);
+            }
+            requestAnimationFrame(() => {
+                const firstMarqueeTextElement = marqueeContentWrapper.firstElementChild;
+                if (firstMarqueeTextElement) {
+                    const singleSegmentWidth = firstMarqueeTextElement.offsetWidth;
+                    marqueeContentWrapper.style.setProperty('--marquee-distance', `-${singleSegmentWidth}px`);
+                    const pixelsPerSecond = 70;
+                    const calculatedSpeed = singleSegmentWidth / pixelsPerSecond;
+                    marqueeContentWrapper.style.setProperty('--marquee-speed', `${calculatedSpeed}s`);
+                    void marqueeContentWrapper.offsetWidth;
+                    marqueeContentWrapper.style.animation = `marquee var(--marquee-speed) linear infinite`;
+                }
+            });
+        }
+    };
+
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      renderProducts();
+      updateCartDisplay(); // Initialize cart display
+      updateMarquee(); // Initialize marquee
+      window.addEventListener('resize', updateMarquee); // Update marquee on resize
+    });
+  </script>
+</body>
+</html>

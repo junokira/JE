@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AWAKEN Cult Newspaper + Shop</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+  <style>
+    /* Import Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;700&display=swap');
+    /* New fonts for newsletter section */
+    @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap');
+
+
+    /* Custom font classes */
+    .font-anton { font-family: 'Anton', sans-serif; }
+    .font-roboto-condensed { font-family: 'Roboto Condensed', sans-serif; }
+    .font-roboto-slab { font-family: 'Roboto Slab', serif; }
+    /* New font classes for newsletter */
+    .font-tattler {
+      font-family: 'Anton', sans-serif;
+      letter-spacing: -0.05em;
+    }
+    .font-national {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+    }
+
+
+    /* Basic body styles */
+    body {
+      background-color: #f3f0e7; /* Light newspaper-like background */
+      color: #000; /* Black text */
+      font-family: 'Roboto Condensed', sans-serif; /* Default font for body */
+      line-height: 1.5;
+      overflow-x: hidden; /* Prevent horizontal scrolling */
+      margin: 0; /* Ensure no default body margin */
+      padding: 0; /* Ensure no default body padding */
+    }
+
+    /* Marquee animation */
+    /* The animation now moves the content by the exact width of one original marquee-text element,
+       which is crucial for seamless looping when content is duplicated multiple times. */
+    @keyframes marquee {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(var(--marquee-distance)); } /* Move by dynamic distance */
+    }
+    .marquee-container {
+        width: 100%; /* Take full width of its parent (header) */
+        overflow: hidden;
+        background-color: black;
+        color: white;
+        font-family: 'Roboto Condensed', sans-serif;
+        padding: 0.25rem 0;
+    }
+    .marquee-content-wrapper { /* New wrapper for seamless animation */
+        display: flex;
+        width: max-content; /* Allow content to dictate width */
+        animation: marquee var(--marquee-speed) linear infinite; /* Speed dynamically set by JS */
+    }
+    .marquee-text {
+        white-space: nowrap; /* Keep content on one line */
+        padding-right: 2rem; /* Small gap between duplicated content */
+        flex-shrink: 0; /* Prevent text from shrinking */
+    }
+
+
+    /* General section padding and max-width */
+    .content-section { /* New class for sections that should be max-width and centered */
+      padding: 3rem 1rem; /* Default vertical padding for sections */
+      max-width: 1400px; /* Increased max-width for consistency with hero-news-section */
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Full-width sections (for marquee and video) */
+    .video-section { /* Renamed for clarity and specific styling */
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      padding: 0;
+    }
+
+    /* Header specific styles */
+    header {
+        background-color: #d94a44;
+        display: flex;
+        flex-direction: column; /* Stack logo/nav and marquee vertically */
+        width: 100%;
+        box-sizing: border-box;
+        position: sticky; /* Make header sticky */
+        top: 0; /* Position at the very top */
+        z-index: 99; /* Above other content */
+    }
+    .header-top-row {
+        padding: 0.5rem 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    header .header-logo {
+        font-family: 'Anton', sans-serif;
+        font-size: 4rem; /* Default size for mobile */
+        color: #f3f0e7;
+        line-height: 1;
+        text-decoration: none;
+        cursor: pointer;
+        transition: color 0.2s;
+        margin-left: 1rem; /* Space from left edge */
+    }
+    header .header-logo:hover {
+        color: #fff;
+    }
+    header nav {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        margin-right: 1rem; /* Space from right edge */
+    }
+    header nav a {
+        color: #f3f0e7;
+        font-family: 'Roboto Condensed', sans-serif;
+        font-size: 0.875rem; /* Smaller nav links for mobile */
+        text-decoration: none;
+        margin-left: 1.5rem; /* Space between nav links */
+        transition: underline 0.2s;
+    }
+    header nav a:hover {
+        text-decoration: underline;
+    }
+    .cart-icon-container {
+      position: relative;
+      cursor: pointer;
+      color: #f3f0e7;
+      font-size: 1.5rem;
+      margin-left: 1.5rem; /* Space from last nav item */
+    }
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background-color: black;
+      color: white;
+      border-radius: 50%;
+      padding: 0.1rem 0.4rem;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+
+
+    /* Specific styles for the Hero News Story section */
+    .hero-news-grid {
+      display: grid;
+      grid-template-columns: 1fr; /* Single column by default for all mobile/tablet */
+      gap: 1.5rem; /* Gap between columns/rows */
+      border: 1px solid black; /* Main border for the section */
+      padding: 1.5rem; /* Inner padding */
+    }
+
+    @media (min-width: 1024px) { /* Desktop screens and up */
+      .hero-news-grid {
+        grid-template-columns: 1fr 2.5fr 1fr; /* Multi-column for desktop */
+        gap: 2rem; /* Increased gap for better spacing */
+      }
+    }
+    /* Increased max-width for the hero news grid section */
+    @media (min-width: 1024px) { /* Adjust for larger screens */
+      .content-section.hero-news-section { /* Apply to the specific hero section */
+        max-width: 1400px; /* Increased max-width */
+      }
+    }
+
+
+    .hero-news-column {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem; /* Space between elements in a column */
+      justify-content: space-between; /* Distribute space to align items */
+    }
+
+    .news-card {
+      border: 1px solid black;
+      font-size: 0.75rem; /* Default font for news card content */
+      line-height: 1.3;
+      transition: background-color 0.3s ease; /* Smooth transition for hover */
+    }
+    .news-card:hover {
+      background-color: #e0e0e0; /* Light gray highlight */
+      cursor: pointer;
+    }
+    .news-card img {
+      width: 100%;
+      height: auto;
+      display: block; /* Ensure image behaves as block for full width */
+    }
+    .news-card-content { /* New class for the content inside the news card */
+      padding: 0.75rem; /* Apply padding only to the text content */
+      padding-top: 0.5rem; /* Add a small top padding to separate from image */
+    }
+
+
+    .main-headline {
+      font-size: 4rem; /* Large headline */
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .sub-headline {
+      font-size: 0.875rem; /* Smaller sub-headline */
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .article-body {
+      font-size: 1.1rem; /* Increased font size for readability */
+      line-height: 1.8; /* Increased line height for readability */
+    }
+
+    .icon-text-block {
+      display: flex;
+      align-items: center;
+      margin-top: 1.5rem;
+      font-size: 0.75rem;
+      border: 1px solid black; /* Added border */
+      padding: 0.75rem; /* Added padding */
+      flex-grow: 1; /* Allow it to grow to fill space */
+      margin-bottom: 0; /* Remove bottom margin if it's the last item in column */
+    }
+    .icon-text-block img {
+      width: 3rem; /* Size of the icon */
+      height: 3rem;
+      margin-right: 0.5rem;
+    }
+
+    /* Shop Section product card adjustments */
+    .shop-product-card {
+      border: 1px solid black;
+      padding: 1rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Apply aspect-square only on large screens and up */
+    @media (min-width: 1024px) { /* Desktop screens and up */
+      .shop-product-card {
+        aspect-ratio: 1 / 1; /* Make cards square on desktop */
+      }
+    }
+
+    .shop-product-card .product-image-container {
+      width: 100%;
+      height: auto; /* Default for mobile/tablet, allows height to adjust */
+      min-height: 12rem; /* Minimum height for better mobile/tablet appearance */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-grow: 1; /* Allow container to grow to fill space */
+    }
+
+    @media (min-width: 1024px) { /* Desktop screens and up */
+      .shop-product-card .product-image-container {
+        height: 16rem; /* Fixed height for desktop to fit square card */
+        min-height: unset; /* Remove min-height override for desktop */
+      }
+    }
+
+    .shop-product-card img {
+      max-width: 100%;
+      max-height: 100%; /* Ensure image fits within container without cropping */
+      height: auto; /* Ensure image height adjusts proportionally */
+      object-fit: contain; /* Ensure the entire image is visible */
+      margin: 0 auto; /* Center image */
+    }
+
+    .shop-product-card button {
+      background-color: black;
+      color: white;
+      padding: 0.5rem 1rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 0.875rem;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      width: calc(100% - 2rem); /* Adjusted width to be less long, similar to Shop All button */
+      max-width: 150px; /* Max width for consistency */
+      margin: 0.5rem auto 0 auto; /* Center button and add top margin */
+      display: block; /* Ensure it takes full width of its container */
+    }
+    .shop-product-card button:hover {
+      background-color: #333;
+    }
+
+    /* Editorial Shots Section - Reverted to old styles for responsiveness */
+    .editorial-shot-card {
+      border: 1px solid black;
+      padding: 0.75rem;
+      text-align: center;
+      transition: background-color 0.3s ease;
+    }
+    .editorial-shot-card:hover {
+      background-color: #e0e0e0;
+      cursor: pointer;
+    }
+    .editorial-shot-card img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    .editorial-shot-card p {
+      font-size: 0.75rem;
+      line-height: 1.3;
+    }
+
+    /* Newsletter Section */
+    .newsletter-section {
+      border-bottom: 1px solid black; /* Only bottom border for the main section */
+      padding: 0rem 2rem 1.5rem 2rem; /* Adjusted padding, top padding removed */
+      text-align: center;
+      max-width: 800px; /* Limit width for readability */
+      margin: 3rem auto; /* Center and add vertical space */
+      background-color: #f3f0e7; /* Match body background color */
+    }
+
+    .newsletter-masthead-container {
+      /* This container ensures the masthead elements are positioned relative to the section */
+      position: relative;
+      width: 100%;
+      padding-top: 1rem; /* Padding at the very top of the section */
+    }
+
+    .newsletter-masthead {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end; /* Align items to the bottom of their container */
+      padding-bottom: 0.5rem; /* Space below content, above the line */
+      border-bottom: 1px solid black; /* The single top line */
+      margin-bottom: 1.5rem; /* Space between the line and "OPEN YOUR EYES" */
+      width: 100%; /* Ensure it spans full width of its parent */
+    }
+
+    .newsletter-masthead-left {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start; /* Align text to the left */
+      line-height: 1; /* Tighten line height for this block */
+    }
+
+    .newsletter-masthead-left .font-national {
+      font-size: 1.25rem; /* Size for "The Daily" */
+      margin-bottom: 0.1rem; /* Small space below "The Daily" */
+    }
+
+    .newsletter-masthead-left .font-tattler {
+      font-size: 4.5rem; /* Size for "AWAKEN" */
+      margin-top: -0.5rem; /* Pull up slightly to overlap */
+    }
+
+    .newsletter-masthead-right {
+      text-align: right;
+      font-weight: bold;
+      text-transform: uppercase;
+      line-height: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+    .newsletter-masthead-right .stars span {
+      display: inline-block;
+      margin-right: 0.1rem;
+      font-size: 0.85rem; /* Size for stars */
+    }
+    .newsletter-masthead-right .special-weekly {
+      font-size: 0.85rem;
+      margin-top: 0.25rem;
+    }
+    .newsletter-masthead-right .price {
+      font-size: 1.5rem; /* Larger for price */
+      margin-top: 0.25rem;
+    }
+
+    .newsletter-headline-main {
+      font-family: 'Anton', sans-serif;
+      font-size: 7.5rem; /* Large for "OPEN YOUR EYES" */
+      line-height: 1;
+      letter-spacing: -0.05em;
+      margin-bottom: 1.5rem; /* Space before email form */
+      text-transform: uppercase;
+    }
+
+    .newsletter-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    .newsletter-form input[type="email"] {
+      border: 1px solid black;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      background-color: #f3f0e7; /* Match body background */
+    }
+    .newsletter-form button {
+      background-color: black;
+      color: white;
+      padding: 0.75rem 1rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .newsletter-form button:hover {
+      background-color: #333;
+    }
+
+    /* Quote above video section */
+    .video-quote {
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto 2rem auto; /* Center and add space below */
+        font-family: 'Roboto Slab', serif; /* Use a serif font for quote */
+        font-style: italic;
+        font-size: 1.5rem;
+        line-height: 1.4;
+        padding: 0 1rem; /* Add horizontal padding for smaller screens */
+        cursor: pointer; /* Indicate clickability */
+        transition: color 0.3s ease; /* Smooth transition for hover */
+    }
+    .video-quote:hover {
+        color: #d94a44; /* Highlight color on hover */
+    }
+    .video-quote strong {
+        font-weight: bold;
+        color: inherit; /* Inherit color from parent for hover effect */
+    }
+
+
+    /* Footer adjustments */
+    footer {
+      border-top: 1px solid black;
+      padding: 1.5rem 1rem;
+      font-size: 0.75rem;
+      text-align: center;
+    }
+    footer a {
+      text-decoration: underline;
+      color: inherit;
+    }
+    footer .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 0.75rem;
+      font-size: 1.25rem; /* Larger social icons */
+    }
+
+    /* Responsive adjustments for header (Mobile/Tablet view) */
+    @media (max-width: 1023px) { /* All screens smaller than desktop */
+      .header-top-row {
+        flex-direction: column; /* Stack logo and nav vertically */
+        padding: 0.5rem 1rem;
+      }
+      header .header-logo {
+        font-size: 4rem; /* Smaller logo for mobile/tablet */
+        margin-left: 0;
+        margin-bottom: 0.5rem; /* Space below logo */
+      }
+      header nav {
+        text-align: center; /* Center nav links */
+        width: 100%;
+        margin-top: 0.5rem; /* Space above nav */
+        margin-right: 0;
+        justify-content: center;
+        flex-wrap: wrap; /* Allow nav items to wrap */
+      }
+      header nav a {
+        font-size: 0.875rem; /* Smaller nav links for mobile/tablet */
+        margin: 0 0.5rem; /* Adjust margin for wrapped items */
+      }
+      .cart-icon-container {
+        font-size: 1.2rem;
+        margin-left: 0.5rem; /* Adjust margin for mobile/tablet */
+      }
+      /* Marquee container now inside header, so its top is relative to header's top */
+      .marquee-container {
+        top: auto; /* Remove fixed top */
+        position: relative; /* Make it relative to header */
+      }
+
+      /* General mobile/tablet adjustments for sections */
+      .newsletter-section {
+        padding: 1rem;
+      }
+      .newsletter-masthead-left .font-national {
+        font-size: 1rem;
+      }
+      .newsletter-masthead-left .font-tattler {
+        font-size: 3rem;
+      }
+      .newsletter-masthead-right .stars span,
+      .newsletter-masthead-right .special-weekly {
+        font-size: 0.7rem;
+      }
+      .newsletter-masthead-right .price {
+        font-size: 1.2rem;
+      }
+      .newsletter-headline-main {
+        font-size: 4rem;
+      }
+      .video-quote {
+        font-size: 1.2rem;
+      }
+      .article-body {
+        font-size: 0.9rem; /* Adjust for smaller screens */
+        line-height: 1.6;
+      }
+      /* Ensure shop and editorial grids are single column on mobile/tablet */
+      .shop-section .grid, .editorial-shots-grid .grid {
+        grid-template-columns: 1fr !important; /* Force single column */
+      }
+      .shop-product-card, .editorial-shot-card {
+        aspect-ratio: auto !important; /* Remove aspect ratio for mobile/tablet */
+        min-height: auto !important; /* Remove min-height for mobile/tablet */
+      }
+      .shop-product-card .product-image-container {
+        height: auto !important; /* Remove fixed height for mobile/tablet */
+        min-height: 12rem; /* Keep a minimum height for images */
+      }
+    }
+
+    /* Responsive adjustments for header (Desktop view) */
+    @media (min-width: 1024px) {
+      header .header-logo {
+        font-size: 6rem; /* Large size for desktop */
+      }
+      header nav a {
+        font-size: 1rem; /* Larger nav links for desktop */
+        margin-left: 2.5rem; /* More space between nav links */
+      }
+    }
+
+    /* Styles for the new Ad Section */
+    .background-image-cover-adjusted {
+      background-size: cover; /* Ensures the image covers the entire element */
+      background-position: 50% 20%; /* Horizontal center, vertical 20% from top */
+      background-repeat: no-repeat; /* Prevents image repetition */
+    }
+
+    .mobile-full-height {
+      height: 100vh;
+    }
+
+    @media (min-width: 768px) { /* md breakpoint */
+      .md\:h-screen {
+        height: 100vh;
+      }
+    }
+
+    /* Cart Overlay - Consistent with shop.html */
+    .cart-overlay {
+      position: fixed;
+      top: 0;
+      right: -400px; /* Hidden off-screen */
+      width: 350px; /* Fixed width for the cart */
+      height: 100%;
+      background-color: #f3f0e7;
+      border-left: 2px solid black;
+      box-shadow: -4px 0 8px rgba(0,0,0,0.2);
+      z-index: 999;
+      transition: right 0.3s ease-in-out;
+      display: flex;
+      flex-direction: column;
+    }
+    .cart-overlay.active {
+      right: 0; /* Slide in */
+    }
+    .cart-header {
+      background-color: black;
+      color: white;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Anton', sans-serif;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+    }
+    .cart-close-button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    .cart-items {
+      flex-grow: 1;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+    .cart-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px dashed #ccc;
+      padding-bottom: 0.5rem;
+    }
+    .cart-item-image {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      margin-right: 0.75rem;
+      border: 1px solid #eee;
+    }
+    .cart-item-details {
+      flex-grow: 1;
+      text-align: left;
+    }
+    .cart-item-details h4 {
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+    .cart-item-details p {
+      font-size: 0.85rem;
+      color: #555;
+    }
+    .cart-item-remove {
+      background-color: #d94a44;
+      color: white;
+      border: none;
+      padding: 0.3rem 0.6rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+      border-radius: 0; /* Ensure sharp corners */
+    }
+    .cart-summary {
+      padding: 1rem;
+      border-top: 2px solid black;
+      font-family: 'Roboto Slab', serif;
+    }
+    .cart-summary p {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+    .cart-checkout-btn {
+      background-color: #d94a44;
+      color: white;
+      padding: 1rem;
+      width: 100%;
+      text-align: center;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      border-radius: 0; /* Ensure sharp corners */
+    }
+    .cart-checkout-btn:hover {
+      background-color: #b92a1e;
+    }
+    .empty-cart-message {
+      text-align: center;
+      padding: 2rem;
+      color: #777;
+    }
+    @media (max-width: 767px) {
+      .cart-overlay {
+        width: 100%; /* Full width on mobile */
+        right: -100vw;
+      }
+      .cart-overlay.active {
+        right: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-top-row">
+      <a href="/" class="header-logo">AWAKEN</a> <!-- Changed href to "/" for homepage -->
+      <nav>
+        <a href="shop.html">Shop</a>
+        <a href="manifesto.html">Manifesto</a>
+        <a href="join-us.html">Join Us</a>
+        <a href="about.html">About</a>
+        <a href="archives.html">Archive</a> <!-- Changed Campaign to Archive -->
+        <div class="cart-icon-container" onclick="toggleCart()">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="cart-count">0</span>
+        </div>
+      </nav>
+    </div>
+    <!-- Top Scrolling Bar - Moved inside header -->
+    <div class="marquee-container">
+      <div class="marquee-content-wrapper">
+        <!-- Removed leading space from content -->
+        <span class="marquee-text">ENLIGHTENMENT IS A CHOICE • JOIN THE CULT • AWAKEN • THE NEW WORLD ORDER IS HERE • BUY THE MESSAGE • BURN THE MASK • REVEAL THE TRUTH •</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero News Story and Side Column -->
+  <section class="content-section hero-news-section"> <!-- Added hero-news-section for specific max-width -->
+    <div class="hero-news-grid">
+      <!-- Middle Column (Main Story) - Now first in source order, order-2 on desktop -->
+      <div class="lg:col-span-1 flex flex-col justify-between lg:order-2">
+        <!-- Sun Picture Exclusive -->
+        <div class="flex items-center justify-between border-b border-black pb-2 mb-4">
+          <img src="https://i.ibb.co/23z6psTD/NEW-EYE-LOGO-BLACK-VEC.png" alt="The Sun Logo" class="h-8 w-auto mr-2" />
+          <span class="font-roboto-condensed text-xs font-bold uppercase">Cult Picture Exclusive</span>
+        </div>
+        <div>
+          <h3 class="font-anton main-headline uppercase">THE VEIL IS THINNING</h3>
+          <p class="font-roboto-condensed sub-headline">Are You Ready For The Truth?</p>
+          <p class="font-roboto-condensed article-body">
+            Whispers of a New World Order are spreading like wildfire, fueled by cryptic messages and unsettling imagery appearing across the metropolis. Citizens report a growing unease, a sense that the reality they know is merely a carefully constructed illusion. The AWAKEN cult claims to hold the key to true enlightenment, promising liberation from the 'cage' of modern existence. Are these just fringe theories, or is there a deeper, more profound truth waiting to be uncovered? The time to question everything is now.
+          </p>
+        </div>
+        <!-- "Smile Surveillance Live" moved above "Portrait and Text" and given grid styling -->
+        <div class="icon-text-block mt-4">
+          <img src="https://i.ibb.co/M5xjjWqM/3rd-eye-smiley.png" alt="Smiley" />
+          <p class="font-roboto-condensed text-xs"><strong>Smile Surveillance Live</strong><br/>Witnesses report sightings of this icon throughout the city. Stay aware.</p>
+        </div>
+        <!-- New Filler Content for Empty Space -->
+        <div class="news-card mt-4">
+          <div class="news-card-content">
+            <strong class="uppercase">Breaking News:</strong><br/>
+            Unexplained energy surges reported near the city's ancient monolith. Coincidence or a sign? More details to follow.
+          </div>
+        </div>
+      </div>
+
+      <!-- Left Column - Now second in source order, order-1 on desktop -->
+      <div class="hero-news-column lg:order-1">
+        <a href="https://instagram.com/awakencult" target="_blank" class="news-card block no-underline text-black">
+          <img src="https://i.ibb.co/fYLGm3Cy/mcga.png" alt="Make Cults Great Again Poster" class="w-full h-auto" />
+          <div class="news-card-content">
+            <strong class="uppercase">The Smile is Watching:</strong><br/>
+            New cult recruitment posters are flooding the city, urging citizens to 'AWAKEN' and 'Make Cults Great Again'. Authorities are baffled.
+          </div>
+        </a>
+        <a href="shop.html" class="news-card block no-underline text-black">
+          <div class="news-card-content">
+            <strong class="uppercase">Easter Egg:</strong><br/>
+            Enter code “TRUTH23” at checkout for a mysterious bonus.
+          </div>
+        </a>
+      </div>
+
+      <!-- Right Column - Now third in source order, order-3 on desktop -->
+      <div class="hero-news-column lg:order-3">
+        <a href="shop.html" class="news-card block no-underline text-black">
+          <div class="news-card-content">
+            <strong class="uppercase">Limited Coupon:</strong><br/>
+            FREE ENLIGHTENMENT with every hoodie purchase. Only valid in Sector 7.
+          </div>
+        </a>
+        <a href="https://instagram.com/awakencult" target="_blank" class="news-card block no-underline text-black">
+          <img src="https://i.ibb.co/TMszwwZ3/nwo-awaken-needs-you.png" alt="Additional Poster" class="w-full h-auto" />
+          <div class="news-card-content">
+            <strong class="uppercase">Cult Propaganda on the Rise:</strong><br/>
+            Posters flood city streets as the AWAKEN movement continues its bold public displays.
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Shop Section -->
+  <section id="shop" class="content-section">
+    <h2 class="text-3xl font-anton text-center mb-4">Underground Market</h2>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6"> <!-- grid-cols-1 for mobile/tablet, lg:grid-cols-3 for desktop -->
+      <!-- Product Cards -->
+      <div class="shop-product-card lg:aspect-square"> <!-- Added lg:aspect-square here -->
+        <div class="product-image-container">
+          <img src="https://i.ibb.co/GvhVTBTc/MCGA-CAP.webp" alt="MCGA Cap" />
+        </div>
+        <h3 class="text-xl font-bold mt-3">MCGA Cap</h3>
+        <p class="text-sm mb-2">$50</p>
+        <button>Buy Now</button>
+      </div>
+      <div class="shop-product-card lg:aspect-square">
+        <div class="product-image-container">
+          <img src="https://i.ibb.co/mrTy6Mhw/fake-news-hoodie.webp" alt="Fake News Hoodie" />
+        </div>
+        <h3 class="text-xl font-bold mt-3">Fake News Hoodie</h3>
+        <p class="text-sm mb-2">$150</p>
+        <button>Buy Now</button>
+      </div>
+      <div class="shop-product-card lg:aspect-square">
+        <div class="product-image-container">
+          <img src="https://i.ibb.co/twNrP2xF/XTCYYYY.webp" alt="XTCY Tee" />
+        </div>
+        <h3 class="text-xl font-bold mt-3">XTCY Tee</h3>
+        <p class="text-sm mb-2">$75</p>
+        <button>Buy Now</button>
+      </div>
+      <div class="shop-product-card lg:aspect-square">
+        <div class="product-image-container">
+          <img src="https://i.ibb.co/JFyXsdVv/vzn-jacket.webp" alt="Visions Hoodie" />
+        </div>
+        <h3 class="text-xl font-bold mt-3">Visions Hoodie</h3>
+        <p class="text-sm mb-2">$180</p>
+        <button>Buy Now</button>
+      </div>
+      <div class="shop-product-card lg:aspect-square">
+        <div class="product-image-container">
+          <img src="https://i.ibb.co/V0FTWqC1/oberyyy.webp" alt="Burn Balaclava" />
+        </div>
+        <h3 class="text-xl font-bold mt-3">Burn Balaclava</h3>
+        <p class="text-sm mb-2">$75</p>
+        <button>Buy Now</button>
+      </div>
+      <div class="shop-product-card lg:aspect-square">
+        <div class="product-image-container">
+          <img src="https://i.ibb.co/JRsBZr2d/BURN-BALACLAVAAA.webp" alt="Awareness Tee" />
+        </div>
+        <h3 class="text-xl font-bold mt-3">Awareness Tee</h3>
+        <p class="text-sm mb-2">$120</p>
+        <button>Buy Now</button>
+      </div>
+    </div>
+    <div class="text-center mt-8 mb-8"> <!-- Moved button here -->
+      <a href="shop.html" class="inline-block bg-black text-white px-6 py-3 font-bold uppercase text-sm hover:bg-gray-800 transition-colors">Shop All Artifacts</a>
+    </div>
+  </section>
+
+  <!-- Quote above video section - Now links to manifesto.html -->
+  <section class="video-quote content-section">
+      <a href="manifesto.html" class="block text-inherit no-underline">
+        <p>"The flesh is weak. The mind is moldable. <strong>Awaken is the path.</strong>"</p>
+      </a>
+  </section>
+
+  <!-- Fullscreen Video Section - Now links to YouTube -->
+  <div class="video-section" onclick="window.open('https://www.youtube.com/@awakencult', '_blank')" style="cursor: pointer;">
+    <video autoplay loop muted playsinline class="w-full h-full object-cover">
+      <source src="https://raw.githubusercontent.com/junokira/NWO/main/nwo%20web%20w-2.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
+  <!-- New Ad Section -->
+  <section id="campaign" class="w-full h-screen relative overflow-hidden">
+    <div class="flex flex-col lg:flex-row w-full h-full"> <!-- Changed md:flex-row to lg:flex-row -->
+      <!-- Left side with woman -->
+      <div class="w-full lg:w-1/2 relative flex-shrink-0 background-image-cover-adjusted mobile-full-height">
+        <!-- Background image for the woman's side -->
+        <div class="absolute inset-0 background-image-cover-adjusted"
+             style="background-image: url('https://i.ibb.co/7txpq4xQ/43435.png'); background-color: #b92a1e;">
+        </div>
+        <!-- Text overlay for the woman's side -->
+        <p class="absolute right-6 bottom-20 text-white text-lg font-serif leading-relaxed max-w-xs z-10" style="line-height:1.4;">
+          “Won’t
+          <br/>
+          anybody
+          <br/>
+          AWAKEN
+          <br/>
+          me?”
+        </p>
+      </div>
+
+      <!-- Right side with cowboy and AWAKEN -->
+      <div class="w-full lg:w-1/2 relative flex-shrink-0 background-image-cover-adjusted mobile-full-height">
+        <!-- Background image for the cowboy's side -->
+        <div class="absolute inset-0 background-image-cover-adjusted"
+             style="background-image: url('https://i.ibb.co/jv3BthpX/3oj3434.png'); background-color: #7a3f2a;">
+        </div>
+        <!-- AWAKEN text moved above product images -->
+        <div class="absolute left-10 bottom-[55vh] lg:bottom-[33vh] text-white font-serif font-extrabold text-6xl leading-none select-none z-10"> <!-- Changed md:bottom to lg:bottom -->
+          AWAKEN
+        </div>
+        <!-- Product images (cigarette packs) overlay -->
+        <div class="absolute left-10 bottom-[15vh] lg:bottom-[10vh] flex space-x-4 z-10"> <!-- Changed md:bottom to lg:bottom -->
+          <img alt="Red cigarette pack with two cigarettes" class="h-44 w-auto rounded-md shadow-lg" src="https://i.ibb.co/S49t2Jm8/ballsl.png" />
+          <img alt="Gold cigarette pack with two cigarettes" class="h-44 w-auto rounded-md shadow-lg" src="https://i.ibb.co/nN3JW0tz/CREAM-BALLY.png" />
+        </div>
+        <!-- Bottom text overlay -->
+        <p class="absolute left-10 bottom-[5vh] lg:bottom-10 text-white text-xs font-serif max-w-xs z-10" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.7);"> <!-- Changed md:bottom to lg:bottom -->
+          Red or Lightsm 100’s — just get a lot to like.
+        </p>
+      </div>
+    </div>
+  </section>
+  <!-- End New Ad Section -->
+
+  <!-- Newsletter Section -->
+  <section class="newsletter-section content-section">
+    <div class="newsletter-masthead-container">
+      <div class="newsletter-masthead">
+        <div class="newsletter-masthead-left">
+          <span class="font-national uppercase">The Daily</span>
+          <h2 class="font-tattler uppercase">AWAKEN</h2>
+        </div>
+        <div class="newsletter-masthead-right">
+          <div class="stars">
+            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+          </div>
+          <div class="special-weekly">SPECIAL WEEKLY</div>
+          <div class="price">15¢</div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="newsletter-headline-main font-tattler uppercase">OPEN YOUR EYES</h2>
+    
+    <form class="newsletter-form">
+      <input type="email" placeholder="Enter your email address" required />
+      <button type="submit">Subscribe</button>
+    </form>
+  </section>
+
+  <!-- Editorial Shots Section - Updated with content and links -->
+  <section class="editorial-shots-grid content-section">
+    <h2 class="text-3xl font-anton text-center mb-8">Dispatches from the Archives</h2>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6"> <!-- grid-cols-1 for mobile/tablet, lg:grid-cols-3 for desktop -->
+      <a href="https://instagram.com/awakencult" target="_blank" class="editorial-shot-card block no-underline text-black">
+        <img src="https://i.ibb.co/fVC0cbZ6/snsb.png" alt="The Silent Observer" />
+        <p>The Silent Observer: Encrypted messages found in Sector 4, hinting at a pervasive surveillance network.</p>
+      </a>
+      <a href="https://instagram.com/awakencult" target="_blank" class="editorial-shot-card block no-underline text-black">
+        <img src="https://i.ibb.co/DPKd5pY6/jhbhjb.png" alt="The Unseen Architect" />
+        <p>The Unseen Architect: Unraveling the blueprints of control embedded in everyday life. A new perspective.</p>
+      </a>
+      <a href="https://instagram.com/awakencult" target="_blank" class="editorial-shot-card block no-underline text-black">
+        <img src="https://i.ibb.co/xS6j3cSs/otis-grade.png" alt="The Awakening Gaze" />
+        <p>The Awakening Gaze: Rare footage of an initiate's first moments of clarity. Profound and unsettling.</p>
+      </a>
+    </div>
+    <div class="text-center mt-8 mb-8"> <!-- Moved button here -->
+      <a href="archives.html" class="inline-block bg-black text-white px-6 py-3 font-bold uppercase text-sm hover:bg-gray-800 transition-colors">View All Archives</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-[#f3f0e7] border-t border-black text-xs font-roboto-condensed text-center py-4">
+    <div class="max-w-6xl mx-auto px-4">
+      <p class="mb-2">© 2025 AWAKEN CULT. Contact: <a href="mailto:info@awakencult.com" class="underline">info@awakencult.com</a></p>
+      <div class="social-icons">
+        <a href="https://instagram.com/awakencult" class="hover:text-gray-600" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="https://x.com/awakencult" class="hover:text-gray-600" target="_blank"><i class="fab fa-twitter"></i></a>
+        <a href="https://youtube.com/@awakencult" class="hover:text-gray-600" target="_blank"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Shopping Cart Overlay - Re-added for consistency -->
+  <div id="cart-overlay" class="cart-overlay">
+    <div class="cart-header">
+      <span>Your Artifacts</span>
+      <button class="cart-close-button" onclick="toggleCart()">&times;</button>
+    </div>
+    <div id="cart-items" class="cart-items">
+      <!-- Cart items will be injected here by JavaScript -->
+      <p class="empty-cart-message" id="empty-cart-message">Your cart is empty. Acquire some truth.</p>
+    </div>
+    <div class="cart-summary">
+      <p>Total: <span id="cart-total">$0.00</span></p>
+      <button class="cart-checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout</button>
+    </div>
+  </div>
+  
+  <!-- Fullscreen Modal Structure -->
+  <div id="fullscreenModal" class="modal-overlay">
+    <div class="modal-content">
+      <img id="fullscreenImage" src="" alt=""> <!-- Removed alt attribute here -->
+    </div>
+  </div>
+
+  <script>
+    // Placeholder for cart functionality (copied from other pages for consistency)
+    let cart = JSON.parse(localStorage.getItem('awakenCart'))
+ || [];
+
+    const cartOverlay = document.getElementById('cart-overlay');
+    const cartCountSpan = document.getElementById('cart-count');
+    const cartItemsDiv = document.getElementById('cart-items');
+    const cartTotalSpan = document.getElementById('cart-total');
+    const emptyCartMessage = document.getElementById('empty-cart-message');
+
+    function toggleCart() {
+      cartOverlay.classList.toggle('active');
+    }
+
+    function updateCartDisplay() {
+      cartItemsDiv.innerHTML = '';
+      let total = 0;
+
+      if (cart.length === 0) {
+        emptyCartMessage.style.display = 'block';
+      } else {
+        emptyCartMessage.style.display = 'none';
+        cart.forEach((item, index) => {
+          const cartItemDiv = document.createElement('div');
+          cartItemDiv.className = 'cart-item';
+          cartItemDiv.innerHTML = `
+            <img src="${item.image}" alt="${item.name}" class="cart-item-image" />
+            <div class="cart-item-details">
+              <h4>${item.name} (${item.size})</h4>
+              <p>$${item.price.toFixed(2)} x ${item.quantity}</p>
+            </div>
+            <button class="cart-item-remove" onclick="removeFromCart(${index})">Remove</button>
+          `;
+          cartItemsDiv.appendChild(cartItemDiv);
+          total += item.price * item.quantity;
+        });
+      }
+      cartTotalSpan.textContent = `$${total.toFixed(2)}`;
+      cartCountSpan.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+      localStorage.setItem('awakenCart', JSON.stringify(cart));
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCartDisplay();
+    }
+
+    function proceedToCheckout() {
+      if (cart.length > 0) {
+        // Using a custom modal/alert for user feedback instead of window.alert
+        showCustomAlert('Proceeding to checkout! Your artifacts are on their way to awaken you further.');
+        cart = [];
+        updateCartDisplay();
+        toggleCart();
+      } else {
+        showCustomAlert('Your cart is empty. Please add some artifacts before checking out.');
+      }
+    }
+
+    // Custom Alert Function (replaces window.alert)
+    function showCustomAlert(message) {
+        const alertBox = document.createElement('div');
+        alertBox.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: black;
+            color: white;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 10000;
+            font-family: 'Roboto Condensed', sans-serif;
+            font-size: 1.1rem;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        `;
+        alertBox.textContent = message;
+        document.body.appendChild(alertBox);
+
+        setTimeout(() => {
+            alertBox.style.opacity = 1;
+        }, 10); // Small delay to trigger transition
+
+        setTimeout(() => {
+            alertBox.style.opacity = 0;
+            alertBox.addEventListener('transitionend', () => alertBox.remove());
+        }, 3000); // Disappear after 3 seconds
+    }
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const posterWrappers = document.querySelectorAll('.poster-item-wrapper');
+      const fullscreenModal = document.getElementById('fullscreenModal');
+      const fullscreenImage = document.getElementById('fullscreenImage');
+
+      // Function to open modal
+      const openModal = (imageSrc) => {
+        fullscreenImage.src = imageSrc;
+        if (fullscreenModal) { // Add null check for fullscreenModal
+          fullscreenModal.classList.add('active');
+          document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+        }
+      };
+
+      // Function to close modal
+      const closeModal = () => {
+        if (fullscreenModal) { // Add null check for fullscreenModal
+          fullscreenModal.classList.remove('active');
+          document.body.style.overflow = ''; // Restore scrolling
+        }
+      };
+
+      // Add click listeners to each poster
+      posterWrappers.forEach(wrapper => {
+        wrapper.addEventListener('click', () => {
+          const img = wrapper.querySelector('img');
+          if (img && img.src) {
+            openModal(img.src);
+          }
+        });
+      });
+
+      // Add click listener to the modal overlay itself to close it (if click is not on the image)
+      if (fullscreenModal) { // Add null check for fullscreenModal
+        fullscreenModal.addEventListener('click', (event) => {
+          if (event.target === fullscreenModal) { // Only close if the direct click target is the overlay
+            closeModal();
+          }
+        });
+      }
+
+      // Add keyboard listener for Escape key to close modal
+      document.addEventListener('keydown', (event) => {
+        if (fullscreenModal && event.key === 'Escape' && fullscreenModal.classList.contains('active')) { // Add null check
+          closeModal();
+        }
+      });
+
+      // Marquee content duplication and animation setup for seamless loop
+      const marqueeContentWrapper = document.querySelector('.marquee-content-wrapper');
+      const originalMarqueeText = document.querySelector('.marquee-text'); // Get the original span
+
+      const updateMarquee = () => {
+        if (marqueeContentWrapper && originalMarqueeText) {
+          const originalContentHTML = originalMarqueeText.innerHTML;
+
+          // Temporarily stop animation and clear content to prevent flickering during recalculation
+          marqueeContentWrapper.style.animation = 'none';
+          marqueeContentWrapper.innerHTML = '';
+
+          // Append enough content to ensure seamless loop across various screen sizes
+          // We'll append 4 copies to be robust.
+          for (let i = 0; i < 4; i++) {
+              const copy = document.createElement('span');
+              copy.className = 'marquee-text';
+              copy.innerHTML = originalContentHTML;
+              marqueeContentWrapper.appendChild(copy);
+          }
+
+          // Use requestAnimationFrame to ensure layout is stable before measuring
+          requestAnimationFrame(() => {
+              const firstMarqueeTextElement = marqueeContentWrapper.firstElementChild;
+              if (firstMarqueeTextElement) {
+                  // Get the actual rendered width of one segment of the marquee text (the first copy)
+                  const singleSegmentWidth = firstMarqueeTextElement.offsetWidth;
+                  
+                  // Set the CSS custom properties for animation distance and speed
+                  // The animation should translate by the exact width of one segment
+                  marqueeContentWrapper.style.setProperty('--marquee-distance', `-${singleSegmentWidth}px`);
+                  
+                  // Calculate speed: Aim for a balance of readability and captivating motion.
+                  // Adjusted to 70 pixels per second for a slightly slower, more readable speed.
+                  const pixelsPerSecond = 70; 
+                  const calculatedSpeed = singleSegmentWidth / pixelsPerSecond;
+                  marqueeContentWrapper.style.setProperty('--marquee-speed', `${calculatedSpeed}s`);
+
+                  // Re-apply animation to ensure it picks up new variables
+                  // Trigger reflow to ensure animation restarts smoothly
+                  void marqueeContentWrapper.offsetWidth; 
+                  marqueeContentWrapper.style.animation = `marquee var(--marquee-speed) linear infinite`;
+              }
+          });
+        }
+      };
+
+      // Call updateMarquee on initial load and window resize
+      updateMarquee();
+      window.addEventListener('resize', updateMarquee);
+
+      updateCartDisplay(); // Initialize cart display on page load
+    });
+  </script>
+</body>
+</html>

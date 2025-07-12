@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AWAKEN Cult Newspaper - Product Detail</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+  <style>
+    /* Import Google Fonts - Consistent with main site */
+    @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap');
+
+    /* Custom font classes - Consistent with main site */
+    .font-anton { font-family: 'Anton', sans-serif; }
+    .font-roboto-condensed { font-family: 'Roboto Condensed', sans-serif; }
+    .font-roboto-slab { font-family: 'Roboto Slab', serif; }
+    .font-tattler { font-family: 'Anton', sans-serif; letter-spacing: -0.05em; }
+    .font-national { font-family: 'Oswald', sans-serif; font-weight: 700; letter-spacing: 0.1em; }
+
+    /* Basic body styles - Consistent with main site */
+    body {
+      background-color: #f3f0e7; /* Light newspaper-like background */
+      color: #000; /* Black text */
+      font-family: 'Roboto Condensed', sans-serif; /* Default font for body */
+      line-height: 1.6;
+      overflow-x: hidden; /* Prevent horizontal scrolling */
+      margin: 0; /* Ensure no default body margin */
+      padding: 0; /* Ensure no default body padding */
+    }
+
+    /* General section padding and max-width - Consistent with main site */
+    .content-section {
+      padding: 3rem 1rem; /* Default vertical padding for sections */
+      max-width: 1280px; /* Max width for content */
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Header specific styles - Consistent with main site */
+    header {
+        background-color: #d94a44;
+        padding: 0.5rem 1rem;
+    }
+    header .header-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 1rem;
+    }
+    header .header-logo {
+        font-family: 'Anton', sans-serif;
+        font-size: 4rem;
+        color: #f3f0e7;
+        line-height: 1;
+        text-decoration: none;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+    header .header-logo:hover {
+        color: #fff;
+    }
+    header nav {
+        flex-shrink: 0;
+    }
+    .cart-icon-container {
+      position: relative;
+      cursor: pointer;
+      color: #f3f0e7;
+      font-size: 1.5rem;
+      margin-left: 1.5rem;
+    }
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background-color: black;
+      color: white;
+      border-radius: 50%;
+      padding: 0.1rem 0.4rem;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+
+    /* Product Detail Page Specific Styles */
+    .product-detail-container {
+      border: 1px solid black;
+      padding: 2rem;
+      background-color: #fff; /* Slightly whiter background for the content itself */
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Center content horizontally */
+      text-align: center; /* Center text within columns */
+    }
+
+    .product-detail-grid {
+      display: grid;
+      grid-template-columns: 1fr; /* Single column for mobile */
+      gap: 2rem;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .product-detail-grid {
+        grid-template-columns: 1fr 1fr; /* Two columns for desktop */
+        text-align: left; /* Align text left within columns on desktop */
+      }
+      .product-detail-grid .product-image-column {
+        display: flex;
+        justify-content: center; /* Center image in its column */
+        align-items: flex-start; /* Align image to top */
+      }
+    }
+
+    .product-detail-image {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #ccc;
+      margin-bottom: 1.5rem; /* Space below image on mobile */
+    }
+
+    @media (min-width: 768px) {
+      .product-detail-image {
+        max-width: 90%; /* Adjust image size in column */
+        margin-bottom: 0; /* No bottom margin in desktop grid */
+      }
+    }
+
+    .product-detail-title {
+      font-family: 'Anton', sans-serif;
+      font-size: 4rem;
+      line-height: 1;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .product-detail-price {
+      font-size: 2.2rem;
+      font-weight: bold;
+      color: #d94a44;
+      margin-bottom: 1.5rem;
+    }
+
+    .product-detail-description {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      text-align: justify; /* Justify text for newspaper feel */
+    }
+
+    .product-detail-lore {
+      font-family: 'Roboto Slab', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: #555;
+      border-left: 4px solid #d94a44;
+      padding-left: 1rem;
+      margin-bottom: 2rem;
+      text-align: left; /* Align lore text left */
+    }
+
+    .product-options-group {
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Center options on mobile */
+    }
+
+    @media (min-width: 768px) {
+      .product-options-group {
+        flex-direction: row; /* Row for options on desktop */
+        justify-content: flex-start; /* Align options left on desktop */
+      }
+    }
+
+    .product-options-group label {
+      font-weight: bold;
+      margin-right: 1rem;
+      margin-bottom: 0.5rem; /* Space below label on mobile */
+    }
+
+    .product-options-group select,
+    .product-options-group input[type="number"] {
+      border: 1px solid black;
+      padding: 0.75rem;
+      background-color: #fefefe;
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: 1rem;
+      border-radius: 4px;
+    }
+
+    .add-to-cart-btn {
+      background-color: black;
+      color: white;
+      padding: 1.2rem 2.5rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 1.25rem;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      width: 100%;
+      max-width: 400px; /* Limit button width */
+      margin-top: 1rem;
+      border-radius: 4px;
+    }
+    .add-to-cart-btn:hover {
+      background-color: #333;
+    }
+
+    /* Related Articles / More Dispatches Section */
+    .related-articles-section {
+      margin-top: 4rem;
+      border-top: 1px solid black;
+      padding-top: 2rem;
+    }
+    .related-articles-section h2 {
+      font-family: 'Anton', sans-serif;
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 2rem;
+      text-transform: uppercase;
+    }
+    .related-article-card {
+      border: 1px solid black;
+      padding: 1rem;
+      background-color: #fff;
+      text-align: left;
+    }
+    .related-article-card img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      margin-bottom: 0.75rem;
+    }
+    .related-article-card h3 {
+      font-family: 'Roboto Slab', serif;
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+    .related-article-card p {
+      font-size: 0.9rem;
+      line-height: 1.4;
+      color: #555;
+    }
+
+    /* Cart Overlay - Consistent with main site */
+    .cart-overlay {
+      position: fixed;
+      top: 0;
+      right: -400px; /* Hidden off-screen */
+      width: 350px; /* Fixed width for the cart */
+      height: 100%;
+      background-color: #f3f0e7;
+      border-left: 2px solid black;
+      box-shadow: -4px 0 8px rgba(0,0,0,0.2);
+      z-index: 999;
+      transition: right 0.3s ease-in-out;
+      display: flex;
+      flex-direction: column;
+    }
+    .cart-overlay.active {
+      right: 0; /* Slide in */
+    }
+    .cart-header {
+      background-color: black;
+      color: white;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Anton', sans-serif;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+    }
+    .cart-close-button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    .cart-items {
+      flex-grow: 1;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+    .cart-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px dashed #ccc;
+      padding-bottom: 0.5rem;
+    }
+    .cart-item-image {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      margin-right: 0.75rem;
+      border: 1px solid #eee;
+    }
+    .cart-item-details {
+      flex-grow: 1;
+      text-align: left;
+    }
+    .cart-item-details h4 {
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+    .cart-item-details p {
+      font-size: 0.85rem;
+      color: #555;
+    }
+    .cart-item-remove {
+      background-color: #d94a44;
+      color: white;
+      border: none;
+      padding: 0.3rem 0.6rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .cart-summary {
+      padding: 1rem;
+      border-top: 2px solid black;
+      font-family: 'Roboto Slab', serif;
+    }
+    .cart-summary p {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+    .cart-checkout-btn {
+      background-color: #d94a44;
+      color: white;
+      padding: 1rem;
+      width: 100%;
+      text-align: center;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .cart-checkout-btn:hover {
+      background-color: #b92a1e;
+    }
+    .empty-cart-message {
+      text-align: center;
+      padding: 2rem;
+      color: #777;
+    }
+
+    /* Footer adjustments - Consistent with main site */
+    footer {
+      border-top: 1px solid black;
+      padding: 1.5rem 1rem;
+      font-size: 0.75rem;
+      text-align: center;
+    }
+    footer a {
+      text-decoration: underline;
+      color: inherit;
+    }
+    footer .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 0.75rem;
+      font-size: 1.25rem;
+    }
+
+    /* Responsive adjustments for header */
+    @media (min-width: 768px) {
+      header .header-logo {
+        font-size: 6rem;
+      }
+      header nav {
+        font-size: 1rem;
+        space-x: 6;
+      }
+    }
+    @media (max-width: 767px) {
+      header .header-content {
+        flex-direction: column;
+        align-items: center;
+      }
+      header .header-logo {
+        font-size: 4rem;
+        margin-bottom: 0.5rem;
+      }
+      header nav {
+        text-align: center;
+        width: 100%;
+        margin-top: 0.5rem;
+        font-size: 0.875rem;
+        space-x: 2;
+      }
+      .cart-icon-container {
+        font-size: 1.2rem;
+      }
+      .product-detail-title {
+        font-size: 3rem;
+      }
+      .product-detail-price {
+        font-size: 1.8rem;
+      }
+      .product-detail-description {
+        font-size: 1rem;
+      }
+      .product-detail-lore {
+        font-size: 0.9rem;
+      }
+      .product-options-group label,
+      .product-options-group select,
+      .product-options-group input[type="number"] {
+        font-size: 0.9rem;
+      }
+      .add-to-cart-btn {
+        font-size: 1rem;
+        padding: 1rem 2rem;
+      }
+      .related-articles-section h2 {
+        font-size: 2rem;
+      }
+      .related-article-card h3 {
+        font-size: 1rem;
+      }
+      .related-article-card p {
+        font-size: 0.8rem;
+      }
+      .cart-overlay {
+        width: 100%; /* Full width on mobile */
+        right: -100vw;
+      }
+      .cart-overlay.active {
+        right: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header - Consistent with main site -->
+  <header class="bg-[#d94a44] px-3 pt-2 pb-1">
+    <div class="header-content">
+      <a href="#" class="header-logo font-anton text-[4rem] sm:text-[6rem] text-[#f3f0e7] leading-none hover:text-white cursor-pointer transition-colors duration-200">AWAKEN</a>
+      <nav class="text-[#f3f0e7] font-roboto-condensed text-xs space-x-4 flex items-center">
+        <a href="#" class="hover:underline">Home</a> <!-- Link back to home (placeholder) -->
+        <a href="#" class="hover:underline">Shop</a> <!-- Link to shop (placeholder) -->
+        <a href="#" class="hover:underline">Manifesto</a> <!-- Link to manifesto (placeholder) -->
+        <a href="#" class="hover:underline">Join Us</a> <!-- Link to join us (placeholder) -->
+        <a href="#" class="hover:underline">About</a> <!-- Link to about (placeholder) -->
+        <a href="#" class="hover:underline">Campaign</a> <!-- Link to campaign (placeholder) -->
+        <div class="cart-icon-container" onclick="toggleCart()">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="cart-count">0</span>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Product Detail Section -->
+  <section class="content-section">
+    <div id="product-detail-container" class="product-detail-container">
+      <div class="product-detail-grid">
+        <div class="product-image-column">
+          <img id="product-image" class="product-detail-image" src="" alt="Product Image" />
+        </div>
+        <div class="product-info-column">
+          <h1 id="product-title" class="product-detail-title"></h1>
+          <p id="product-price" class="product-detail-price"></p>
+          <p id="product-description" class="product-detail-description"></p>
+          <p id="product-lore" class="product-detail-lore"></p>
+
+          <div class="product-options-group">
+            <label for="product-size">Size:</label>
+            <select id="product-size" class="rounded-md"></select>
+          </div>
+          <div class="product-options-group">
+            <label for="product-quantity">Quantity:</label>
+            <input type="number" id="product-quantity" value="1" min="1" class="rounded-md" />
+          </div>
+          <button id="add-to-cart-btn" class="add-to-cart-btn rounded-md">Add to Cart</button>
+        </div>
+      </div>
+
+      <!-- Related Articles / More Dispatches -->
+      <div class="related-articles-section w-full">
+        <h2>More Dispatches From The Market</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="related-article-card rounded-lg">
+            <img src="https://i.ibb.co/GvhVTBTc/MCGA-CAP.webp" alt="Related Product 1" />
+            <h3>The Cap of Conformity</h3>
+            <p>A subtle nod to the movement, perfect for blending in while standing out to those who know.</p>
+            <button class="bg-black text-white px-4 py-2 text-sm mt-2 rounded-md hover:bg-gray-800" onclick="window.location.href='product-detail.html?id=p1'">View Artifact</button>
+          </div>
+          <div class="related-article-card rounded-lg">
+            <img src="https://i.ibb.co/V0FTWqC1/oberyyy.webp" alt="Related Product 2" />
+            <h3>The Veil of Anonymity</h3>
+            <p>For those times when the truth must be spoken, but your identity must remain a mystery.</p>
+            <button class="bg-black text-white px-4 py-2 text-sm mt-2 rounded-md hover:bg-gray-800" onclick="window.location.href='product-detail.html?id=p5'">View Artifact</button>
+          </div>
+          <div class="related-article-card rounded-lg">
+            <img src="https://i.ibb.co/JFyXsdVv/vzn-jacket.webp" alt="Related Product 3" />
+            <h3>The Visionary's Garb</h3>
+            <p>Embody the future. This piece is for those who see beyond the immediate, into the true design.</p>
+            <button class="bg-black text-white px-4 py-2 text-sm mt-2 rounded-md hover:bg-gray-800" onclick="window.location.href='product-detail.html?id=p4'">View Artifact</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Shopping Cart Overlay - Consistent with main site -->
+  <div id="cart-overlay" class="cart-overlay">
+    <div class="cart-header">
+      <span>Your Artifacts</span>
+      <button class="cart-close-button" onclick="toggleCart()">&times;</button>
+    </div>
+    <div id="cart-items" class="cart-items">
+      <!-- Cart items will be injected here by JavaScript -->
+      <p class="empty-cart-message" id="empty-cart-message">Your cart is empty. Acquire some truth.</p>
+    </div>
+    <div class="cart-summary">
+      <p>Total: <span id="cart-total">$0.00</span></p>
+      <button class="cart-checkout-btn rounded-md" onclick="proceedToCheckout()">Proceed to Checkout</button>
+    </div>
+  </div>
+
+  <!-- Footer - Consistent with main site -->
+  <footer class="bg-[#f3f0e7] border-t border-black text-xs font-roboto-condensed text-center py-4">
+    <div class="max-w-6xl mx-auto px-4">
+      <p class="mb-2">© 2025 AWAKEN CULT. Contact: <a href="mailto:info@awakencult.com" class="underline">info@awakencult.com</a></p>
+      <div class="social-icons">
+        <a href="https://instagram.com/awakencult" class="hover:text-gray-600" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="https://x.com/awakencult" class="hover:text-gray-600" target="_blank"><i class="fab fa-twitter"></i></a>
+        <a href="https://youtube.com/@awakencult" class="hover:text-gray-600" target="_blank"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Product Data (duplicated for simplicity, in a real app this would be fetched or global)
+    const products = [
+      {
+        id: 'p1',
+        name: 'XTCY Tee',
+        price: 75,
+        image: 'https://i.ibb.co/GvhVTBTc/MCGA-CAP.webp',
+        description: 'Embrace the euphoria of truth with the XTCY Tee. Crafted for comfort and clarity, this garment is a statement of your awakened state. Limited run for true believers.',
+        sizes: ['S', 'M', 'L', 'XL'],
+        lore: "Worn by the first initiates during the Great Revelation, this tee symbolizes the initial rush of clarity."
+      },
+      {
+        id: 'p2',
+        name: 'Fake News Hoodie',
+        price: 150,
+        image: 'https://i.ibb.co/mrTy6Mhw/fake-news-hoodie.webp',
+        description: 'In an era saturated with manufactured narratives, the "Fake News" Hoodie stands as a defiant emblem of critical thought. Crafted for comfort in the coming storm, its bold declaration is a shield against deception and a beacon for those who question. Join the ranks of the discerning.',
+        sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+        lore: "A staple among the truth-seekers, this hoodie was first seen during the 'Information Purge' of 2023."
+      },
+      {
+        id: 'p3',
+        name: 'Awareness Tee',
+        price: 120,
+        image: 'https://i.ibb.co/twNrP2xF/XTCYYYY.webp',
+        description: 'The Awareness Tee is more than fabric; it\'s a canvas for your expanded consciousness. Featuring intricate designs that hint at deeper truths, it invites inquiry and recognition from fellow awakened souls.',
+        sizes: ['S', 'M', 'L'],
+        lore: "Rumored to be inspired by ancient glyphs discovered in the 'Forbidden Archives', promoting heightened awareness."
+      },
+      {
+        id: 'p4',
+        name: 'Visions Hoodie',
+        price: 180,
+        image: 'https://i.ibb.co/JFyXsdVv/vzn-jacket.webp',
+        description: 'Experience clarity with the Visions Hoodie. Its unique design represents the unfolding of hidden realities, offering warmth and comfort as you navigate the complexities of the awakened world.',
+        sizes: ['M', 'L', 'XL', 'XXL'],
+        lore: "This design appeared to our founder in a profound vision, depicting the layers of reality peeling away."
+      },
+      {
+        id: 'p5',
+        name: 'Burn Balaclava',
+        price: 75,
+        image: 'https://i.ibb.co/V0FTWqC1/oberyyy.webp',
+        description: 'Conceal your identity, reveal your true self. The Burn Balaclava is a symbol of rebellion against the system, a statement that you are ready to shed the old world and embrace the new.',
+        sizes: ['One Size'],
+        lore: "First donned by the anonymous 'Shadow Collective' during their silent protests against the illusion."
+      },
+      {
+        id: 'p6',
+        name: 'MCGA Cap',
+        price: 50,
+        image: 'https://i.ibb.co/JRsBZr2d/BURN-BALACLAVAAA.webp',
+        description: 'Make Cults Great Again. This cap is a bold declaration, a nod to the resurgence of true belief and collective action. Wear it proudly as a member of the AWAKEN movement.',
+        sizes: ['One Size'],
+        lore: "A rallying cry from the early days of the movement, repurposed for the modern awakened."
+      },
+      {
+        id: 'p7',
+        name: 'Truth Seeker Backpack',
+        price: 90,
+        image: 'https://placehold.co/300x300/A0A0A0/FFF?text=BACKPACK',
+        description: 'Carry your revelations with you. This durable backpack is designed for the journey of truth-seeking, with hidden compartments for your most sacred findings.',
+        sizes: ['One Size'],
+        lore: "Equipped for the long road ahead, used by our scouts in their expeditions for ancient knowledge."
+      },
+      {
+        id: 'p8',
+        name: 'Cipher Gloves',
+        price: 40,
+        image: 'https://placehold.co/300x300/B0B0B0/FFF?text=GLOVES',
+        description: 'Protect your hands as you dismantle the old world. These gloves offer comfort and grip, perfect for handling the delicate threads of reality.',
+        sizes: ['S', 'M', 'L'],
+        lore: "Worn by code-breakers and truth-weavers, essential for intricate work in the digital realm."
+      }
+    ];
+
+    let cart = JSON.parse(localStorage.getItem('awakenCart')) || []; // Load cart from local storage
+
+    // Cart Overlay Functions (consistent with other pages)
+    const cartOverlay = document.getElementById('cart-overlay');
+    const cartCountSpan = document.getElementById('cart-count');
+    const cartItemsDiv = document.getElementById('cart-items');
+    const cartTotalSpan = document.getElementById('cart-total');
+    const emptyCartMessage = document.getElementById('empty-cart-message');
+
+    function toggleCart() {
+      cartOverlay.classList.toggle('active');
+    }
+
+    function updateCartDisplay() {
+      cartItemsDiv.innerHTML = ''; // Clear current items
+      let total = 0;
+
+      if (cart.length === 0) {
+        emptyCartMessage.style.display = 'block';
+      } else {
+        emptyCartMessage.style.display = 'none';
+        cart.forEach((item, index) => {
+          const cartItemDiv = document.createElement('div');
+          cartItemDiv.className = 'cart-item';
+          cartItemDiv.innerHTML = `
+            <img src="${item.image}" alt="${item.name}" class="cart-item-image rounded" />
+            <div class="cart-item-details">
+              <h4>${item.name} (${item.size})</h4>
+              <p>$${item.price.toFixed(2)} x ${item.quantity}</p>
+            </div>
+            <button class="cart-item-remove" onclick="removeFromCart(${index})">Remove</button>
+          `;
+          cartItemsDiv.appendChild(cartItemDiv);
+          total += item.price * item.quantity;
+        });
+      }
+
+      cartTotalSpan.textContent = `$${total.toFixed(2)}`;
+      cartCountSpan.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+      localStorage.setItem('awakenCart', JSON.stringify(cart)); // Save cart to local storage
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCartDisplay();
+    }
+
+    function proceedToCheckout() {
+      if (cart.length > 0) {
+        alert('Proceeding to checkout! Your artifacts are on their way to awaken you further.');
+        cart = []; // Clear cart after "checkout"
+        updateCartDisplay();
+        toggleCart(); // Close cart
+      } else {
+        alert('Your cart is empty. Please add some artifacts before checking out.');
+      }
+    }
+
+    // Product Detail Page Logic
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const productId = urlParams.get('id');
+      const product = products.find(p => p.id === productId);
+
+      const productDetailContainer = document.getElementById('product-detail-container'); // Get the container
+
+      if (product) {
+        document.getElementById('product-image').src = product.image;
+        document.getElementById('product-image').alt = product.name;
+        document.getElementById('product-title').textContent = product.name;
+        document.getElementById('product-price').textContent = `$${product.price.toFixed(2)}`;
+        document.getElementById('product-description').textContent = product.description;
+        document.getElementById('product-lore').textContent = `Lore: ${product.lore}`;
+
+        const sizeSelect = document.getElementById('product-size');
+        product.sizes.forEach(size => {
+          const option = document.createElement('option');
+          option.value = size;
+          option.textContent = size;
+          sizeSelect.appendChild(option);
+        });
+
+        document.getElementById('add-to-cart-btn').addEventListener('click', () => {
+          const selectedSize = sizeSelect.value;
+          const quantity = parseInt(document.getElementById('product-quantity').value);
+
+          const existingItemIndex = cart.findIndex(item =>
+            item.id === product.id && item.size === selectedSize
+          );
+
+          if (existingItemIndex > -1) {
+            cart[existingItemIndex].quantity += quantity;
+          } else {
+            cart.push({
+              id: product.id,
+              name: product.name,
+              price: product.price,
+              image: product.image,
+              size: selectedSize,
+              quantity: quantity
+            });
+          }
+          updateCartDisplay();
+          alert(`${quantity} x ${product.name} (${selectedSize}) added to your cart!`);
+        });
+      } else {
+        // Handle product not found: display message and do not attempt to redirect
+        if (productDetailContainer) {
+          productDetailContainer.innerHTML = `
+            <p class="text-center text-xl font-bold text-red-600">Artifact not found. Please return to the market.</p>
+            <button class="bg-black text-white px-4 py-2 mt-4 rounded-md hover:bg-gray-800" onclick="window.history.back()">Go Back</button>
+          `;
+        }
+      }
+
+      updateCartDisplay(); // Initialize cart display on page load
+    });
+  </script>
+</body>
+</html>
