@@ -83,6 +83,7 @@
       height: 100vh;
       overflow: hidden;
       padding: 0;
+      margin-bottom: 0 !important; /* Ensure no gap below video, using !important for strictness */
     }
 
     /* Header specific styles */
@@ -363,8 +364,8 @@
     }
 
     .newsletter-masthead-left .font-tattler {
-      font-size: 4.5rem; /* Size for "AWAKEN" */
-      margin-top: -0.5rem; /* Pull up slightly to overlap */
+      font-size: 4.5rem;
+      margin-top: -0.5rem;
     }
 
     .newsletter-masthead-right {
@@ -379,14 +380,14 @@
     .newsletter-masthead-right .stars span {
       display: inline-block;
       margin-right: 0.1rem;
-      font-size: 0.85rem; /* Size for stars */
+      font-size: 0.85rem;
     }
     .newsletter-masthead-right .special-weekly {
       font-size: 0.85rem;
       margin-top: 0.25rem;
     }
     .newsletter-masthead-right .price {
-      font-size: 1.5rem; /* Larger for price */
+      font-size: 1.5rem;
       margin-top: 0.25rem;
     }
 
@@ -397,7 +398,14 @@
       letter-spacing: -0.05em;
       margin-bottom: 1.5rem; /* Space before email form */
       text-transform: uppercase;
+      color: #000; /* Default black color */
+      transition: color 0.2s, text-shadow 0.2s; /* Smooth transition for hover */
     }
+    .newsletter-headline-main:hover {
+      color: #d94a44; /* Red color on hover */
+      text-shadow: 0 0 5px rgba(217, 74, 68, 0.5); /* Subtle glow */
+    }
+
 
     .newsletter-form {
       display: flex;
@@ -410,44 +418,43 @@
       border: 1px solid black;
       padding: 0.75rem 1rem;
       font-size: 1rem;
-      background-color: #f3f0e7; /* Match body background */
+      background-color: white; /* Changed to white background */
     }
     .newsletter-form button {
-      background-color: black;
-      color: white;
-      padding: 0.75rem 1rem;
+      background-color: #d94a44; /* Changed to red */
+      color: white; /* Changed to white text */
+      padding: 1rem 1.5rem; /* Made button bigger */
       font-weight: bold;
       text-transform: uppercase;
-      font-size: 1rem;
+      font-size: 1.1rem; /* Made font bigger */
       border: none;
       cursor: pointer;
       transition: background-color 0.2s;
     }
     .newsletter-form button:hover {
-      background-color: #333;
+      background-color: #b92a1e; /* Darker red on hover */
     }
 
     /* Quote above video section */
     .video-quote {
         text-align: center;
         max-width: 800px;
-        margin: 0 auto 2rem auto; /* Center and add space below */
-        font-family: 'Roboto Slab', serif; /* Use a serif font for quote */
+        margin: 0 auto 2rem auto;
+        font-family: 'Roboto Slab', serif;
         font-style: italic;
         font-size: 1.5rem;
         line-height: 1.4;
-        padding: 0 1rem; /* Add horizontal padding for smaller screens */
-        cursor: pointer; /* Indicate clickability */
-        transition: color 0.3s ease; /* Smooth transition for hover */
+        padding: 0 1rem;
+        cursor: pointer;
+        transition: color 0.3s ease;
     }
     .video-quote:hover {
-        color: #d94a44; /* Highlight color on hover */
+        color: #d94a44;
     }
     .video-quote strong {
         font-weight: bold;
-        color: inherit; /* Inherit color from parent for hover effect */
+        color: inherit;
     }
-
 
     /* Footer adjustments */
     footer {
@@ -465,43 +472,52 @@
       justify-content: center;
       gap: 1.5rem;
       margin-top: 0.75rem;
-      font-size: 1.25rem; /* Larger social icons */
+      font-size: 1.25rem;
     }
 
-    /* Responsive adjustments for header (Mobile/Tablet view) */
-    @media (max-width: 1023px) { /* All screens smaller than desktop */
+    /* Responsive adjustments for header */
+    @media (min-width: 768px) {
+      header .header-logo {
+        font-size: 6rem;
+      }
+      header nav a {
+        font-size: 1rem;
+        margin-left: 2.5rem;
+      }
+    }
+    @media (max-width: 767px) {
       .header-top-row {
-        flex-direction: column; /* Stack logo and nav vertically */
+        flex-direction: column;
         padding: 0.5rem 1rem;
       }
       header .header-logo {
-        font-size: 4rem; /* Smaller logo for mobile/tablet */
+        font-size: 4rem;
         margin-left: 0;
-        margin-bottom: 0.5rem; /* Space below logo */
+        margin-bottom: 0.5rem;
       }
       header nav {
-        text-align: center; /* Center nav links */
+        text-align: center;
         width: 100%;
-        margin-top: 0.5rem; /* Space above nav */
+        margin-top: 0.5rem;
         margin-right: 0;
         justify-content: center;
-        flex-wrap: wrap; /* Allow nav items to wrap */
+        flex-wrap: wrap;
       }
       header nav a {
-        font-size: 0.875rem; /* Smaller nav links for mobile/tablet */
-        margin: 0 0.5rem; /* Adjust margin for wrapped items */
+        font-size: 0.875rem;
+        margin: 0 0.5rem;
       }
       .cart-icon-container {
         font-size: 1.2rem;
-        margin-left: 0.5rem; /* Adjust margin for mobile/tablet */
+        margin-left: 0.5rem;
       }
-      /* Marquee container now inside header, so its top is relative to header's top */
       .marquee-container {
-        top: auto; /* Remove fixed top */
-        position: relative; /* Make it relative to header */
+        top: auto;
+        position: relative;
       }
-
-      /* General mobile/tablet adjustments for sections */
+    }
+    /* Responsive adjustments for other sections */
+    @media (max-width: 768px) {
       .newsletter-section {
         padding: 1rem;
       }
@@ -525,46 +541,60 @@
         font-size: 1.2rem;
       }
       .article-body {
-        font-size: 0.9rem; /* Adjust for smaller screens */
+        font-size: 0.9rem;
         line-height: 1.6;
       }
-      /* Ensure shop and editorial grids are single column on mobile/tablet */
-      .shop-section .grid, .editorial-shots-grid .grid {
-        grid-template-columns: 1fr !important; /* Force single column */
+      .editorial-shot-card img {
+        height: 150px;
       }
-      .shop-product-card, .editorial-shot-card {
-        aspect-ratio: auto !important; /* Remove aspect ratio for mobile/tablet */
-        min-height: auto !important; /* Remove min-height for mobile/tablet */
-      }
-      .shop-product-card .product-image-container {
-        height: auto !important; /* Remove fixed height for mobile/tablet */
-        min-height: 12rem; /* Keep a minimum height for images */
+      /* Video adjustments for mobile */
+      .video-section video {
+        object-fit: cover; /* Changed back to cover */
+        width: 100%; /* Ensure it takes full width */
+        height: auto; /* Adjust height proportionally */
       }
     }
-
-    /* Responsive adjustments for header (Desktop view) */
-    @media (min-width: 1024px) {
-      header .header-logo {
-        font-size: 6rem; /* Large size for desktop */
+    @media (max-width: 480px) {
+      .newsletter-masthead-left .font-national {
+        font-size: 0.8rem;
       }
-      header nav a {
-        font-size: 1rem; /* Larger nav links for desktop */
-        margin-left: 2.5rem; /* More space between nav links */
+      .newsletter-masthead-left .font-tattler {
+        font-size: 2.5rem;
+      }
+      .newsletter-masthead-right .stars span,
+      .newsletter-masthead-right .special-weekly {
+        font-size: 0.6rem;
+      }
+      .newsletter-masthead-right .price {
+        font-size: 1rem;
+      }
+      .newsletter-headline-main {
+        font-size: 2.5rem;
+      }
+      .video-quote {
+        font-size: 1rem;
+      }
+      .article-body {
+        font-size: 0.8rem;
+        line-height: 1.5;
+      }
+      .editorial-shot-card img {
+        height: 120px;
       }
     }
 
     /* Styles for the new Ad Section */
     .background-image-cover-adjusted {
-      background-size: cover; /* Ensures the image covers the entire element */
-      background-position: 50% 20%; /* Horizontal center, vertical 20% from top */
-      background-repeat: no-repeat; /* Prevents image repetition */
+      background-size: cover;
+      background-position: 50% 20%;
+      background-repeat: no-repeat;
     }
 
     .mobile-full-height {
       height: 100vh;
     }
 
-    @media (min-width: 768px) { /* md breakpoint */
+    @media (min-width: 768px) {
       .md\:h-screen {
         height: 100vh;
       }
@@ -644,7 +674,7 @@
       padding: 0.3rem 0.6rem;
       font-size: 0.75rem;
       cursor: pointer;
-      border-radius: 0; /* Ensure sharp corners */
+      border-radius: 0;
     }
     .cart-summary {
       padding: 1rem;
@@ -669,7 +699,7 @@
       font-size: 1.1rem;
       cursor: pointer;
       transition: background-color 0.2s;
-      border-radius: 0; /* Ensure sharp corners */
+      border-radius: 0;
     }
     .cart-checkout-btn:hover {
       background-color: #b92a1e;
@@ -681,7 +711,7 @@
     }
     @media (max-width: 767px) {
       .cart-overlay {
-        width: 100%; /* Full width on mobile */
+        width: 100%;
         right: -100vw;
       }
       .cart-overlay.active {
@@ -694,13 +724,13 @@
   <!-- Header -->
   <header>
     <div class="header-top-row">
-      <a href="/" class="header-logo">AWAKEN</a> <!-- Changed href to "/" for homepage -->
+      <a href="index.html" class="header-logo">AWAKEN</a> <!-- Changed href to "index.html" for homepage -->
       <nav>
         <a href="shop.html">Shop</a>
         <a href="manifesto.html">Manifesto</a>
         <a href="join-us.html">Join Us</a>
-        <a href="about.html">About</a>
-        <a href="archives.html">Archive</a> <!-- Changed Campaign to Archive -->
+        <a href="archives.html">Archives</a> <!-- Changed Archive to Archives -->
+        <a href="#about">About</a> <!-- About remains an anchor, as it's on the homepage -->
         <div class="cart-icon-container" onclick="toggleCart()">
           <i class="fas fa-shopping-cart"></i>
           <span class="cart-count" id="cart-count">0</span>
@@ -838,7 +868,7 @@
       </div>
     </div>
     <div class="text-center mt-8 mb-8"> <!-- Moved button here -->
-      <a href="shop.html" class="inline-block bg-black text-white px-6 py-3 font-bold uppercase text-sm hover:bg-gray-800 transition-colors">Shop All Artifacts</a>
+      <a href="shop.html" class="inline-block bg-[#d94a44] text-white px-8 py-4 font-bold uppercase text-base hover:bg-[#b92a1e] transition-colors">Shop All Artifacts</a>
     </div>
   </section>
 
@@ -851,14 +881,14 @@
 
   <!-- Fullscreen Video Section - Now links to YouTube -->
   <div class="video-section" onclick="window.open('https://www.youtube.com/@awakencult', '_blank')" style="cursor: pointer;">
-    <video autoplay loop muted playsinline class="w-full h-full object-cover">
+    <video autoplay loop muted playsinline class="w-full h-full object-cover"> <!-- Changed object-fit back to cover -->
       <source src="https://raw.githubusercontent.com/junokira/NWO/main/nwo%20web%20w-2.mp4" type="video/mp4" />
       Your browser does not support the video tag.
     </video>
   </div>
 
-  <!-- New Ad Section -->
-  <section id="campaign" class="w-full h-screen relative overflow-hidden">
+  <!-- New Ad Section - Removed top margin to close gap -->
+  <section id="campaign" class="w-full h-screen relative overflow-hidden mt-0 !pt-0"> <!-- Added !pt-0 for strict no top padding -->
     <div class="flex flex-col lg:flex-row w-full h-full"> <!-- Changed md:flex-row to lg:flex-row -->
       <!-- Left side with woman -->
       <div class="w-full lg:w-1/2 relative flex-shrink-0 background-image-cover-adjusted mobile-full-height">
@@ -920,12 +950,18 @@
       </div>
     </div>
 
-    <h2 class="newsletter-headline-main font-tattler uppercase">OPEN YOUR EYES</h2>
+    <a href="join-us.html" class="block no-underline"> <!-- Wrapped in anchor tag -->
+      <h2 class="newsletter-headline-main font-tattler uppercase">OPEN YOUR EYES</h2>
+    </a>
     
-    <form class="newsletter-form">
-      <input type="email" placeholder="Enter your email address" required />
-      <button type="submit">Subscribe</button>
+    <!-- MailerLite Form Integration -->
+    <form action="https://assets.mailerlite.com/jsonp/1660429/forms/159738966717761336/subscribe" method="post" target="_blank" class="newsletter-form">
+      <input type="email" name="fields[email]" placeholder="Enter your email" required class="newsletter-form-input" />
+      <input type="hidden" name="ml-submit" value="1">
+      <input type="hidden" name="anticsrf" value="true">
+      <button type="submit" class="newsletter-form-button">Subscribe</button>
     </form>
+    <!-- End MailerLite Form Integration -->
   </section>
 
   <!-- Editorial Shots Section - Updated with content and links -->
@@ -946,7 +982,7 @@
       </a>
     </div>
     <div class="text-center mt-8 mb-8"> <!-- Moved button here -->
-      <a href="archives.html" class="inline-block bg-black text-white px-6 py-3 font-bold uppercase text-sm hover:bg-gray-800 transition-colors">View All Archives</a>
+      <a href="archives.html" class="inline-block bg-[#d94a44] text-white px-8 py-4 font-bold uppercase text-base hover:bg-[#b92a1e] transition-colors">View All Archives</a>
     </div>
   </section>
 
@@ -962,7 +998,15 @@
     </div>
   </footer>
 
-  <!-- Shopping Cart Overlay - Re-added for consistency -->
+  <!-- Fullscreen Modal Structure -->
+  <div id="fullscreenModal" class="modal-overlay">
+    <div class="modal-content">
+      <img id="fullscreenImage" src="" alt="">
+      <!-- Removed the close button from HTML as requested -->
+    </div>
+  </div>
+
+  <!-- Shopping Cart Overlay - Re-added and consistent with main site -->
   <div id="cart-overlay" class="cart-overlay">
     <div class="cart-header">
       <span>Your Artifacts</span>
@@ -974,14 +1018,7 @@
     </div>
     <div class="cart-summary">
       <p>Total: <span id="cart-total">$0.00</span></p>
-      <button class="cart-checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout</button>
-    </div>
-  </div>
-  
-  <!-- Fullscreen Modal Structure -->
-  <div id="fullscreenModal" class="modal-overlay">
-    <div class="modal-content">
-      <img id="fullscreenImage" src="" alt=""> <!-- Removed alt attribute here -->
+      <button class="cart-checkout-btn rounded-md" onclick="proceedToCheckout()">Proceed to Checkout</button>
     </div>
   </div>
 
@@ -990,18 +1027,32 @@
     let cart = JSON.parse(localStorage.getItem('awakenCart'))
  || [];
 
+    // Check if cart elements exist before trying to access them
     const cartOverlay = document.getElementById('cart-overlay');
-    const cartCountSpan = document.getElementById('cart-count');
-    const cartItemsDiv = document.getElementById('cart-items');
-    const cartTotalSpan = document.getElementById('cart-total');
-    const emptyCartMessage = document.getElementById('empty-cart-message');
+    let cartCountSpan, cartItemsDiv, cartTotalSpan, emptyCartMessage;
+
+    // Only get elements if cartOverlay exists, preventing null errors
+    if (cartOverlay) {
+        cartCountSpan = document.getElementById('cart-count');
+        cartItemsDiv = document.getElementById('cart-items');
+        cartTotalSpan = document.getElementById('cart-total');
+        emptyCartMessage = document.getElementById('empty-cart-message');
+    }
+
 
     function toggleCart() {
-      cartOverlay.classList.toggle('active');
+      if (cartOverlay) { // Only toggle if cart overlay exists
+        cartOverlay.classList.toggle('active');
+      }
     }
 
     function updateCartDisplay() {
-      cartItemsDiv.innerHTML = '';
+      if (!cartItemsDiv || !cartCountSpan || !cartTotalSpan || !emptyCartMessage) {
+        // console.error("Cart elements not found. Cart display cannot be updated.");
+        return; // Exit if cart elements are not found
+      }
+
+      cartItemsDiv.innerHTML = ''; // Clear current items
       let total = 0;
 
       if (cart.length === 0) {
@@ -1012,7 +1063,7 @@
           const cartItemDiv = document.createElement('div');
           cartItemDiv.className = 'cart-item';
           cartItemDiv.innerHTML = `
-            <img src="${item.image}" alt="${item.name}" class="cart-item-image" />
+            <img src="${item.image}" alt="${item.name}" class="cart-item-image rounded" />
             <div class="cart-item-details">
               <h4>${item.name} (${item.size})</h4>
               <p>$${item.price.toFixed(2)} x ${item.quantity}</p>
@@ -1023,26 +1074,15 @@
           total += item.price * item.quantity;
         });
       }
+
       cartTotalSpan.textContent = `$${total.toFixed(2)}`;
       cartCountSpan.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
-      localStorage.setItem('awakenCart', JSON.stringify(cart));
+      localStorage.setItem('awakenCart', JSON.stringify(cart)); // Save cart to local storage
     }
 
     function removeFromCart(index) {
       cart.splice(index, 1);
       updateCartDisplay();
-    }
-
-    function proceedToCheckout() {
-      if (cart.length > 0) {
-        // Using a custom modal/alert for user feedback instead of window.alert
-        showCustomAlert('Proceeding to checkout! Your artifacts are on their way to awaken you further.');
-        cart = [];
-        updateCartDisplay();
-        toggleCart();
-      } else {
-        showCustomAlert('Your cart is empty. Please add some artifacts before checking out.');
-      }
     }
 
     // Custom Alert Function (replaces window.alert)
@@ -1078,11 +1118,23 @@
         }, 3000); // Disappear after 3 seconds
     }
 
+    function proceedToCheckout() {
+      if (cart.length > 0) {
+        showCustomAlert('Proceeding to checkout! Your artifacts are on their way to awaken you further.');
+        cart = []; // Clear cart after "checkout"
+        updateCartDisplay();
+        toggleCart(); // Close cart
+      } else {
+        showCustomAlert('Your cart is empty. Please add some artifacts before checking out.');
+      }
+    }
+
 
     document.addEventListener('DOMContentLoaded', () => {
       const posterWrappers = document.querySelectorAll('.poster-item-wrapper');
       const fullscreenModal = document.getElementById('fullscreenModal');
       const fullscreenImage = document.getElementById('fullscreenImage');
+      // The closeModalButton is intentionally removed from HTML as requested
 
       // Function to open modal
       const openModal = (imageSrc) => {
@@ -1098,6 +1150,7 @@
         if (fullscreenModal) { // Add null check for fullscreenModal
           fullscreenModal.classList.remove('active');
           document.body.style.overflow = ''; // Restore scrolling
+          fullscreenImage.src = ''; // Clear image source
         }
       };
 
@@ -1128,57 +1181,52 @@
       });
 
       // Marquee content duplication and animation setup for seamless loop
-      const marqueeContentWrapper = document.querySelector('.marquee-content-wrapper');
-      const originalMarqueeText = document.querySelector('.marquee-text'); // Get the original span
+      const marqueeContentWrapper = document.querySelector('.marquee-container .marquee-content-wrapper');
+      const originalMarqueeText = document.querySelector('.marquee-container .marquee-text');
 
-      const updateMarquee = () => {
-        if (marqueeContentWrapper && originalMarqueeText) {
-          const originalContentHTML = originalMarqueeText.innerHTML;
+      if (marqueeContentWrapper && originalMarqueeText) {
+        const originalContent = originalMarqueeText.outerHTML;
 
-          // Temporarily stop animation and clear content to prevent flickering during recalculation
-          marqueeContentWrapper.style.animation = 'none';
-          marqueeContentWrapper.innerHTML = '';
+        // Clear existing content to prevent multiple duplications on re-run
+        marqueeContentWrapper.innerHTML = '';
 
-          // Append enough content to ensure seamless loop across various screen sizes
-          // We'll append 4 copies to be robust.
-          for (let i = 0; i < 4; i++) {
-              const copy = document.createElement('span');
-              copy.className = 'marquee-text';
-              copy.innerHTML = originalContentHTML;
-              marqueeContentWrapper.appendChild(copy);
-          }
-
-          // Use requestAnimationFrame to ensure layout is stable before measuring
-          requestAnimationFrame(() => {
-              const firstMarqueeTextElement = marqueeContentWrapper.firstElementChild;
-              if (firstMarqueeTextElement) {
-                  // Get the actual rendered width of one segment of the marquee text (the first copy)
-                  const singleSegmentWidth = firstMarqueeTextElement.offsetWidth;
-                  
-                  // Set the CSS custom properties for animation distance and speed
-                  // The animation should translate by the exact width of one segment
-                  marqueeContentWrapper.style.setProperty('--marquee-distance', `-${singleSegmentWidth}px`);
-                  
-                  // Calculate speed: Aim for a balance of readability and captivating motion.
-                  // Adjusted to 70 pixels per second for a slightly slower, more readable speed.
-                  const pixelsPerSecond = 70; 
-                  const calculatedSpeed = singleSegmentWidth / pixelsPerSecond;
-                  marqueeContentWrapper.style.setProperty('--marquee-speed', `${calculatedSpeed}s`);
-
-                  // Re-apply animation to ensure it picks up new variables
-                  // Trigger reflow to ensure animation restarts smoothly
-                  void marqueeContentWrapper.offsetWidth; 
-                  marqueeContentWrapper.style.animation = `marquee var(--marquee-speed) linear infinite`;
-              }
-          });
+        // Duplicate the content multiple times to ensure continuous flow
+        // A good rule of thumb is to duplicate enough times so the total content width
+        // is at least 2-3 times the container width.
+        // We'll start with 3 duplications for robustness.
+        for (let i = 0; i < 3; i++) {
+            marqueeContentWrapper.innerHTML += originalContent;
         }
-      };
 
-      // Call updateMarquee on initial load and window resize
-      updateMarquee();
-      window.addEventListener('resize', updateMarquee);
+        // Use requestAnimationFrame to ensure layout is stable before measuring
+        requestAnimationFrame(() => {
+            const firstMarqueeTextElement = marqueeContentWrapper.firstElementChild;
+            if (firstMarqueeTextElement) {
+                // Get the actual rendered width of one segment of the marquee text
+                const singleTextWidth = firstMarqueeTextElement.offsetWidth;
 
-      updateCartDisplay(); // Initialize cart display on page load
+                // Set the CSS custom properties for animation distance and speed
+                // The animation should translate by the exact width of one segment
+                marqueeContentWrapper.style.setProperty('--marquee-distance', `-${singleTextWidth}px`);
+                
+                // Calculate speed: 1 second per 150 pixels for a good balance of speed and readability
+                // Adjusted to 150 pixels per second for a good speed.
+                const pixelsPerSecond = 150; 
+                const calculatedSpeed = singleTextWidth / pixelsPerSecond;
+                marqueeContentWrapper.style.setProperty('--marquee-speed', `${calculatedSpeed}s`);
+
+                // Re-apply animation to ensure it picks up new variables
+                marqueeContentWrapper.style.animation = 'none'; // Reset animation
+                void marqueeContentWrapper.offsetWidth; // Trigger reflow
+                marqueeContentWrapper.style.animation = `marquee var(--marquee-speed) linear infinite`;
+            }
+        });
+      }
+
+      // Only call updateCartDisplay if the cart elements are present in the DOM
+      if (cartOverlay) {
+        updateCartDisplay(); // Initialize cart display on page load
+      }
     });
   </script>
 </body>
