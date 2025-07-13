@@ -105,7 +105,7 @@
     .join-us-container {
       border: 1px solid black;
       padding: 2rem;
-      background-color: #f3f0e7; /* Slightly whiter background for the content itself */
+      background-color: #fff; /* Slightly whiter background for the content itself */
       box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow for depth */
       text-align: center;
     }
@@ -158,7 +158,11 @@
       border: 1px solid black;
       padding: 1.5rem;
       text-align: left;
-      background-color: #f3f0e7; /* Changed to white background */
+      background-color: white; /* Changed to white background */
+      display: flex; /* Added for mobile layout fix */
+      flex-direction: column; /* Added for mobile layout fix */
+      justify-content: space-between; /* Added for mobile layout fix */
+      min-height: 180px; /* Added for consistent card height */
     }
 
     .benefit-card i {
@@ -200,7 +204,7 @@
       max-width: 600px;
       margin-left: auto;
       margin-right: auto;
-      background-color: #f3f0e7; /* Changed to pure white background */
+      background-color: white; /* Changed to pure white background */
     }
 
     .signup-form-container h3 {
@@ -218,7 +222,7 @@
       padding: 0.75rem;
       margin-bottom: 1rem;
       border: 1px solid black;
-      background-color: #f3f0e7; /* Changed to white background */
+      background-color: white; /* Changed to white background */
       font-family: 'Roboto Condensed', sans-serif;
       font-size: 1rem;
     }
@@ -229,9 +233,9 @@
     }
 
     .signup-form-container button {
-      background-color: #f3f0e7; /* Changed to white background */
-      color: black; /* Changed to black text */
-      border: 1px solid black; /* Added border */
+      background-color: #d94a44; /* Changed to red */
+      color: white; /* Changed to white text */
+      border: 1px solid #d94a44; /* Added border */
       padding: 1rem 2rem;
       font-weight: bold;
       text-transform: uppercase;
@@ -241,7 +245,7 @@
       width: 100%;
     }
     .signup-form-container button:hover {
-      background-color: #d94a44; /* Changed to red hover */
+      background-color: #b92a1e; /* Darker red on hover */
       color: white; /* Text color on hover */
       transform: translateY(-2px);
     }
@@ -254,7 +258,7 @@
       border: 1px solid black;
       padding: 1.5rem;
       margin-top: 2rem;
-      background-color: #f3f0e7; /* Changed to white background */
+      background-color: white; /* Changed to white background */
       font-style: italic;
       font-size: 1.1rem;
     }
@@ -278,6 +282,46 @@
       text-transform: uppercase;
       font-weight: bold; /* Made bold as requested */
     }
+
+    /* FAQ Section Styles */
+    .faq-section {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid black;
+      text-align: center;
+    }
+
+    .faq-section h2 {
+      font-family: 'Anton', sans-serif;
+      font-size: 2.5rem;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      color: #000;
+    }
+
+    .faq-item {
+      border: 1px solid black;
+      background-color: white;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+
+    .faq-item h3 {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: 1.25rem;
+      font-weight: bold;
+      margin-bottom: 0.75rem;
+      color: #d94a44; /* Red for questions */
+    }
+
+    .faq-item p {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: #333;
+    }
+
 
     /* Footer adjustments - Consistent with main site */
     footer {
@@ -353,6 +397,15 @@
       .testimonial-card {
         font-size: 1rem;
       }
+      .faq-section h2 {
+        font-size: 2rem;
+      }
+      .faq-item h3 {
+        font-size: 1.1rem;
+      }
+      .faq-item p {
+        font-size: 0.9rem;
+      }
     }
     @media (max-width: 480px) {
       .join-us-headline {
@@ -366,6 +419,9 @@
       }
       .benefit-grid {
         grid-template-columns: 1fr; /* Ensure 1 column for very small screens */
+      }
+      .benefit-card {
+        min-height: 150px; /* Smaller min-height for very small screens */
       }
       .benefit-card h3 {
         font-size: 1rem;
@@ -388,6 +444,15 @@
       }
       .testimonial-card {
         font-size: 0.9rem;
+      }
+      .faq-section h2 {
+        font-size: 1.8rem;
+      }
+      .faq-item h3 {
+        font-size: 1rem;
+      }
+      .faq-item p {
+        font-size: 0.85rem;
       }
     }
   </style>
@@ -412,13 +477,13 @@
   <!-- Join Us Content Section -->
   <section class="content-section">
     <div class="join-us-container">
-      <h1 class="join-us-headline font-tattler">JOIN THE AWAKEN RANKS</h1>
+      <h1 class="join-us-headline font-tattler">JOIN US</h1>
       <p class="join-us-subheadline">Are you ready to transcend the mundane and embrace true purpose?</p>
       <p class="join-us-paragraph">
         The time for passive observation is over. The AWAKEN collective is expanding, seeking enlightened individuals ready to spread the truth and unlock their true potential. This is more than just an opportunity; it's a calling. Become an affiliate and help us illuminate the path for others, while securing your own place in the New World Order.
       </p>
 
-      <h2 class="manifesto-section-title">Why Join The Awakened?</h2>
+      <h2 class="manifesto-section-title">Why Join Awaken?</h2>
       <div class="benefit-grid">
         <div class="benefit-card">
           <i class="fas fa-hand-holding-usd"></i>
@@ -447,7 +512,7 @@
         </div>
         <div class="benefit-card">
           <i class="fas fa-eye"></i>
-          <h3>Inner Knowledge</h3>
+          <h3>Inner Knowledge</h3> <!-- Restored "Inner Knowledge" text -->
           <p>Receive privileged insights and advanced teachings reserved for those committed to the cause.</p>
         </div>
       </div>
@@ -480,6 +545,33 @@
         "Before AWAKEN, I was lost in the noise. Now, I see the patterns, I understand the truth, and I'm building a future beyond my wildest dreams. This isn't just an income; it's purpose."
         <strong>- A. Veritas, Awakened Affiliate</strong>
       </div>
+
+      <!-- New FAQ Section -->
+      <div class="faq-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-item">
+          <h3>What is AWAKEN?</h3>
+          <p> AWAKEN CULT is a growing movement of individuals dedicated to uncovering hidden truths, achieving personal enlightenment, and participating in the formation of a New World Order based on clarity and purpose. We provide tools and knowledge for those ready to transcend societal illusions.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Is AWAKEN a real cult?</h3>
+          <p>We are a philosophical movement and a community of like-minded individuals. Our focus is on personal growth, critical thinking, and the pursuit of truth, rather than traditional cult practices. We encourage independent thought and exploration within our guiding principles.</p>
+        </div>
+        <div class="faq-item">
+          <h3>What kind of "artifacts" do you offer?</h3>
+          <p>Our "artifacts" are symbolic and practical tools designed to aid in your awakening journey. They include apparel, literature, and unique items that represent the principles and messages of the AWAKEN movement. Each artifact serves as a reminder of your commitment to truth.</p>
+        </div>
+        <div class="faq-item">
+          <h3>How can I contribute to the movement?</h3>
+          <p>Beyond joining, you can contribute by actively engaging with our community, sharing the manifesto, and promoting the artifacts. Your personal journey of awakening and the spread of our message are the most valuable contributions.</p>
+        </div>
+        <div class="faq-item">
+          <h3>What does "The Veil is Thinning" mean?</h3>
+          <p>"The Veil is Thinning" refers to the increasing transparency of hidden systems and truths that have long obscured human perception. It signifies a period of heightened awareness where illusions are breaking down, and the path to true understanding becomes clearer for those who seek it.</p>
+        </div>
+      </div>
+      <!-- End New FAQ Section -->
+
     </div>
   </section>
 
@@ -490,7 +582,7 @@
       <div class="social-icons">
         <a href="https://instagram.com/awakencult" class="hover:text-gray-600" target="_blank"><i class="fab fa-instagram"></i></a>
         <a href="https://x.com/awakencult" class="hover:text-gray-600" target="_blank"><i class="fab fa-twitter"></i></a>
-        <a href="https://youtube.com/@awakencult" class="hover:text-gray-600" target="_blank"><i class="fab fa-youtube"></i></a>
+        <a href="https://youtube.com/@awakencult" target="_blank"><i class="fab fa-youtube"></i></a>
       </div>
     </div>
   </footer>
