@@ -19,7 +19,7 @@
     .font-roboto-slab { font-family: 'Roboto Slab', serif; }
     .font-tattler { font-family: 'Anton', sans-serif; letter-spacing: -0.05em; }
     .font-national { font-family: 'Oswald', sans-serif; font-weight: 700; letter-spacing: 0.1em; }
-
+di
     /* Basic body styles - Consistent with homepage */
     body {
       background-color: #f3f0e7; /* Light newspaper-like background */
@@ -198,28 +198,13 @@
     }
 
     /* For images within the article body - Adjusted for better fit */
-    .article-body .image-card { /* New class for images wrapped in a card */
-      border: 1px solid black; /* Apply border to the image card */
-      padding: 0.75rem; /* Padding inside the image card */
-      margin: 1.5rem auto; /* Center the image card and add vertical space */
-      display: block; /* Ensure it behaves like a block element */
-      max-width: 100%; /* Ensure it doesn't overflow its parent */
-      box-sizing: border-box; /* Include padding in width */
-      text-align: center; /* Center image and caption within the card */
-    }
-    .article-body .image-card img {
-      max-width: 100%; /* Ensure images don't overflow their card */
+    .article-body img {
+      max-width: 100%; /* Ensure images don't overflow */
       height: auto;
-      display: block; /* Remove extra space below image */
-      margin: 0 auto 0.5rem auto; /* Center image within card, add space below */
-      border: none; /* Remove individual image border if card has one */
-      box-shadow: none; /* Remove individual image shadow if card has one */
-    }
-    .article-body .image-card .caption {
-      font-size: 0.75rem;
-      line-height: 1.3;
-      color: #555;
-      margin-top: 0.5rem; /* Space between image and caption */
+      display: block;
+      margin: 1.5rem auto; /* Center images and add vertical space */
+      border: 1px solid #ccc;
+      box-shadow: 4px 4px 8px rgba(0,0,0,0.2); /* Subtle shadow for images */
     }
 
     /* For promo codes and special announcements */
@@ -425,9 +410,6 @@
         .article-card {
             font-size: 0.7rem;
         }
-        .article-body .image-card .caption {
-            font-size: 0.65rem;
-        }
     }
 
     /* Responsive adjustments for header (Desktop view) - Consistent with homepage */
@@ -566,6 +548,17 @@
             updateCartDisplay();
         }
 
+        function proceedToCheckout() {
+            if (cart.length > 0) {
+                showCustomAlert('Proceeding to checkout! Your artifacts are on their way to awaken you further.');
+                cart = [];
+                updateCartDisplay();
+                toggleCart();
+            } else {
+                showCustomAlert('Your cart is empty. Please add some artifacts before checking out.');
+            }
+        }
+
         function showCustomAlert(message) {
             const alertBox = document.createElement('div');
             alertBox.style.cssText = `
@@ -605,28 +598,16 @@
             subHeadline: "Decades of whispers, now brought to light. Are you ready to comprehend the true scale of the transformation?",
             body: `
               <p>The old systems are crumbling, not by chance, but by design. The New World Order is not a conspiracy theory; it is the inevitable evolution of consciousness, orchestrated by those who have long seen beyond the veil. This is the era of structured truth. Every institution, every narrative, every comfort is a thread in the web of control. But once seen, the threads can be unraveled.</p>
-              <div class="image-card">
-                <img src="https://i.ibb.co/fVC0cbZ6/snsb.png" alt="NWO Blueprint" />
-                <p class="caption">The blueprint of control, revealed.</p>
-              </div>
+              <img src="https://i.ibb.co/fVC0cbZ6/snsb.png" alt="NWO Blueprint" />
               <p>For too long, humanity has slumbered beneath a veil woven from lies, distractions, and manufactured realities. We are fed narratives designed to keep us docile, consuming, and perpetually unaware of the true power that lies dormant within each soul. The screens glow, the news cycles churn, and the systems of control tighten their grip, all while the masses remain oblivious to the chains that bind their minds. This is not freedom; it is a meticulously crafted prison of perception.</p>
               <p class="promo-code">CODE: NWO2025 (10% off any hoodie)</p>
               <p>They tell you what to think, how to feel, and what to desire. They profit from your ignorance and thrive on your complacency. The institutions you trust are but instruments of a grander design, a silent orchestration of control that spans generations. Your history is rewritten, your future is predetermined, and your present is a carefully managed illusion.</p>
-              <div class="image-card">
-                <img src="https://i.ibb.co/y424N0x/instagram.png" alt="Social Media Control" />
-                <p class="caption">The digital chains that bind us.</p>
-              </div>
+              <img src="https://i.ibb.co/y424N0x/instagram.png" alt="Social Media Control" />
               <p>The silent war is fought not with bullets, but with bytes. Information is the new battlefield, and your mind is the prize. Every click, every like, every share is a data point, meticulously collected to refine the algorithms of your control. But awareness is the first step to liberation. Recognize the patterns, and the power shifts.</p>
-              <div class="image-card">
-                <img src="https://i.ibb.co/TMszwwZ3/nwo-awaken-needs-you.png" alt="NWO Needs You Poster" />
-                <p class="caption">The call for a new dawn.</p>
-              </div>
+              <img src="https://i.ibb.co/TMszwwZ3/nwo-awaken-needs-you.png" alt="NWO Needs You Poster" />
               <p>The final stage is not a takeover, but an invitation. An invitation to those who have seen the truth, who have felt the stirrings of awakening, to join the architects of the new dawn. The choice is yours: remain in the illusion, or step into the light of the New World Order.</p>
               <p><strong>How to Expose the System:</strong> Begin by questioning every source of information. Cross-reference news from independent outlets. Observe patterns in media narratives that seem designed to divide or distract. Share your findings with trusted individuals, encouraging critical thinking rather than blind acceptance. Support alternative media and decentralized information networks. Demand transparency from institutions. Your conscious engagement is a powerful force against their control.</p>
-              <div class="image-card">
-                <img src="https://placehold.co/600x400/333333/FFFFFF?text=Global+Control+Diagram" alt="Global Control Diagram" />
-                <p class="caption">Mapping the global network of influence.</p>
-              </div>
+              <img src="https://placehold.co/600x400/333333/FFFFFF?text=Global+Control+Diagram" alt="Global Control Diagram" />
               <p><strong>Applying the Knowledge:</strong> Understand that true power lies in collective awareness. Educate yourself on historical precedents of societal manipulation. Practice digital hygiene by limiting exposure to mainstream narratives and seeking diverse perspectives. Engage in local community building to create resilient networks outside of centralized systems. Develop self-sufficiency in key areas like food and energy to reduce reliance on controlled infrastructures. Every step towards autonomy weakens their grip.</p>
             `,
             leftColumnContent: `
@@ -709,28 +690,16 @@
             subHeadline: "In a world saturated with disinformation, the true challenge is discerning the signal from the noise.",
             body: `
               <p>Every channel, every feed, every public pronouncement is designed to distract. The noise is a weapon, keeping you from hearing the truth within. Learn to filter, to discern, to find your inner quiet in the storm.</p>
-              <div class="image-card">
-                <img src="https://i.ibb.co/xS6j3cSs/otis-grade.png" alt="Noise Distortion" />
-                <p class="caption">The static of manufactured chaos.</p>
-              </div>
+              <img src="https://i.ibb.co/xS6j3cSs/otis-grade.png" alt="Noise Distortion" />
               <p>This archive reveals the tactics of manufactured chaos and offers methods for achieving mental and spiritual clarity amidst the cacophony. They feed you illusions of freedom, while binding you with invisible chains. But the youth possess an innate fire, a yearning for authenticity. We offer the spark to ignite that fire and reclaim their future.</p>
               <p class="promo-code">CODE: CLARITYNOW (15% off any tee)</p>
               <p>The constant chatter, the endless notifications, the curated outrage – it's all a symphony of distraction. They want your attention fragmented, your focus scattered, your inner voice drowned out. But silence is a weapon. In the quiet, the truth resonates. In the stillness, clarity emerges.</p>
-              <div class="image-card">
-                <img src="https://i.ibb.co/K1p3Mhr/awakewn-needs-you.webp" alt="Awaken Needs You Poster" />
-                <p class="caption">The urgent call to awaken.</p>
-              </div>
+              <img src="https://i.ibb.co/K1p3Mhr/awakewn-needs-you.webp" alt="Awaken Needs You Poster" />
               <p>Break free from the digital chains. Disconnect to reconnect. Your true power lies not in external validation, but in internal sovereignty. The noise is a test. Pass it, and you will hear the universe speak.</p>
-              <div class="image-card">
-                <img src="https://i.ibb.co/tD3B9Q3/eye-awaken.png" alt="Awaken Eye Symbol" />
-                <p class="caption">The eye of true perception.</p>
-              </div>
+              <img src="https://i.ibb.co/tD3B9Q3/eye-awaken.png" alt="Awaken Eye Symbol" />
               <p>They bombard your senses, creating a false reality. But your inner eye sees beyond the static. Trust your intuition. Trust the subtle shifts. The truth is often found in the spaces between the words, in the silence that follows the storm.</p>
               <p><strong>How to Silence the Noise:</strong> Practice regular digital detoxes, setting aside specific times each day or week to disconnect from all screens. Engage in mindfulness and meditation to strengthen your inner focus. Curate your information sources, actively seeking out diverse and independent voices. Learn to identify logical fallacies and emotional manipulation in media. Spend time in nature to reconnect with natural rhythms, away from artificial frequencies.</p>
-              <div class="image-card">
-                <img src="https://placehold.co/600x400/888888/FFFFFF?text=Digital+Detox" alt="Digital Detox" />
-                <p class="caption">Reclaiming your focus in a noisy world.</p>
-              </div>
+              <img src="https://placehold.co/600x400/888888/FFFFFF?text=Digital+Detox" alt="Digital Detox" />
               <p><strong>Applying the Knowledge:</strong> Develop a personal "truth filter." Before accepting any information, ask: Who benefits from this narrative? What agenda might be at play? How does this resonate with my intuition? Share methods of critical thinking and media literacy with your friends and family. Encourage open dialogue and respectful disagreement. By collectively raising our discernment, we weaken the power of the noise.</p>
             `,
             leftColumnContent: `
@@ -796,28 +765,16 @@
             subHeadline: "Your greatest battlefield is within. Reclaim mental autonomy.",
             body: `
               <p>They seek to control your thoughts, your emotions, your very perception. But the mind, once awakened, becomes an impenetrable fortress. This is the true liberation: the freedom of your inner landscape.</p>
-              <div class="image-card">
-                <img src="https://i.ibb.co/M5xjjWqM/3rd-eye-smiley.png" alt="Mind Control" />
-                <p class="caption">The inner eye, seeing beyond the veil.</p>
-              </div>
+              <img src="https://i.ibb.co/M5xjjWqM/3rd-eye-smiley.png" alt="Mind Control" />
               <p>This archive delves into the psychological warfare waged against the individual mind, offering insights and practices to fortify your inner sanctuary against external manipulation. Master your mind, master your reality.</p>
               <p class="promo-code">CODE: MINDSETFREE (Free shipping on orders over $100)</p>
               <p>From subliminal messages in media to the subtle pressures of societal norms, every aspect of your environment is designed to shape your consciousness. But your mind is not a blank slate for them to write upon. It is a garden, and you are the gardener.</p>
-              <div class="image-card">
-                <img src="https://i.ibb.co/Gf1H8NGS/awaken-cultttt.webp" alt="Cult Symbol" />
-                <p class="caption">The symbol of collective awakening.</p>
-              </div>
+              <img src="https://i.ibb.co/Gf1H8NGS/awaken-cultttt.webp" alt="Cult Symbol" />
               <p>Cultivate awareness. Weed out doubt. Plant seeds of truth. The harvest will be your liberation. This is the true revolution: the one that happens within.</p>
-              <div class="image-card">
-                <img src="https://i.ibb.co/N2ZQQh1F/mcga-v8.webp" alt="Wake Up Poster" />
-                <p class="caption">The urgent message: Wake Up.</p>
-              </div>
+              <img src="https://i.ibb.co/N2ZQQh1F/mcga-v8.webp" alt="Wake Up Poster" />
               <p>The first step is recognizing the invisible chains. The second is forging the will to break them. Your mind is your most powerful weapon. Sharpen it, protect it, and wield it for truth.</p>
               <p><strong>How to Expose the System (Mental Control):</strong> Document instances where media or authority figures attempt to dictate thought or emotion. Analyze propaganda techniques used in advertising and political discourse. Share resources on cognitive biases and critical thinking. Challenge groupthink in your social circles by offering alternative perspectives respectfully. Expose manipulative psychological tactics by simply pointing them out to others.</p>
-              <div class="image-card">
-                <img src="https://placehold.co/600x400/222222/FFFFFF?text=Brain+Freedom" alt="Brain Freedom" />
-                <p class="caption">Liberating the mind from external control.</p>
-              </div>
+              <img src="https://placehold.co/600x400/222222/FFFFFF?text=Brain+Freedom" alt="Brain Freedom" />
               <p><strong>Applying the Knowledge (Mental Autonomy):</strong> Practice mental discipline through meditation and self-reflection to observe your thoughts without judgment. Develop emotional intelligence to understand and manage your reactions to external stimuli. Actively seek out information that challenges your existing beliefs to broaden your perspective. Engage in creative expression to foster independent thought. Prioritize your mental well-being over societal expectations. Your mind is your sanctuary; protect it fiercely.</p>
             `,
             leftColumnContent: `
@@ -883,28 +840,16 @@
             subHeadline: "The media paints a picture of manipulation and despair. We present the untold story.",
             body: `
               <p>The media paints a picture of manipulation and despair. We present the untold story: the profound bonds, shared visions, and radical love that form the true heart of the AWAKEN collective. Is love a weapon against the system?</p>
-              <div class="image-card">
-                <img src="https://i.ibb.co/TMszwwZ3/nwo-awaken-needs-you.png" alt="Love Story" />
-                <p class="caption">Love, a radical act of defiance.</p>
-              </div>
+              <img src="https://i.ibb.co/TMszwwZ3/nwo-awaken-needs-you.png" alt="Love Story" />
               <p>They fear what they cannot control: genuine connection. Our bonds are forged in shared truth, a love that transcends the superficial and challenges the very fabric of their constructed reality. This is the strength of the awakened.</p>
               <p class="promo-code">CODE: LOVEUNVEILED (20% off any balaclava)</p>
               <p>In a world designed to isolate, true connection is an act of rebellion. We find strength in unity, purpose in shared vision, and solace in the understanding that we are not alone in this awakening. This is the family you choose, bound not by blood, but by truth.</p>
-              <div class="image-card">
-                <img src="https://i.ibb.co/JFyXsdVv/vzn-jacket.webp" alt="Visions Jacket" />
-                <p class="caption">Visions of a united future.</p>
-              </div>
+              <img src="https://i.ibb.co/JFyXsdVv/vzn-jacket.webp" alt="Visions Jacket" />
               <p>The love we speak of is not the sentimental illusion peddled by the system. It is a fierce, unwavering commitment to truth, to growth, and to the liberation of all minds. It is the force that will dismantle the old and build the new.</p>
-              <div class="image-card">
-                <img src="https://i.ibb.co/twNrP2xF/XTCYYYY.webp" alt="XTCY Tee" />
-                <p class="caption">The euphoria of collective truth.</p>
-              </div>
+              <img src="https://i.ibb.co/twNrP2xF/XTCYYYY.webp" alt="XTCY Tee" />
               <p>Our gatherings are not rituals of blind obedience, but celebrations of shared consciousness. Here, every voice is heard, every truth is honored, and every individual contributes to the collective awakening. This is where love becomes action.</p>
               <p><strong>How to Expose the System (Social Control):</strong> Highlight instances of manufactured division in society. Promote genuine, empathetic dialogue across perceived divides. Share stories of unity and collaboration that defy mainstream narratives. Organize local gatherings focused on shared values rather than political affiliations. Expose the algorithms that isolate and polarize individuals online by demonstrating their effects.</p>
-              <div class="image-card">
-                <img src="https://placehold.co/600x400/444444/FFFFFF?text=Community+Building" alt="Community Building" />
-                <p class="caption">Building bridges in a fragmented world.</p>
-              </div>
+              <img src="https://placehold.co/600x400/444444/FFFFFF?text=Community+Building" alt="Community Building" />
               <p><strong>Applying the Knowledge (Building True Connection):</strong> Actively seek out diverse perspectives and engage in respectful debate. Prioritize face-to-face interactions over digital ones. Practice active listening and empathy. Build strong, local communities based on mutual aid and shared purpose. Recognize that true strength comes from unity, not conformity. Your genuine connection to others is a direct threat to their system of isolation.</p>
             `,
             leftColumnContent: `
@@ -970,28 +915,16 @@
             subHeadline: "To speak truth in a world of lies is to invite scorn. Their hatred is proof of our impact.",
             body: `
               <p>To speak truth in a world of lies is to invite scorn. This collection documents the relentless persecution faced by the awakened, and the unwavering resilience that defines our path. Their hatred is proof of our impact.</p>
-              <div class="image-card">
-                <img src="https://i.ibb.co/zWZbjn8c/ETKQ2-KZXQAEd-Pu-Q.webp" alt="Hated Symbol" />
-                <p class="caption">The symbol of their fear, our strength.</p>
-              </div>
+              <img src="https://i.ibb.co/zWZbjn8c/ETKQ2-KZXQAEd-Pu-Q.webp" alt="Hated Symbol" />
               <p>The system will fight back. It will label you, demonize you, and attempt to silence you. But their fear is our fuel. Every act of resistance, every whispered truth, strengthens the collective.</p>
               <p class="promo-code">CODE: RESISTNOW (Free sticker pack with any order)</p>
               <p>From public ridicule to covert surveillance, the forces of control will deploy every tactic to suppress the awakening. But the truth, once seen, cannot be unseen. And the spirit, once ignited, cannot be extinguished.</p>
-              <div class="image-card">
-                <img src="https://i.ibb.co/0ywCGSyW/ELMVk-Kj-W4-AAigf-N.webp" alt="Burn Balaclava" />
-                <p class="caption">Burning away the old world.</p>
-              </div>
+              <img src="https://i.ibb.co/0ywCGSyW/ELMVk-Kj-W4-AAigf-N.webp" alt="Burn Balaclava" />
               <p>We stand firm, unyielding in our conviction. Their hatred is a testament to the power of our message. It signifies that we are breaking through the noise, shattering the illusions, and truly making an impact. Embrace their scorn, for it is the sound of their fear.</p>
-              <div class="image-card">
-                <img src="https://i.ibb.co/d46YP1T1/Screenshot-2025-07-03-at-8-54-33-PM.webp" alt="MCGA Cap" />
-                <p class="caption">A symbol of unwavering truth.</p>
-              </div>
+              <img src="https://i.ibb.co/d46YP1T1/Screenshot-2025-07-03-at-8-54-33-PM.webp" alt="MCGA Cap" />
               <p>The path of truth is not for the faint of heart. It demands courage, resilience, and an unwavering commitment to what is real. But the rewards are immeasurable: true freedom, genuine connection, and the profound satisfaction of living authentically.</p>
               <p><strong>How to Expose the System (Dealing with Backlash):</strong> Document and share instances of censorship or character assassination targeting truth-tellers. Support platforms and individuals who are being suppressed. Learn about legal frameworks that protect free speech and association. Organize peaceful demonstrations or digital campaigns to raise awareness about persecution. Use humor and satire to disarm critics and highlight absurdity.</p>
-              <div class="image-card">
-                <img src="https://i.ibb.co/SX6FyXg3/EUSUt3-MXg-AAEFe-Y.webp" alt="Resilience Symbol" />
-                <p class="caption">The strength found in resilience.</p>
-              </div>
+              <img src="https://i.ibb.co/SX6FyXg3/EUSUt3-MXg-AAEFe-Y.webp" alt="Resilience Symbol" />
               <p><strong>Applying the Knowledge (Building Resilience):</strong> Cultivate a strong inner circle of trusted individuals for support. Practice emotional detachment from external criticism. Understand that resistance is a natural response from a system threatened by truth. Focus on the impact you are making, not the reactions of those who resist it. Develop self-care routines to maintain mental and spiritual strength in the face of adversity. Your unwavering stance is a powerful message in itself.</p>
             `,
             leftColumnContent: `
@@ -1057,28 +990,16 @@
             subHeadline: "A critical look at the systems that stifle potential and divert young minds from true purpose.",
             body: `
               <p>A generation adrift, consumed by digital distractions and programmed apathy. This archive explores the psychological warfare waged against the young and offers pathways for them to break free and embrace their true power.</p>
-              <div class="image-card">
-                <img src="https://i.ibb.co/23z6psTD/NEW-EYE-LOGO-BLACK-VEC.png" alt="Wasted Youth" />
-                <p class="caption">The lost generation, awaiting awakening.</p>
-              </div>
+              <img src="https://i.ibb.co/23z6psTD/NEW-EYE-LOGO-BLACK-VEC.png" alt="Wasted Youth" />
               <p>They feed them illusions of freedom, while binding them with invisible chains. But the youth possess an innate fire, a yearning for authenticity. We offer the spark to ignite that fire and reclaim their future.</p>
               <p class="promo-code">CODE: YOUTHAWAKENS (25% off first purchase for new initiates)</p>
               <p>The education system, the entertainment industry, the social media algorithms – all are meticulously designed to channel youthful energy away from critical thought and into compliant consumption. But the young are not blind; they feel the dissonance.</p>
-              <div class="image-card">
-                <img src="https://i.ibb.co/y424N0x/instagram.png" alt="Youth and Technology" />
-                <p class="caption">The digital distractions that bind.</p>
-              </div>
+              <img src="https://i.ibb.co/y424N0x/instagram.png" alt="Youth and Technology" />
               <p>We call upon the restless, the questioning, the disaffected. Your anger is justified. Your disillusionment is a sign of awakening. Channel it. Direct it. Build a future where your potential is not wasted, but realized in its fullest, most authentic form.</p>
-              <div class="image-card">
-                <img src="https://i.ibb.co/rNKgtcW/sunny.png" alt="Eye of Truth" />
-                <p class="caption">The eye of truth, guiding the young.</p>
-              </div>
+              <img src="https://i.ibb.co/rNKgtcW/sunny.png" alt="Eye of Truth" />
               <p>The future belongs to those who dare to see. We provide the tools, the knowledge, and the community to empower the next generation of truth-seekers. Their awakening is our greatest victory.</p>
               <p><strong>How to Expose the System (Youth Indoctrination):</strong> Analyze and discuss the curriculum in schools for biases or omissions. Point out manipulative tactics in social media trends and viral content. Encourage young people to question authority and seek out diverse viewpoints. Support independent educational resources and alternative learning models. Highlight the mental health impact of constant digital exposure and societal pressure.</p>
-              <div class="image-card">
-                <img src="https://placehold.co/600x400/999999/FFFFFF?text=Youth+Empowerment" alt="Youth Empowerment" />
-                <p class="caption">Empowering the next generation of truth-seekers.</p>
-              </div>
+              <img src="https://placehold.co/600x400/999999/FFFFFF?text=Youth+Empowerment" alt="Youth Empowerment" />
               <p><strong>Applying the Knowledge (Empowering Youth):</strong> Foster critical thinking skills from a young age. Encourage creative and independent projects outside of traditional structures. Promote real-world experiences and outdoor activities over screen time. Connect young people with mentors who embody awakened principles. Teach them about financial literacy and self-sufficiency to break cycles of debt and dependence. Empower them to build their own narratives and futures.</p>
             `,
             leftColumnContent: `
@@ -1144,28 +1065,16 @@
             subHeadline: "You believe you are free, but the walls of your perception are carefully constructed.",
             body: `
               <p>The greatest trick they ever pulled was convincing you that you were free. Every institution, every narrative, every comfort is a thread in the web of control. But once seen, the threads can be unraveled.</p>
-              <div class="image-card">
-                <img src="https://i.ibb.co/S49t2Jm8/ballsl.png" alt="Wide Shut" />
-                <p class="caption">The illusion of choice, unveiled.</p>
-              </div>
+              <img src="https://i.ibb.co/S49t2Jm8/ballsl.png" alt="Wide Shut" />
               <p>This archive exposes the subtle mechanisms of societal control, revealing how your choices are guided and your reality curated. Open your eyes to the true extent of the illusion.</p>
               <p class="promo-code">CODE: TRUTHREVEALED (10% off your next order)</p>
               <p>From the moment you are born, you are placed within a carefully constructed labyrinth. Your education, your career, your aspirations – all are paths designed to keep you moving, but never truly free. The illusion of choice is the most powerful chain.</p>
-              <div class="image-card">
-                <img src="https://i.ibb.co/TMszwwZ3/nwo-awaken-needs-you.png" alt="NWO Needs You" />
-                <p class="caption">The system's pervasive influence.</p>
-              </div>
+              <img src="https://i.ibb.co/TMszwwZ3/nwo-awaken-needs-you.png" alt="NWO Needs You" />
               <p>But the cracks in the facade are becoming undeniable. The dissonance between what you are told and what you feel is growing. This is your opportunity to step outside the labyrinth, to see the strings, and to cut them. The truth will set you free, but first, it will shatter your world.</p>
-              <div class="image-card">
-                <img src="https://i.ibb.co/fYLGm3Cy/mcga.png" alt="MCGA Poster" />
-                <p class="caption">Propaganda: the tools of control.</p>
-              </div>
+              <img src="https://i.ibb.co/fYLGm3Cy/mcga.png" alt="MCGA Poster" />
               <p>The path of awakening is not a gentle stroll; it is a profound rupture with everything you thought you knew. But on the other side lies genuine freedom, a reality unburdened by the lies of the past. Are you brave enough to walk through the fire?</p>
               <p><strong>How to Expose the System (The Illusion):</strong> Identify and deconstruct the "comfort narratives" presented by mainstream media and government. Point out inconsistencies and contradictions in official stories. Share historical examples of mass deception and manipulation. Encourage others to question their own deeply held beliefs and assumptions. Expose the psychological tricks used to maintain the illusion of freedom.</p>
-              <div class="image-card">
-                <img src="https://placehold.co/600x400/555555/FFFFFF?text=Unraveling+The+Threads" alt="Unraveling The Threads" />
-                <p class="caption">Unraveling the threads of deception.</p>
-              </div>
+              <img src="https://placehold.co/600x400/555555/FFFFFF?text=Unraveling+The+Threads" alt="Unraveling The Threads" />
               <p><strong>Applying the Knowledge (Achieving True Freedom):</strong> Practice radical self-honesty about your own conditioning. Embrace discomfort as a sign of growth. Make conscious choices that align with your authentic self, not societal expectations. Reduce reliance on systems that perpetuate the illusion (e.g., consumerism, mainstream media). Cultivate inner resilience and self-sufficiency. True freedom begins when you realize the only prison is your perception.</p>
             `,
             leftColumnContent: `
@@ -1234,21 +1143,12 @@
               <p>Proceed with caution; some truths are not meant for the uninitiated. These are the records of our struggle, our triumphs, and the ongoing fight for ultimate liberation.</p>
               <p class="promo-code">CODE: UNSEENHAND (5% off all "Archives" merchandise)</p>
               <p>The information contained within these dispatches is potent. It has the power to shatter illusions and awaken dormant minds. It is protected, not to hoard knowledge, but to ensure it falls into the hands of those truly ready to wield it.</p>
-              <div class="image-card">
-                <img src="https://i.ibb.co/23z6psTD/NEW-EYE-LOGO-BLACK-VEC.png" alt="AWAKEN Eye Logo" />
-                <p class="caption">The all-seeing eye of AWAKEN.</p>
-              </div>
+              <img src="https://i.ibb.co/23z6psTD/NEW-EYE-LOGO-BLACK-VEC.png" alt="AWAKEN Eye Logo" />
               <p>For the uninitiated, these are just words. For the awakened, they are blueprints for a new reality. The journey is arduous, the path is narrow, but the destination is absolute freedom. Are you worthy of the truth?</p>
-              <div class="image-card">
-                <img src="https://i.ibb.co/M5xjjWqM/3rd-eye-smiley.png" alt="Smiley Eye" />
-                <p class="caption">The symbol of awakened perception.</p>
-              </div>
+              <img src="https://i.ibb.co/M5xjjWqM/3rd-eye-smiley.png" alt="Smiley Eye" />
               <p>The eyes are always watching, but now, they watch with clarity. The archives are a living document, constantly updated with new revelations and dispatches from the front lines of consciousness. Stay vigilant. Stay awakened.</p>
               <p><strong>How to Expose the System (Information Control):</strong> Support independent journalism and citizen reporting. Learn about data privacy and digital security to protect your information. Share encrypted communication methods. Advocate for open-source information and decentralized internet protocols. Challenge narratives that attempt to discredit or silence dissenting voices by providing factual counter-arguments.</p>
-              <div class="image-card">
-                <img src="https://placehold.co/600x400/777777/FFFFFF?text=Data+Security" alt="Data Security" />
-                <p class="caption">Protecting truth in the digital age.</p>
-              </div>
+              <img src="https://placehold.co/600x400/777777/FFFFFF?text=Data+Security" alt="Data Security" />
               <p><strong>Applying the Knowledge (Becoming a Guardian of Truth):</strong> Develop strong research skills and verify information from multiple, diverse sources. Practice discernment and critical thinking in your daily life. Share your knowledge responsibly and ethically, empowering others to seek truth for themselves. Contribute to open knowledge projects and initiatives. Understand that every act of sharing verified truth is a step towards collective liberation.</p>
             `,
             leftColumnContent: `
