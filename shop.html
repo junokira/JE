@@ -13,6 +13,8 @@
     @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;700&display=swap');
     @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap');
     @import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Playfair+Display&family=Verdana:wght@400;700&display=swap'); /* Added homepage fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap'); /* For 'HATED' and 'WIDE SHUT' */
+
 
     /* Custom font classes - Consistent with main site */
     .font-anton { font-family: 'Anton', sans-serif; }
@@ -20,10 +22,8 @@
     .font-roboto-slab { font-family: 'Roboto Slab', serif; }
     .font-tattler { font-family: 'Anton', sans-serif; letter-spacing: -0.05em; }
     .font-national { font-family: 'Oswald', sans-serif; font-weight: 700; letter-spacing: 0.1em; }
-    /* Homepage specific fonts */
-    .font-alfa-slab-one { font-family: 'Alfa Slab One', cursive; }
+    .font-bebas-neue { font-family: 'Bebas Neue', sans-serif; }
     .font-playfair-display { font-family: 'Playfair Display', serif; }
-    .font-verdana { font-family: Verdana, sans-serif; }
 
 
     /* Basic body styles - Consistent with main site */
@@ -143,7 +143,6 @@
       color: #f3f0e7;
       padding: 4rem 1rem;
       text-align: center;
-      /* Removed border-bottom: 2px solid #d94a44; */
     }
     .shop-hero-title {
       font-family: 'Anton', sans-serif;
@@ -176,8 +175,6 @@
       object-fit: cover; /* Ensure images cover the area */
       flex-shrink: 0; /* Prevent images from shrinking */
     }
-    /* Removed old media query for this grid as it's now universal */
-
 
     .product-grid-section {
       padding-top: 3rem;
@@ -193,6 +190,7 @@
       justify-content: space-between; /* Matches homepage */
       align-items: center; /* Matches homepage */
       background: transparent; /* Matches homepage */
+      cursor: pointer; /* Indicate clickability */
     }
 
     /* Apply aspect-square only on large screens and up */
@@ -216,7 +214,7 @@
     @media (min-width: 1024px) { /* Desktop screens and up */
       .product-card .product-image-container {
         height: 16rem; /* Fixed height for desktop to fit square card - Matches homepage */
-        min-height: unset; /* Remove min-height override for desktop - Matches homepage */
+        min-height: unset; /* Remove min-height override for desktop */
       }
     }
 
@@ -270,50 +268,336 @@
     }
 
 
-    /* New Newspaper Article/Propaganda Section Styles */
-    .newspaper-article-card {
+    /* Propaganda Poster Section Styles - Adjusted for no whitespace around image */
+    .propaganda-poster-card {
       border: 1px solid black;
-      padding: 1.5rem;
-      background-color: #fff;
-      text-align: left;
-      margin-bottom: 2rem;
-      border-radius: 0; /* Ensure sharp corners */
+      background-color: transparent;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
     }
-    .newspaper-article-card .headline {
+    .propaganda-poster-card:hover {
+        background-color: #e0e0e0; /* Light gray highlight on hover */
+    }
+
+    .propaganda-poster-card .image-wrapper {
+      width: 100%;
+      height: auto;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .propaganda-poster-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      margin: 0;
+      border: none;
+    }
+
+    .propaganda-poster-card .caption-text {
+      padding: 0.75rem;
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: 0.75rem;
+      line-height: 1.3;
+      margin-top: 0;
+      text-align: center;
+    }
+
+    /* Archive Covers for Shop Page (New Dispatches from the Field Section) */
+    .shop-archive-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid for covers */
+      gap: 2rem;
+      justify-items: center;
+      padding: 2rem 0; /* Add some padding */
+    }
+
+    .magazine-cover {
+      width: 100%;
+      max-width: 320px; /* Max width for each cover */
+      aspect-ratio: 2 / 3; /* Standard magazine aspect ratio */
+      border: 2px solid black;
+      box-shadow: 8px 8px 0px rgba(0,0,0,0.8); /* Strong shadow for depth */
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end; /* Align content to bottom by default */
+      align-items: center;
+      text-align: center;
+      text-decoration: none; /* Remove underline from link */
+      color: inherit; /* Inherit text color */
+    }
+
+    .magazine-cover:hover {
+      transform: translateY(-8px);
+      box-shadow: 12px 12px 0px rgba(0,0,0,0.8);
+    }
+
+    /* Specific Cover Styles (copied from archives-page) */
+
+    /* NEW WORLD ORDER Cover */
+    .cover-nwo {
+      background-color: #1a1a1a;
+      color: #f3f0e7;
+      justify-content: center; /* Center content vertically */
+    }
+    .cover-nwo .title {
       font-family: 'Anton', sans-serif;
-      font-size: 2.2rem;
-      line-height: 1.1;
-      margin-bottom: 0.75rem;
+      font-size: 3.5rem;
+      line-height: 0.9;
       text-transform: uppercase;
-      color: #d94a44;
+      margin-bottom: 0.5rem;
+      color: #d94a44; /* Red accent */
+      text-shadow: 4px 4px black;
     }
-    .newspaper-article-card .sub-headline {
+    .cover-nwo .subtitle {
       font-family: 'Roboto Condensed', sans-serif;
       font-size: 1rem;
       font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
       margin-bottom: 1rem;
     }
-    .newspaper-article-card img {
-      width: 100%;
-      height: auto;
-      object-fit: cover;
-      margin-bottom: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 0; /* Ensure sharp corners */
-    }
-    .newspaper-article-card p {
+    .cover-nwo .tagline {
       font-family: 'Roboto Slab', serif;
-      font-size: 0.95rem;
-      line-height: 1.5;
-      text-align: justify;
+      font-size: 0.75rem;
+      line-height: 1.2;
+      max-width: 80%;
+      margin: 0 auto;
     }
-    .newspaper-article-card .read-more {
-      display: inline-block;
-      margin-top: 1rem;
+    .cover-nwo .logo-text {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      border: 1px solid #f3f0e7;
+      padding: 0.2rem 0.5rem;
+    }
+    .cover-nwo .date {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        font-family: 'Roboto Condensed', sans-serif;
+        font-size: 0.75rem;
+        font-weight: bold;
+    }
+
+    /* NOISE Cover */
+    .cover-noise {
+      background-color: #e0e0e0;
+      color: #000;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1rem;
+      box-sizing: border-box;
+      background-image: url('data:image/svg+xml,%3Csvg width="6" height="6" viewBox="0 0 6 6" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%239C9C9C" fill-opacity="0.4"%3E%3Cpath d="M1 3h1v1H1V3zm2 0h1v1H3V3zM0 2h1v1H0V2zm4 0h1v1H4V2z"/%3E%3C/g%3E%3C/svg%3E'); /* Subtle noise pattern */
+    }
+    .cover-noise .top-bar {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: 0.7rem;
       font-weight: bold;
-      color: black;
-      text-decoration: underline;
-      cursor: pointer;
+      text-transform: uppercase;
+    }
+    .cover-noise .main-title {
+      font-family: 'Anton', sans-serif;
+      font-size: 4.5rem;
+      line-height: 0.8;
+      text-transform: uppercase;
+      text-align: center;
+      position: relative;
+      z-index: 10;
+      margin-top: 2rem;
+      color: #d94a44;
+      -webkit-text-stroke: 1px black; /* Outline effect */
+      text-stroke: 1px black;
+    }
+    .cover-noise .subtitle-noise {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: 1rem;
+      font-weight: bold;
+      text-align: center;
+      margin-top: -0.5rem;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 10;
+    }
+    .cover-noise .noise-graphic {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      height: 80%;
+      background-color: rgba(0,0,0,0.1);
+      border-radius: 50%;
+      filter: blur(10px);
+      z-index: 5;
+    }
+    .cover-noise .small-text {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: 0.6rem;
+      text-align: center;
+      margin-top: auto; /* Push to bottom */
+      padding-bottom: 0.5rem;
+    }
+
+    /* HATED Cover */
+    .cover-hated {
+      background-color: #000;
+      color: #f3f0e7;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      box-sizing: border-box;
+      background-image: url('https://placehold.co/320x480/222222/000000?text='); /* Placeholder for a gritty background image */
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+    .cover-hated::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.8));
+        z-index: 1;
+    }
+    .cover-hated > * {
+        position: relative;
+        z-index: 2;
+    }
+    .cover-hated .title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 5rem;
+      line-height: 0.8;
+      text-transform: uppercase;
+      color: white;
+      text-shadow: 4px 4px #d94a44; /* Red shadow */
+      margin-bottom: 0.5rem;
+      transform: rotate(-5deg); /* Slight tilt */
+    }
+    .cover-hated .subtitle {
+      font-family: 'Roboto Slab', serif;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #f3f0e7;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .cover-hated .issue-info {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: 0.7rem;
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      right: 1rem;
+      display: flex;
+      justify-content: space-between;
+      text-transform: uppercase;
+    }
+    .cover-hated .tagline {
+        font-family: 'Roboto Condensed', sans-serif;
+        font-size: 0.8rem;
+        margin-top: 1rem;
+        max-width: 80%;
+        line-height: 1.3;
+    }
+
+    /* WIDE SHUT Cover */
+    .cover-wide-shut {
+      background-color: #0d1a26; /* Dark blue/black */
+      color: #f3f0e7;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      box-sizing: border-box;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover-wide-shut::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at center, rgba(255,255,255,0.05) 0%, transparent 70%);
+        z-index: 1;
+    }
+    .cover-wide-shut .awaken-logo {
+        font-family: 'Anton', sans-serif;
+        font-size: 2.5rem;
+        color: #d94a44; /* Red accent */
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        letter-spacing: 0.1em;
+        z-index: 2;
+    }
+    .cover-wide-shut .title {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.5rem;
+      line-height: 1;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 0.5rem;
+      color: white;
+      position: relative;
+      z-index: 2;
+    }
+    .cover-wide-shut .subtitle {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-style: italic;
+      text-align: center;
+      margin-bottom: 1rem;
+      color: #ccc;
+      position: relative;
+      z-index: 2;
+    }
+    .cover-wide-shut .eye-icon {
+        font-size: 4rem;
+        color: #f3f0e7;
+        margin-bottom: 1rem;
+        position: relative;
+        z-index: 2;
+    }
+    .cover-wide-shut .feature-list {
+        font-family: 'Roboto Condensed', sans-serif;
+        font-size: 0.75rem;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        position: absolute;
+        bottom: 1rem;
+        right: 1rem;
+        text-align: right;
+        z-index: 2;
+    }
+    .cover-wide-shut .feature-list li {
+        margin-bottom: 0.2rem;
+        opacity: 0.8;
     }
 
     /* Cart Overlay - Consistent with main site */
@@ -390,7 +674,7 @@
       padding: 0.3rem 0.6rem;
       font-size: 0.75rem;
       cursor: pointer;
-      border-radius: 0; /* Ensure sharp corners */
+      border-radius: 0; /* Sharp corners */
     }
     .cart-summary {
       padding: 1rem;
@@ -415,7 +699,7 @@
       font-size: 1.1rem;
       cursor: pointer;
       transition: background-color 0.2s;
-      border-radius: 0; /* Ensure sharp corners */
+      border-radius: 0; /* Sharp corners */
     }
     .cart-checkout-btn:hover {
       background-color: #b92a1e;
@@ -457,24 +741,6 @@
       /* Desktop 3-column grid for products */
       #product-list {
         grid-template-columns: repeat(3, 1fr);
-      }
-      /* Propaganda Posters Section - Desktop */
-      .propaganda-poster-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1.5rem; /* Gap between posters on desktop */
-      }
-      .propaganda-poster-card {
-        border: 1px solid black;
-        padding: 0.75rem;
-        background-color: #fff;
-        aspect-ratio: 2 / 3; /* Maintain aspect ratio on desktop */
-      }
-      .propaganda-poster-card img {
-        margin-bottom: 0.5rem;
-        border: none;
-      }
-      .propaganda-poster-card p {
-        padding: 0; /* Remove horizontal padding on desktop */
       }
     }
     @media (max-width: 1023px) { /* All screens smaller than desktop */
@@ -542,14 +808,27 @@
         padding: 0.4rem 1rem; /* Matches homepage button padding */
         width: fit-content; /* Make button width fit content */
       }
-      .newspaper-article-card .headline {
-        font-size: 1.8rem;
+      /* Archive covers on mobile */
+      .shop-archive-grid {
+        grid-template-columns: 1fr;
       }
-      .newspaper-article-card .sub-headline {
+      .magazine-cover {
+        max-width: 90%; /* Allow covers to be wider on mobile */
+      }
+      .cover-nwo .title, .cover-noise .main-title, .cover-hated .title, .cover-wide-shut .title {
+        font-size: 3rem; /* Adjust title size for mobile */
+      }
+      .cover-nwo .subtitle, .cover-noise .subtitle-noise, .cover-hated .subtitle, .cover-wide-shut .subtitle {
         font-size: 0.9rem;
       }
-      .newspaper-article-card p {
-        font-size: 0.85rem;
+      .cover-nwo .tagline, .cover-noise .small-text, .cover-hated .tagline, .cover-wide-shut .feature-list li {
+        font-size: 0.6rem;
+      }
+      .cover-wide-shut .awaken-logo {
+        font-size: 1.8rem;
+      }
+      .cover-wide-shut .eye-icon {
+        font-size: 3rem;
       }
       .cart-overlay {
         width: 100%; /* Full width on mobile */
@@ -557,26 +836,6 @@
       }
       .cart-overlay.active {
         right: 0;
-      }
-      /* Propaganda Posters Section - Mobile */
-      .propaganda-poster-grid {
-        grid-template-columns: 1fr; /* Single column for mobile */
-        gap: 1.5rem; /* Gap between posters on mobile */
-      }
-      .propaganda-poster-card {
-        border: 1px solid black; /* Re-add border for mobile */
-        padding: 0.75rem; /* Re-add padding for mobile */
-        background-color: #fff; /* Re-add background for mobile */
-        aspect-ratio: auto; /* Remove fixed aspect ratio on mobile */
-        height: auto; /* Allow height to adjust based on content */
-      }
-      .propaganda-poster-card img {
-        margin-bottom: 0.5rem; /* Re-add bottom margin for image */
-        border: 1px solid #ccc; /* Add subtle border to image */
-      }
-      .propaganda-poster-card p {
-        padding: 0; /* No horizontal padding on caption */
-        margin-top: 0.5rem; /* Keep some space for caption */
       }
     }
 
@@ -633,9 +892,9 @@
 
   <!-- New Image Grid below Hero Section (on black background) -->
   <section class="underground-market-image-grid">
-    <img src="https://i.ibb.co/Yrm6S69/awaken-new-1.webp" alt="Market Image 1" />
-    <img src="https://i.ibb.co/K1p3Mhr/awakewn-needs-you.webp" alt="Market Image 2" />
-    <img src="https://i.ibb.co/N2ZQQh1F/mcga-v8.webp" alt="Market Image 3" />
+    <img src="https://i.ibb.co/5x4jkM92/Chat-GPT-Image-Jul-15-2025-at-05-05-06-PM.webp" alt="Market Image 1" />
+    <img src="https://i.ibb.co/Jw5NW7yv/Chat-GPT-Image-Jul-15-2025-at-05-05-18-PM.webp" alt="Market Image 2" />
+    <img src="https://i.ibb.co/bjQJDRVq/bully.webp" alt="Market Image 3" />
   </section>
 
   <!-- Product Grid Section -->
@@ -646,28 +905,60 @@
     </div>
   </section>
 
-  <!-- New Article Section: Dispatches from the Field -->
+  <!-- New Article Section: Dispatches from the Field (now using archive covers) -->
   <section class="content-section">
     <h2 class="text-3xl font-anton text-center mb-8">Dispatches From The Field</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="newspaper-article-card">
-        <h3 class="headline">The Veil of Digital Silence</h3>
-        <p class="sub-headline">Reports from Sector 4 indicate increased algorithmic suppression of truth-bearing content.</p>
-        <img src="https://placehold.co/600x400/808080/FFF?text=DIGITAL+SILENCE" alt="Digital Silence Graphic" />
-        <p>
-          Our operatives confirm a disturbing trend: independent channels disseminating unvarnished truths are being systematically de-platformed. The digital realm, once a beacon of free exchange, is now a meticulously curated echo chamber. This suppression directly targets those who question the official narrative, proving the power of the message we carry.
-        </p>
-        <span class="read-more">Read More on the Network &raquo;</span>
-      </div>
-      <div class="newspaper-article-card">
-        <h3 class="headline">New Artifacts Discovered in The Void</h3>
-        <p class="sub-headline">Mysterious garments emerge, imbued with properties of resistance and clarity.</p>
-        <img src="https://placehold.co/600x400/A0A0A0/FFF?text=MYSTERIOUS+GARMENTS" alt="Mysterious Garments Graphic" />
-        <p>
-          Deep within the hidden folds of the unseen, new apparel has surfaced. These are not mere textiles; they are conduits. Each stitch, each fiber, resonates with the frequency of awakening. Early wearers report heightened senses and a profound sense of detachment from the illusions of the old world. These artifacts are now available for acquisition.
-        </p>
-        <span class="read-more">Explore New Artifacts &raquo;</span>
-      </div>
+    <div class="shop-archive-grid">
+        <!-- NEW WORLD ORDER Cover -->
+        <a href="archive-detail.html?id=new_world_order" class="magazine-cover cover-nwo">
+            <span class="logo-text">AWAKEN</span>
+            <span class="date">JULY 2025</span>
+            <div class="flex flex-col items-center">
+                <div class="title">NEW WORLD</div>
+                <div class="title">ORDER</div>
+                <div class="subtitle">THE TRUTH WILL SET YOU FREE.</div>
+                <p class="tagline">Are you ready to comprehend the true scale of the transformation? Decades of whispers, now brought to light.</p>
+            </div>
+        </a>
+
+        <!-- NOISE Cover -->
+        <a href="archive-detail.html?id=noise" class="magazine-cover cover-noise">
+            <div class="top-bar">
+                <span>AWAKEN DISPATCH</span>
+                <span>ISSUE 007</span>
+            </div>
+            <div class="main-title">NOISE</div>
+            <div class="subtitle-noise">SILENCE THE STATIC, FIND THE SIGNAL</div>
+            <div class="noise-graphic"></div>
+            <p class="small-text">In a world saturated with disinformation, the true challenge is discerning the signal from the noise. Learn to filter, to discern, to find your inner quiet in the storm.</p>
+        </a>
+
+        <!-- HATED Cover -->
+        <a href="archive-detail.html?id=hated" class="magazine-cover cover-hated">
+            <div class="title">HATED</div>
+            <div class="subtitle">A CULT LOVE STORY</div>
+            <p class="tagline">They fear what they don't understand. Their hatred is proof of our impact. Embrace the fire within.</p>
+            <div class="issue-info">
+                <span>AWAKEN PRESS</span>
+                <span>VOL. III</span>
+                <span>2025</span>
+            </div>
+        </a>
+
+        <!-- WIDE SHUT Cover -->
+        <a href="archive-detail.html?id=wide_shut" class="magazine-cover cover-wide-shut">
+            <span class="awaken-logo">AWAKEN</span>
+            <i class="fas fa-eye eye-icon"></i> <!-- Eye icon -->
+            <div class="title">WIDE</div>
+            <div class="title">SHUT</div>
+            <div class="subtitle">The Veil Is Thinning. The Truth Is Uncomfortable.</div>
+            <ul class="feature-list">
+                <li>UNSEEN FORCES</li>
+                <li>HIDDEN REALITIES</li>
+                <li>THE AWAKENING</li>
+                <li>THE CULT'S AGENDA</li>
+            </ul>
+        </a>
     </div>
   </section>
 
@@ -676,7 +967,8 @@
     <h2 class="text-3xl font-anton text-center mb-8">The Awakened Wardrobe: Featured Artifact</h2>
     <div class="border border-black p-4 flex flex-col md:flex-row items-center gap-6 bg-white">
       <div class="md:w-1/2">
-        <img src="https://i.ibb.co/mrTy6Mhw/fake-news-hoodie.webp" alt="Featured Fake News Hoodie" class="w-full h-auto object-cover border border-gray-300" />
+        <!-- Removed border from the image -->
+        <img src="https://i.ibb.co/mrTy6Mhw/fake-news-hoodie.webp" alt="Featured Fake News Hoodie" class="w-full h-auto object-cover" />
       </div>
       <div class="md:w-1/2 text-center md:text-left">
         <h3 class="font-anton text-4xl uppercase mb-3">The "Fake News" Hoodie</h3>
@@ -690,32 +982,44 @@
   </section>
 
   <!-- New Propaganda Poster Section -->
-  <section class="content-section mt-12"> <!-- Reverted to content-section for max-width and padding -->
+  <section class="content-section mt-12">
     <h2 class="text-3xl font-anton text-center mb-8">Propaganda Dispatches</h2>
-    <div class="propaganda-poster-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"> <!-- Added propaganda-poster-grid and gap -->
+    <div class="propaganda-poster-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <div class="propaganda-poster-card">
-        <img src="https://i.ibb.co/Yrm6S69/awaken-new-1.webp" alt="Propaganda Poster 1" />
-        <p class="text-xs font-roboto-condensed mt-2">"The Hand of Truth" - Circulated in Sector 7, 2025.</p>
+        <div class="image-wrapper">
+          <img src="https://i.ibb.co/Yrm6S69/awaken-new-1.webp" alt="Propaganda Poster 1" />
+        </div>
+        <p class="caption-text">"The Hand of Truth" - Circulated in Sector 7, 2025.</p>
       </div>
       <div class="propaganda-poster-card">
-        <img src="https://i.ibb.co/K1p3Mhr/awakewn-needs-you.webp" alt="Propaganda Poster 2" />
-        <p class="text-xs font-roboto-condensed mt-2">"They Need You Blind" - Found near the Central Spire, 2024.</p>
+        <div class="image-wrapper">
+          <img src="https://i.ibb.co/K1p3Mhr/awakewn-needs-you.webp" alt="Propaganda Poster 2" />
+        </div>
+        <p class="caption-text">"They Need You Blind" - Found near the Central Spire, 2024.</p>
       </div>
       <div class="propaganda-poster-card">
-        <img src="https://i.ibb.co/N2ZQQh1F/mcga-v8.webp" alt="Propaganda Poster 3" />
-        <p class="text-xs font-roboto-condensed mt-2">"Wake Up Now" - Discovered in the Old World Archives, 2023.</p>
+        <div class="image-wrapper">
+          <img src="https://i.ibb.co/N2ZQQh1F/mcga-v8.webp" alt="Propaganda Poster 3" />
+        </div>
+        <p class="caption-text">"Wake Up Now" - Discovered in the Old World Archives, 2023.</p>
       </div>
       <div class="propaganda-poster-card">
-        <img src="https://i.ibb.co/rNKgtcW/sunny.png" alt="Propaganda Poster 4" />
-        <p class="text-xs font-roboto-condensed mt-2">"The All-Seeing Eye" - A timeless symbol of vigilance.</p>
+        <div class="image-wrapper">
+          <img src="https://i.ibb.co/rNKgtcW/sunny.png" alt="Propaganda Poster 4" />
+        </div>
+        <p class="caption-text">"The All-Seeing Eye" - A timeless symbol of vigilance.</p>
       </div>
       <div class="propaganda-poster-card">
-        <img src="https://i.ibb.co/Gf1H8NGS/awaken-cultttt.webp" alt="Propaganda Poster 5" />
-        <p class="text-xs font-roboto-condensed mt-2">"Cult of Truth" - Embrace the collective consciousness.</p>
+        <div class="image-wrapper">
+          <img src="https://i.ibb.co/Gf1H8NGS/awaken-cultttt.webp" alt="Propaganda Poster 5" />
+        </div>
+        <p class="caption-text">"Cult of Truth" - Embrace the collective consciousness.</p>
       </div>
       <div class="propaganda-poster-card">
-        <img src="https://i.ibb.co/tD3B9Q3/eye-awaken.png" alt="Propaganda Poster 6" />
-        <p class="text-xs font-roboto-condensed mt-2">"Awaken Your Inner Eye" - See beyond the illusion.</p>
+        <div class="image-wrapper">
+          <img src="https://i.ibb.co/tD3B9Q3/eye-awaken.png" alt="Propaganda Poster 6" />
+        </div>
+        <p class="caption-text">"Awaken Your Inner Eye" - See beyond the illusion.</p>
       </div>
     </div>
   </section>
@@ -870,14 +1174,17 @@
       products.forEach(product => {
         const productCard = document.createElement('div');
         productCard.className = 'product-card';
-        // Changed onclick to navigate to product-detail.html
+        // Make the entire card clickable
+        productCard.onclick = () => {
+          window.location.href = `product-detail.html?id=${product.id}`;
+        };
         productCard.innerHTML = `
           <div class="product-image-container">
             <img src="${product.image}" alt="${product.name}" />
           </div>
           <h3 class="text-xl font-bold mt-3">${product.name}</h3>
           <p class="text-sm mb-2">$${product.price.toFixed(2)}</p>
-          <button class="view-artifact-btn" onclick="window.location.href='product-detail.html?id=${product.id}'">Buy Now</button>
+          <button class="view-artifact-btn" onclick="event.stopPropagation(); window.location.href='product-detail.html?id=${product.id}'">Buy Now</button>
         `;
         productListDiv.appendChild(productCard);
       });
@@ -928,14 +1235,47 @@
       updateCartDisplay();
     }
 
+    function showCustomAlert(message) {
+        const alertBox = document.createElement('div');
+        alertBox.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: black;
+            color: white;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 10000;
+            font-family: 'Roboto Condensed', sans-serif;
+            font-size: 1.1rem;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        `;
+        alertBox.textContent = message;
+        document.body.appendChild(alertBox);
+
+        setTimeout(() => {
+            alertBox.style.opacity = 1;
+        }, 10); // Small delay to trigger transition
+
+        setTimeout(() => {
+            alertBox.style.opacity = 0;
+            alertBox.addEventListener('transitionend', () => alertBox.remove());
+        }, 3000); // Disappear after 3 seconds
+    }
+
+
     function proceedToCheckout() {
       if (cart.length > 0) {
-        alert('Proceeding to checkout! Your artifacts are on their way to awaken you further.');
+        showCustomAlert('Proceeding to checkout! Your artifacts are on their way to awaken you further.');
         cart = []; // Clear cart after "checkout"
         updateCartDisplay();
         toggleCart(); // Close cart
       } else {
-        alert('Your cart is empty. Please add some artifacts before checking out.');
+        showCustomAlert('Your cart is empty. Please add some artifacts before checking out.');
       }
     }
 
