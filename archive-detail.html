@@ -152,7 +152,7 @@
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
-      justify-content: flex-start; /* Ensures content starts from the top */
+      justify-content: space-between;
     }
 
     .article-card { /* Used for side content like news-card on homepage */
@@ -197,18 +197,17 @@
       text-align: justify;
     }
 
-    /* For images within the article body - Adjusted for better fit */
+    /* For images within the article body */
     .article-body img {
-      max-width: 100%; /* Ensure images don't overflow */
+      max-width: 100%;
       height: auto;
       display: block;
       margin: 1.5rem auto; /* Center images and add vertical space */
       border: 1px solid #ccc;
-      box-shadow: 4px 4px 8px rgba(0,0,0,0.2); /* Subtle shadow for images */
     }
 
-    /* For promo codes and special announcements */
-    .promo-code, .special-announcement {
+    /* For promo codes */
+    .promo-code {
       background-color: #d94a44;
       color: white;
       font-family: 'Oswald', sans-serif;
@@ -222,9 +221,8 @@
       cursor: pointer;
       user-select: all; /* Allow easy selection/copy */
       transition: background-color 0.2s;
-      text-align: center; /* Ensure text inside is centered */
     }
-    .promo-code:hover, .special-announcement:hover {
+    .promo-code:hover {
       background-color: #b92a1e;
     }
 
@@ -450,24 +448,26 @@
 
     <main class="content-section">
         <div class="article-grid">
-            <!-- Left Column for side content - order-1 on desktop -->
+            <!-- Middle Column (Main Article Content) - Now first in source order, order-2 on desktop -->
+            <div class="lg:col-span-1 flex flex-col justify-between main-article-content lg:order-2">
+                <!-- Cult Archive Dispatch, Headline, and Sub-headline at the very top of this column -->
+                <div class="flex items-center justify-between border-b border-black pb-2 mb-4">
+                    <img src="https://i.ibb.co/23z6psTD/NEW-EYE-LOGO-BLACK-VEC.png" alt="The Sun Logo" class="h-8 w-auto mr-2" />
+                    <span class="font-roboto-condensed text-xs font-bold uppercase">Cult Archive Dispatch</span>
+                </div>
+                <h3 id="article-main-headline" class="font-anton main-headline"></h3>
+                <p id="article-sub-headline" class="font-roboto-condensed sub-headline"></p>
+                <div id="article-body" class="font-roboto-condensed article-body">
+                    <!-- Main article text and images will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Left Column for side content - Now second in source order, order-1 on desktop -->
             <div class="article-column lg:order-1" id="left-column">
                 <!-- Content will be dynamically loaded here -->
             </div>
 
-            <!-- Middle Column (Main Article Content) - order-2 on desktop -->
-            <div class="lg:col-span-1 flex flex-col main-article-content lg:order-2">
-                <!-- Main article text and images will be loaded here -->
-                <div id="main-article-header">
-                    <h3 id="article-main-headline" class="font-anton main-headline"></h3>
-                    <p id="article-sub-headline" class="font-roboto-condensed sub-headline"></p>
-                </div>
-                <div id="article-body" class="font-roboto-condensed article-body">
-                    <!-- Main article body content including images and promo codes -->
-                </div>
-            </div>
-
-            <!-- Right Column for side content - order-3 on desktop -->
+            <!-- Right Column for side content - Now third in source order, order-3 on desktop -->
             <div class="article-column lg:order-3" id="right-column">
                 <!-- Content will be dynamically loaded here -->
             </div>
@@ -612,29 +612,16 @@
             `,
             leftColumnContent: `
               <div class="article-card">
-                <div class="flex items-center justify-between pb-2 mb-2">
-                    <img src="https://i.ibb.co/23z6psTD/NEW-EYE-LOGO-BLACK-VEC.png" alt="The Sun Logo" class="h-6 w-auto mr-2" />
-                    <span class="font-roboto-condensed text-xs font-bold uppercase">Cult Archive Dispatch</span>
-                </div>
-                <p><strong>Defiance:</strong> Stories of unwavering resistance.</p>
+                <img src="https://i.ibb.co/FYLGm3Cy/mcga.png" alt="Related Image 1" />
+                <p><strong>Propaganda Alert:</strong> New posters sighted, urging citizens to 'AWAKEN'.</p>
               </div>
-              <a href="https://instagram.com/awakencult" target="_blank" class="article-card block no-underline text-black">
-                <img src="https://i.ibb.co/fYLGm3Cy/mcga.png" alt="Make Cults Great Again Poster" class="w-full h-auto" />
-                <div class="news-card-content">
-                  <strong class="uppercase">Propaganda Alert:</strong><br/>
-                  New posters sighted, urging citizens to 'AWAKEN'.
-                </div>
-              </a>
               <div class="article-card">
                 <p><strong>Breaking:</strong> Unexplained energy surges reported near ancient monolith. Coincidence?</p>
               </div>
-              <a href="https://instagram.com/awakencult" target="_blank" class="article-card block no-underline text-black">
-                <img src="https://i.ibb.co/S49t2Jm8/ballsl.png" alt="Illusion Poster" class="w-full h-auto" />
-                <div class="news-card-content">
-                  <strong class="uppercase">The Illusion:</strong><br/>
-                  A deeper dive into the layers of manufactured reality.
-                </div>
-              </a>
+              <div class="article-card">
+                <img src="https://i.ibb.co/S49t2Jm8/ballsl.png" alt="Illusion Poster" />
+                <p><strong>The Illusion:</strong> A deeper dive into the layers of manufactured reality.</p>
+              </div>
               <div class="article-card">
                 <p><strong>Decrypting the Signals:</strong> How to interpret hidden messages in plain sight.</p>
               </div>
@@ -642,46 +629,25 @@
                 <img src="https://placehold.co/150x225/555555/FFFFFF?text=Hidden+Symbols" alt="Hidden Symbols" />
                 <p><strong>Hidden Symbols:</strong> Uncovering the esoteric language of control.</p>
               </div>
-              <div class="article-card">
-                <p><strong>Further Reading:</strong> The history of globalist organizations and their influence.</p>
-              </div>
-              <div class="article-card">
-                <p><strong>Call to Action:</strong> Join the weekly online discussion on dismantling the old order.</p>
-              </div>
             `,
             rightColumnContent: `
               <div class="article-card">
-                <span class="font-roboto-condensed text-xs font-bold uppercase">Analysis: Why the system fears the awakened.</span>
+                <img src="https://i.ibb.co/TMszwwZ3/nwo-awaken-needs-you.png" alt="Related Image 2" />
+                <p><strong>Urgent Dispatch:</strong> The call for the New World Order is intensifying.</p>
               </div>
-              <a href="https://instagram.com/awakencult" target="_blank" class="article-card block no-underline text-black">
-                <img src="https://i.ibb.co/TMszwwZ3/nwo-awaken-needs-you.png" alt="NWO Needs You Poster" class="w-full h-auto" />
-                <div class="news-card-content">
-                  <strong class="uppercase">Urgent Dispatch:</strong><br/>
-                  The call for the New World Order is intensifying.
-                </div>
-              </a>
               <div class="article-card">
                 <p><strong>Exclusive Offer:</strong> Free enlightenment with every hoodie purchase in Sector 7.</p>
               </div>
-              <a href="https://instagram.com/awakencult" target="_blank" class="article-card block no-underline text-black">
-                <img src="https://i.ibb.co/V0FTWqC1/oberyyy.webp" alt="Mask Poster" class="w-full h-auto" />
-                <div class="news-card-content">
-                  <strong class="uppercase">Unmasking:</strong><br/>
-                  The importance of shedding false identities.
-                </div>
-              </a>
+              <div class="article-card">
+                <img src="https://i.ibb.co/V0FTWqC1/oberyyy.webp" alt="Mask Poster" />
+                <p><strong>Unmasking:</strong> The importance of shedding false identities.</p>
+              </div>
               <div class="article-card">
                 <p><strong>Global Alignment:</strong> Understanding the forces at play across continents.</p>
               </div>
               <div class="article-card">
                 <img src="https://placehold.co/150x225/777777/FFFFFF?text=The+Architects" alt="The Architects" />
                 <p><strong>The Architects:</strong> Profiles of the unseen hands shaping our world.</p>
-              </div>
-              <div class="article-card">
-                <p><strong>Event:</strong> Next clandestine meeting details revealed for initiates.</p>
-              </div>
-              <div class="article-card">
-                <p><strong>Insight:</strong> The true meaning of 'freedom' in a controlled society.</p>
               </div>
             `
           },
@@ -690,8 +656,9 @@
             subHeadline: "In a world saturated with disinformation, the true challenge is discerning the signal from the noise.",
             body: `
               <p>Every channel, every feed, every public pronouncement is designed to distract. The noise is a weapon, keeping you from hearing the truth within. Learn to filter, to discern, to find your inner quiet in the storm.</p>
-              <img src="https://i.ibb.co/xS6j3cSs/otis-grade.png" alt="Noise Distortion" />
               <p>This archive reveals the tactics of manufactured chaos and offers methods for achieving mental and spiritual clarity amidst the cacophony. They feed you illusions of freedom, while binding you with invisible chains. But the youth possess an innate fire, a yearning for authenticity. We offer the spark to ignite that fire and reclaim their future.</p>
+              <img src="https://i.ibb.co/xS6j3cSs/otis-grade.png" alt="Noise Distortion" />
+              <p>The discomfort isn’t the problem. The discomfort is the signal. It’s the part of you that remembers freedom. They fear that part of you. So they sell you sedation. Numb is safe. Numb is profitable.</p>
               <p class="promo-code">CODE: CLARITYNOW (15% off any tee)</p>
               <p>The constant chatter, the endless notifications, the curated outrage – it's all a symphony of distraction. They want your attention fragmented, your focus scattered, your inner voice drowned out. But silence is a weapon. In the quiet, the truth resonates. In the stillness, clarity emerges.</p>
               <img src="https://i.ibb.co/K1p3Mhr/awakewn-needs-you.webp" alt="Awaken Needs You Poster" />
@@ -704,19 +671,12 @@
             `,
             leftColumnContent: `
               <div class="article-card">
-                <div class="flex items-center justify-between pb-2 mb-2">
-                    <img src="https://i.ibb.co/23z6psTD/NEW-EYE-LOGO-BLACK-VEC.png" alt="The Sun Logo" class="h-6 w-auto mr-2" />
-                    <span class="font-roboto-condensed text-xs font-bold uppercase">Cult Archive Dispatch</span>
-                </div>
                 <p><strong>Insight:</strong> The true challenge is discerning signal from noise.</p>
               </div>
-              <a href="https://instagram.com/awakencult" target="_blank" class="article-card block no-underline text-black">
-                <img src="https://i.ibb.co/rNKgtcW/sunny.png" alt="Eye Poster" class="w-full h-auto" />
-                <div class="news-card-content">
-                  <strong class="uppercase">The Eye:</strong><br/>
-                  Always watching, always guiding.
-                </div>
-              </a>
+              <div class="article-card">
+                <img src="https://i.ibb.co/rNKgtcW/sunny.png" alt="Eye Poster" />
+                <p><strong>The Eye:</strong> Always watching, always guiding.</p>
+              </div>
               <div class="article-card">
                 <p><strong>Frequency Shifts:</strong> How to tune into the authentic vibrations.</p>
               </div>
@@ -724,46 +684,28 @@
                 <img src="https://placehold.co/150x225/AAAAAA/FFFFFF?text=Sound+Waves" alt="Sound Waves" />
                 <p><strong>Sonic Warfare:</strong> The hidden impact of sound frequencies.</p>
               </div>
-              <div class="article-card">
-                <p><strong>Meditation Guide:</strong> Simple practices for daily clarity.</p>
-              </div>
-              <div class="article-card">
-                <p><strong>Case Study:</strong> How a small community achieved complete informational autonomy.</p>
-              </div>
             `,
             rightColumnContent: `
               <div class="article-card">
-                <span class="font-roboto-condensed text-xs font-bold uppercase">Analysis: Why the system fears the awakened.</span>
-              </div>
-              <div class="article-card">
                 <p><strong>Warning:</strong> Manufactured chaos is designed to keep you docile.</p>
               </div>
-              <a href="https://instagram.com/awakencult" target="_blank" class="article-card block no-underline text-black">
-                <img src="https://i.ibb.co/tD3B9Q3/eye-awaken.png" alt="Awaken Eye" class="w-full h-auto" />
-                <div class="news-card-content">
-                  <strong class="uppercase">Visual Distortion:</strong><br/>
-                  The world as they want you to see it.
-                </div>
-              </a>
               <div class="article-card">
-                <p><strong>Digital Detox Protocols:</strong> Practical steps to reclaim your attention.</p>
+                <img src="https://i.ibb.co/tD3B9Q3/eye-awaken.png" alt="Awaken Eye" />
+                <p><strong>Visual Distortion:</strong> The world as they want you to see it.</p>
+              </div>
+              <div class="article-card">
+                <p><strong>Digital Detox Protocols:</b> Practical steps to reclaim your attention.</p>
               </div>
               <div class="article-card">
                 <img src="https://placehold.co/150x225/BBBBBB/FFFFFF?text=Mind+Filters" alt="Mind Filters" />
                 <p><strong>Mind Filters:</strong> Building mental defenses against persuasion.</p>
               </div>
-              <div class="article-card">
-                <p><strong>Exclusive:</strong> Interview with a former disinformation agent.</p>
-              </div>
-              <div class="article-card">
-                <p><strong>Resource:</strong> Recommended readings for advanced truth-seekers.</p>
-              </div>
             `
           },
           state_of_mind: {
             mainHeadline: "State of Mind: The Inner Landscape",
-            subHeadline: "Your greatest battlefield is within. Reclaim mental autonomy.",
-            body: `
+SubHeadline: "Your greatest battlefield is within. Reclaim mental autonomy.",
+body: `
               <p>They seek to control your thoughts, your emotions, your very perception. But the mind, once awakened, becomes an impenetrable fortress. This is the true liberation: the freedom of your inner landscape.</p>
               <img src="https://i.ibb.co/M5xjjWqM/3rd-eye-smiley.png" alt="Mind Control" />
               <p>This archive delves into the psychological warfare waged against the individual mind, offering insights and practices to fortify your inner sanctuary against external manipulation. Master your mind, master your reality.</p>
@@ -779,19 +721,12 @@
             `,
             leftColumnContent: `
               <div class="article-card">
-                <div class="flex items-center justify-between pb-2 mb-2">
-                    <img src="https://i.ibb.co/23z6psTD/NEW-EYE-LOGO-BLACK-VEC.png" alt="The Sun Logo" class="h-6 w-auto mr-2" />
-                    <span class="font-roboto-condensed text-xs font-bold uppercase">Cult Archive Dispatch</span>
-                </div>
                 <p><strong>Meditation Protocol:</strong> New techniques for mental fortification.</p>
               </div>
-              <a href="https://instagram.com/awakencult" target="_blank" class="article-card block no-underline text-black">
-                <img src="https://i.ibb.co/N2ZQQh1F/mcga-v8.webp" alt="Wake Up Poster" class="w-full h-auto" />
-                <div class="news-card-content">
-                  <strong class="uppercase">Wake Up:</strong><br/>
-                  The first step to reclaiming your mind.
-                </div>
-              </a>
+              <div class="article-card">
+                <img src="https://i.ibb.co/N2ZQQh1F/mcga-v8.webp" alt="Wake Up Poster" />
+                <p><strong>Wake Up:</strong> The first step to reclaiming your mind.</p>
+              </div>
               <div class="article-card">
                 <p><strong>Cognitive Dissonance:</strong> Understanding the mind's defense mechanisms.</p>
               </div>
@@ -799,39 +734,21 @@
                 <img src="https://placehold.co/150x225/CCCCCC/FFFFFF?text=Inner+Peace" alt="Inner Peace" />
                 <p><strong>Inner Peace:</strong> Finding stillness amidst the chaos.</p>
               </div>
-              <div class="article-card">
-                <p><strong>Workshop:</strong> Mastering your inner dialogue for true freedom.</p>
-              </div>
-              <div class="article-card">
-                <p><strong>Testimonial:</strong> How mental autonomy changed one initiate's life.</p>
-              </div>
             `,
             rightColumnContent: `
               <div class="article-card">
-                <span class="font-roboto-condensed text-xs font-bold uppercase">Analysis: Why the system fears the awakened.</span>
-              </div>
-              <div class="article-card">
                 <p><strong>Psychic Defense:</strong> Guard your thoughts from external influence.</p>
               </div>
-              <a href="https://instagram.com/awakencult" target="_blank" class="article-card block no-underline text-black">
-                <img src="https://i.ibb.co/b34X7S0/hand-awaken.png" alt="Awaken Hand" class="w-full h-auto" />
-                <div class="news-card-content">
-                  <strong class="uppercase">Guidance:</strong><br/>
-                  The path to inner peace.
-                </div>
-              </a>
+              <div class="article-card">
+                <img src="https://i.ibb.co/b34X7S0/hand-awaken.png" alt="Awaken Hand" />
+                <p><strong>Guidance:</strong> The path to inner peace.</p>
+              </div>
               <div class="article-card">
                 <p><strong>Dream Interpretation:</strong> Unlocking subconscious messages.</p>
               </div>
               <div class="article-card">
                 <img src="https://placehold.co/150x225/DDDDDD/FFFFFF?text=Thought+Control" alt="Thought Control" />
                 <p><strong>Thought Control:</strong> Recognizing the subtle attacks on your mind.</p>
-              </div>
-              <div class="article-card">
-                <p><strong>New Research:</strong> The impact of frequencies on human consciousness.</p>
-              </div>
-              <div class="article-card">
-                <p><strong>Exercise:</strong> Daily practices to strengthen your mental fortitude.</p>
               </div>
             `
           },
@@ -854,19 +771,12 @@
             `,
             leftColumnContent: `
               <div class="article-card">
-                <div class="flex items-center justify-between pb-2 mb-2">
-                    <img src="https://i.ibb.co/23z6psTD/NEW-EYE-LOGO-BLACK-VEC.png" alt="The Sun Logo" class="h-6 w-auto mr-2" />
-                    <span class="font-roboto-condensed text-xs font-bold uppercase">Cult Archive Dispatch</span>
-                </div>
                 <p><strong>Community Report:</strong> Bonds strengthened through shared truth.</p>
               </div>
-              <a href="https://instagram.com/awakencult" target="_blank" class="article-card block no-underline text-black">
-                <img src="https://i.ibb.co/twNrP2xF/XTCYYYY.webp" alt="XTCY Tee" class="w-full h-auto" />
-                <div class="news-card-content">
-                  <strong class="uppercase">Euphoria:</strong><br/>
-                  The joy of shared awakening.
-                </div>
-              </a>
+              <div class="article-card">
+                <img src="https://i.ibb.co/twNrP2xF/XTCYYYY.webp" alt="XTCY Tee" />
+                <p><strong>Euphoria:</strong> The joy of shared awakening.</p>
+              </div>
               <div class="article-card">
                 <p><strong>Shared Visions:</strong> Documenting collective insights.</p>
               </div>
@@ -874,39 +784,21 @@
                 <img src="https://placehold.co/150x225/EEEEEE/000000?text=Group+Unity" alt="Group Unity" />
                 <p><strong>Group Unity:</strong> The power of collective consciousness.</p>
               </div>
-              <div class="article-card">
-                <p><strong>Manifesto Excerpt:</strong> Love as a radical act of defiance.</p>
-              </div>
-              <div class="article-card">
-                <p><strong>Profile:</strong> The unsung heroes of the AWAKEN collective.</p>
-              </div>
             `,
             rightColumnContent: `
               <div class="article-card">
-                <span class="font-roboto-condensed text-xs font-bold uppercase">Analysis: Why the system fears the awakened.</span>
-              </div>
-              <div class="article-card">
                 <p><strong>Manifesto:</strong> Love as a radical act of defiance.</p>
               </div>
-              <a href="https://instagram.com/awakencult" target="_blank" class="article-card block no-underline text-black">
-                <img src="https://i.ibb.co/mrTy6Mhw/fake-news-hoodie.webp" alt="Fake News Hoodie" class="w-full h-auto" />
-                <div class="news-card-content">
-                  <strong class="uppercase">Truth in Fabric:</strong><br/>
-                  Wearing your beliefs.
-                </div>
-              </a>
+              <div class="article-card">
+                <img src="https://i.ibb.co/mrTy6Mhw/fake-news-hoodie.webp" alt="Fake News Hoodie" />
+                <p><strong>Truth in Fabric:</strong> Wearing your beliefs.</p>
+              </div>
               <div class="article-card">
                 <p><strong>Affiliate Stories:</strong> Testimonials of transformation.</p>
               </div>
               <div class="article-card">
                 <img src="https://placehold.co/150x225/FFFFFF/000000?text=Interconnected" alt="Interconnected" />
                 <p><strong>Interconnectedness:</strong> The web of awakened souls.</p>
-              </div>
-              <div class="article-card">
-                <p><strong>Event:</strong> Next community gathering for shared enlightenment.</p>
-              </div>
-              <div class="article-card">
-                <p><strong>Resource:</strong> Building resilient networks in a fragmented world.</p>
               </div>
             `
           },
@@ -929,19 +821,12 @@
             `,
             leftColumnContent: `
               <div class="article-card">
-                <div class="flex items-center justify-between pb-2 mb-2">
-                    <img src="https://i.ibb.co/23z6psTD/NEW-EYE-LOGO-BLACK-VEC.png" alt="The Sun Logo" class="h-6 w-auto mr-2" />
-                    <span class="font-roboto-condensed text-xs font-bold uppercase">Cult Archive Dispatch</span>
-                </div>
                 <p><strong>Defiance:</strong> Stories of unwavering resistance.</p>
               </div>
-              <a href="https://instagram.com/awakencult" target="_blank" class="article-card block no-underline text-black">
-                <img src="https://i.ibb.co/GvhVTBTc/MCGA-CAP.webp" alt="MCGA Cap" class="w-full h-auto" />
-                <div class="news-card-content">
-                  <strong class="uppercase">Symbol of Resistance:</strong><br/>
-                  Wear your truth.
-                </div>
-              </a>
+              <div class="article-card">
+                <img src="https://i.ibb.co/GvhVTBTc/MCGA-CAP.webp" alt="MCGA Cap" />
+                <p><strong>Symbol of Resistance:</strong> Wear your truth.</p>
+              </div>
               <div class="article-card">
                 <p><strong>Historical Precedents:</strong> Past movements of truth.</p>
               </div>
@@ -949,39 +834,21 @@
                 <img src="https://placehold.co/150x225/CCCCCC/000000?text=Shadow+Figures" alt="Shadow Figures" />
                 <p><strong>Shadow Figures:</strong> The unseen forces of suppression.</p>
               </div>
-              <div class="article-card">
-                <p><strong>Legal Victories:</strong> How small wins lead to big changes.</p>
-              </div>
-              <div class="article-card">
-                <p><strong>Community Support:</strong> Finding strength in numbers against persecution.</p>
-              </div>
             `,
             rightColumnContent: `
               <div class="article-card">
-                <span class="font-roboto-condensed text-xs font-bold uppercase">Analysis: Why the system fears the awakened.</span>
-              </div>
-              <div class="article-card">
                 <p><strong>Analysis:</strong> Why the system fears the awakened.</p>
               </div>
-              <a href="https://instagram.com/awakencult" target="_blank" class="article-card block no-underline text-black">
-                <img src="https://i.ibb.co/V0FTWqC1/oberyyy.webp" alt="Balaclava" class="w-full h-auto" />
-                <div class="news-card-content">
-                  <strong class="uppercase">Hidden Identity:</strong><br/>
-                  The power of anonymity.
-                </div>
-              </a>
+              <div class="article-card">
+                <img src="https://i.ibb.co/V0FTWqC1/oberyyy.webp" alt="Balaclava" />
+                <p><strong>Hidden Identity:</strong> The power of anonymity.</p>
+              </div>
               <div class="article-card">
                 <p><strong>Legal Dispatches:</strong> Cases of suppression and victory.</p>
               </div>
               <div class="article-card">
                 <img src="https://placehold.co/150x225/DDDDDD/000000?text=Truth+Shield" alt="Truth Shield" />
                 <p><strong>Truth Shield:</strong> Protecting yourself from psychological attacks.</p>
-              </div>
-              <div class="article-card">
-                <p><strong>Survival Guide:</strong> Thriving in a hostile information environment.</p>
-              </div>
-              <div class="article-card">
-                <p><strong>New Release:</strong> 'The Book of Resilience' now available.</p>
               </div>
             `
           },
@@ -1004,59 +871,34 @@
             `,
             leftColumnContent: `
               <div class="article-card">
-                <div class="flex items-center justify-between pb-2 mb-2">
-                    <img src="https://i.ibb.co/23z6psTD/NEW-EYE-LOGO-BLACK-VEC.png" alt="The Sun Logo" class="h-6 w-auto mr-2" />
-                    <span class="font-roboto-condensed text-xs font-bold uppercase">Cult Archive Dispatch</span>
-                </div>
                 <p><strong>Youth Movement:</strong> Inspiring stories of young truth-seekers.</p>
               </div>
-              <a href="https://instagram.com/awakencult" target="_blank" class="article-card block no-underline text-black">
-                <img src="https://i.ibb.co/rNKgtcW/sunny.png" alt="Eye of Truth" class="w-full h-auto" />
-                <div class="news-card-content">
-                  <strong class="uppercase">Guidance:</strong><br/>
-                  Seeing through the distractions.
-                </div>
-              </a>
               <div class="article-card">
-                <p><strong>Educational Alternatives:</strong> Paths beyond the system.</p>
+                <img src="https://i.ibb.co/rNKgtcW/sunny.png" alt="Eye of Truth" />
+                <p><strong>Guidance:</strong> Seeing through the distractions.</p>
+              </div>
+              <div class="article-card">
+                <p><strong>Educational Alternatives:</b> Paths beyond the system.</p>
               </div>
               <div class="article-card">
                 <img src="https://placehold.co/150x225/AAAAAA/000000?text=Future+Leaders" alt="Future Leaders" />
                 <p><strong>Future Leaders:</strong> Nurturing the next generation of awakened minds.</p>
               </div>
-              <div class="article-card">
-                <p><strong>Mentorship Program:</strong> Connecting experienced initiates with new recruits.</p>
-              </div>
-              <div class="article-card">
-                <p><strong>Podcast:</strong> 'The Youth Awakening' - weekly discussions on current issues.</p>
-              </div>
             `,
             rightColumnContent: `
               <div class="article-card">
-                <span class="font-roboto-condensed text-xs font-bold uppercase">Analysis: Why the system fears the awakened.</span>
-              </div>
-              <div class="article-card">
                 <p><strong>Digital Detox:</strong> Tools to break free from screen-induced apathy.</p>
               </div>
-              <a href="https://instagram.com/awakencult" target="_blank" class="article-card block no-underline text-black">
-                <img src="https://i.ibb.co/tD3B9Q3/eye-awaken.png" alt="Awaken Eye" class="w-full h-auto" />
-                <div class="news-card-content">
-                  <strong class="uppercase">Clarity:</strong><br/>
-                  The path to true purpose.
-                </div>
-              </a>
+              <div class="article-card">
+                <img src="https://i.ibb.co/tD3B9Q3/eye-awaken.png" alt="Awaken Eye" />
+                <p><strong>Clarity:</strong> The path to true purpose.</p>
+              </div>
               <div class="article-card">
                 <p><strong>Activism & Engagement:</strong> How youth can make a difference.</p>
               </div>
               <div class="article-card">
                 <img src="https://placehold.co/150x225/BBBBBB/000000?text=Creative+Expression" alt="Creative Expression" />
                 <p><strong>Creative Expression:</strong> Unleashing the authentic self.</p>
-              </div>
-              <div class="article-card">
-                <p><strong>Resource Guide:</strong> Books and documentaries for young truth-seekers.</p>
-              </div>
-              <div class="article-card">
-                <p><strong>Event:</strong> Youth Summit for a New World Order - registration open.</p>
               </div>
             `
           },
@@ -1079,19 +921,12 @@
             `,
             leftColumnContent: `
               <div class="article-card">
-                <div class="flex items-center justify-between pb-2 mb-2">
-                    <img src="https://i.ibb.co/23z6psTD/NEW-EYE-LOGO-BLACK-VEC.png" alt="The Sun Logo" class="h-6 w-auto mr-2" />
-                    <span class="font-roboto-condensed text-xs font-bold uppercase">Cult Archive Dispatch</span>
-                </div>
                 <p><strong>Perception Shift:</strong> How to see beyond the constructed reality.</p>
               </div>
-              <a href="https://instagram.com/awakencult" target="_blank" class="article-card block no-underline text-black">
-                <img src="https://i.ibb.co/fYLGm3Cy/mcga.png" alt="MCGA Poster" class="w-full h-auto" />
-                <div class="news-card-content">
-                  <strong class="uppercase">Propaganda:</strong><br/>
-                  Recognizing the tools of control.
-                </div>
-              </a>
+              <div class="article-card">
+                <img src="https://i.ibb.co/fYLGm3Cy/mcga.png" alt="MCGA Poster" />
+                <p><strong>Propaganda:</strong> Recognizing the tools of control.</p>
+              </div>
               <div class="article-card">
                 <p><strong>The Matrix Unplugged:</strong> Personal accounts of awakening.</p>
               </div>
@@ -1099,39 +934,21 @@
                 <img src="https://placehold.co/150x225/DDDDDD/000000?text=Hidden+Agendas" alt="Hidden Agendas" />
                 <p><strong>Hidden Agendas:</strong> Uncovering the true motives.</p>
               </div>
-              <div class="article-card">
-                <p><strong>Documentary Review:</strong> Films that expose the hidden truths.</p>
-              </div>
-              <div class="article-card">
-                <p><strong>New Release:</strong> 'The Chains of Perception' - a groundbreaking book.</p>
-              </div>
             `,
             rightColumnContent: `
               <div class="article-card">
-                <span class="font-roboto-condensed text-xs font-bold uppercase">Analysis: Why the system fears the awakened.</span>
-              </div>
-              <div class="article-card">
                 <p><strong>Control Mechanisms:</strong> An in-depth look at how society is managed.</p>
               </div>
-              <a href="https://instagram.com/awakencult" target="_blank" class="article-card block no-underline text-black">
-                <img src="https://i.ibb.co/V0FTWqC1/oberyyy.webp" alt="Balaclava" class="w-full h-auto" />
-                <div class="news-card-content">
-                  <strong class="uppercase">Concealment:</strong><br/>
-                  Blending in to observe.
-                </div>
-              </a>
+              <div class="article-card">
+                <img src="https://i.ibb.co/V0FTWqC1/oberyyy.webp" alt="Balaclava" />
+                <p><strong>Concealment:</strong> Blending in to observe.</p>
+              </div>
               <div class="article-card">
                 <p><strong>The Great Deception:</strong> Historical examples of societal manipulation.</p>
               </div>
               <div class="article-card">
                 <img src="https://placehold.co/150x225/CCCCCC/000000?text=Breaking+Free" alt="Breaking Free" />
                 <p><strong>Breaking Free:</strong> Steps to dismantle your personal prison.</p>
-              </div>
-              <div class="article-card">
-                <p><strong>Podcast:</strong> 'Unveiling Reality' - weekly insights into the illusion.</p>
-              </div>
-              <div class="article-card">
-                <p><strong>Event:</strong> 'Freedom from Illusion' seminar - register now!</p>
               </div>
             `
           },
@@ -1153,59 +970,34 @@
             `,
             leftColumnContent: `
               <div class="article-card">
-                <div class="flex items-center justify-between pb-2 mb-2">
-                    <img src="https://i.ibb.co/23z6psTD/NEW-EYE-LOGO-BLACK-VEC.png" alt="The Sun Logo" class="h-6 w-auto mr-2" />
-                    <span class="font-roboto-condensed text-xs font-bold uppercase">Cult Archive Dispatch</span>
-                </div>
                 <p><strong>Initiate Protocol:</strong> Steps to gain full access to classified data.</p>
               </div>
-              <a href="https://instagram.com/awakencult" target="_blank" class="article-card block no-underline text-black">
-                <img src="https://i.ibb.co/xS6j3cSs/otis-grade.png" alt="Noise Image" class="w-full h-auto" />
-                <div class="news-card-content">
-                  <strong class="uppercase">Filtering:</strong><br/>
-                  Discerning truth from static.
-                </div>
-              </a>
+              <div class="article-card">
+                <img src="https://i.ibb.co/xS6j3cSs/otis-grade.png" alt="Noise Image" />
+                <p><strong>Filtering:</strong> Discerning truth from static.</p>
+              </div>
               <div class="article-card">
                 <p><strong>Cipher Keys:</strong> Decoding the hidden messages.</p>
               </div>
               <div class="article-card">
                 <img src="https://placehold.co/150x225/BBBBBB/000000?text=Secret+Files" alt="Secret Files" />
-                <p><strong>Secret Files:</strong> Unlocking the deepest truths.</p>
-              </div>
-              <div class="article-card">
-                <p><strong>New Discoveries:</strong> Recent breakthroughs in understanding the archives.</p>
-              </div>
-              <div class="article-card">
-                <p><strong>Community Forum:</strong> Discussing the latest archival findings.</p>
+                <p><strong>Secret Files:</b> Unlocking the deepest truths.</p>
               </div>
             `,
             rightColumnContent: `
               <div class="article-card">
-                <span class="font-roboto-condensed text-xs font-bold uppercase">Analysis: Why the system fears the awakened.</span>
-              </div>
-              <div class="article-card">
                 <p><strong>Warning:</strong> Unauthorized reproduction is forbidden. The eyes are watching.</p>
               </div>
-              <a href="https://instagram.com/awakencult" target="_blank" class="article-card block no-underline text-black">
-                <img src="https://i.ibb.co/M5xjjWqM/3rd-eye-smiley.png" alt="Smiley Eye" class="w-full h-auto" />
-                <div class="news-card-content">
-                  <strong class="uppercase">Surveillance:</strong><br/>
-                  The ever-present gaze.
-                </div>
-              </a>
+              <div class="article-card">
+                <img src="https://i.ibb.co/M5xjjWqM/3rd-eye-smiley.png" alt="Smiley Eye" />
+                <p><strong>Surveillance:</strong> The ever-present gaze.</p>
+              </div>
               <div class="article-card">
                 <p><strong>Future Dispatches:</strong> What's coming next in the archives.</p>
               </div>
               <div class="article-card">
                 <img src="https://placehold.co/150x225/DDDDDD/000000?text=Truth+Seekers" alt="Truth Seekers" />
                 <p><strong>Truth Seekers:</strong> Profiles of those who dare to know.</p>
-              </div>
-              <div class="article-card">
-                <p><strong>Exclusive Access:</strong> How to become an official archivist.</p>
-              </div>
-              <div class="article-card">
-                <p><strong>Event:</strong> Annual Archival Review - open to all initiates.</p>
               </div>
             `
           }
