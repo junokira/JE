@@ -472,8 +472,11 @@
             ctx.strokeRect(0, canvas.height - GROUND_HEIGHT, canvas.width, GROUND_HEIGHT);
 
             if (backgroundBuildingsData.length > 0) {
-                const firstBuilding = backgroundBuildingsData[0];
-                const totalBgWidth = firstBuilding.width * BG_BUILDING_COUNT; // Approximate total width for wrapping
+                // Calculate the total width of all background buildings to determine the loop point
+                let totalBackgroundWidth = 0;
+                for(const bldg of backgroundBuildingsData) {
+                    totalBackgroundWidth += bldg.width;
+                }
 
                 for (let i = 0; i < backgroundBuildingsData.length; i++) {
                     let bgBldg = backgroundBuildingsData[i];
@@ -483,14 +486,12 @@
 
                     // If a building goes completely off screen to the left, reposition it to the right
                     if (bgBldg.x + bgBldg.width < 0) {
-                        // Find the rightmost building's current rendered position to place this one next to it
+                        // Find the rightmost building's current position and place this one after it
                         let maxRightX = -Infinity;
                         for(let j = 0; j < backgroundBuildingsData.length; j++) {
-                            if (backgroundBuildingsData[j].x > maxRightX) {
-                                maxRightX = backgroundBuildingsData[j].x;
-                            }
+                            maxRightX = Math.max(maxRightX, backgroundBuildingsData[j].x);
                         }
-                        bgBldg.x = maxRightX + bgBldg.width; // Place it after the rightmost building
+                        bgBldg.x = maxRightX + bgBldg.width; // Place it immediately after the rightmost
                     }
                     drawBackgroundBuilding(bgBldg, time);
                 }
@@ -537,54 +538,55 @@
             currentTimeOfDay = (currentTimeOfDay + DAY_CYCLE_SPEED * deltaTime) % 1;
             eyeOscillationOffset += EYE_OSCILLATION_SPEED * deltaTime;
 
-            if (!gameRunning && !gameOver) {
+            // Only update game logic if game is running
+            if (gameRunning) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
+
                 drawBackgroundLayer(currentTimeOfDay, deltaTime);
-                drawWatchingEye();
-                player.draw();
-                requestAnimationFrame(animate);
-                return;
-            }
+                player.update();
 
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let i = 0; i < obstacles.length; i++) {
+                    const o = obstacles[i];
+                    o.x -= GAME_SPEED;
 
-            drawBackgroundLayer(currentTimeOfDay, deltaTime);
-            player.update();
+                    drawMetalBin(o.x, 0, o.width, o.topHeight);
+                    drawMetalBin(o.x, canvas.height - o.bottomHeight - GROUND_HEIGHT, o.width, o.bottomHeight);
 
-            for (let i = 0; i < obstacles.length; i++) {
-                const o = obstacles[i];
-                o.x -= GAME_SPEED;
+                    if (player.x < o.x + o.width &&
+                        player.x + player.width > o.x &&
+                        (player.y < o.topHeight || player.y + player.height > canvas.height - o.bottomHeight - GROUND_HEIGHT)) {
+                        playHitSound();
+                        endGame();
+                        requestAnimationFrame(animate); // Keep animating background and eye
+                        return; // Stop game logic
+                    }
 
-                drawMetalBin(o.x, 0, o.width, o.topHeight);
-                drawMetalBin(o.x, canvas.height - o.bottomHeight - GROUND_HEIGHT, o.width, o.bottomHeight);
+                    if (o.x + o.width < player.x && !o.passed) {
+                        score++;
+                        playScoreSound();
+                        scoreDisplay.textContent = `SCORE: ${score}`;
+                        o.passed = true;
+                    }
+                }
 
-                if (player.x < o.x + o.width &&
-                    player.x + player.width > o.x &&
-                    (player.y < o.topHeight || player.y + player.height > canvas.height - o.bottomHeight - GROUND_HEIGHT)) {
+                obstacles = obstacles.filter(o => o.x + o.width > 0);
+
+                if (player.y + player.height > canvas.height - GROUND_HEIGHT) {
+                    player.y = canvas.height - GROUND_HEIGHT - player.height;
+                    player.velocity = 0;
                     playHitSound();
                     endGame();
-                    return;
+                    requestAnimationFrame(animate); // Keep animating background and eye
+                    return; // Stop game logic
                 }
-
-                if (o.x + o.width < player.x && !o.passed) {
-                    score++;
-                    playScoreSound();
-                    scoreDisplay.textContent = `SCORE: ${score}`;
-                    o.passed = true;
-                }
+            } else {
+                // If game is not running, still draw background and eye for UI screens
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawBackgroundLayer(currentTimeOfDay, deltaTime);
             }
-
-            obstacles = obstacles.filter(o => o.x + o.width > 0);
-
-            if (player.y + player.height > canvas.height - GROUND_HEIGHT) {
-                player.y = canvas.height - GROUND_HEIGHT - player.height;
-                player.velocity = 0;
-                playHitSound();
-                endGame();
-                return;
-            }
-
-            drawWatchingEye();
-            player.draw();
+            
+            drawWatchingEye(); // Always draw the eye
+            player.draw(); // Always draw the player (even on start/game over screens)
 
             requestAnimationFrame(animate);
         }
@@ -710,11 +712,33 @@
         // Share button logic
         function handleShareClick() {
             const gameUrl = window.location.href;
-            try {
-                navigator.clipboard.writeText(gameUrl).then(() => {
-                    showMessage("Link Copied!");
-                }).catch(() => {
-                    // Fallback if writeText fails (e.g., not secure context, permission issues)
+            if (navigator.share) {
+                navigator.share({
+                    title: 'AWAKEN - Dystopian Flap Game',
+                    url: gameUrl,
+                }).then(() => {
+                    console.log('Thanks for sharing!');
+                }).catch(console.error);
+            } else {
+                // Fallback for environments that do not support navigator.share
+                try {
+                    navigator.clipboard.writeText(gameUrl).then(() => {
+                        showMessage("Link Copied!");
+                    }).catch(() => {
+                        const textArea = document.createElement("textarea");
+                        textArea.value = gameUrl;
+                        document.body.appendChild(textArea);
+                        textArea.focus();
+                        textArea.select();
+                        try {
+                            document.execCommand('copy');
+                            showMessage("Link Copied! (Fallback)");
+                        } catch (err) {
+                            showMessage("Failed to copy link. Please copy manually: " + gameUrl);
+                        }
+                        document.body.removeChild(textArea);
+                    });
+                } catch (err) {
                     const textArea = document.createElement("textarea");
                     textArea.value = gameUrl;
                     document.body.appendChild(textArea);
@@ -727,21 +751,7 @@
                         showMessage("Failed to copy link. Please copy manually: " + gameUrl);
                     }
                     document.body.removeChild(textArea);
-                });
-            } catch (err) {
-                // Fallback for older browsers or restricted environments (like some iframes)
-                const textArea = document.createElement("textarea");
-                textArea.value = gameUrl;
-                document.body.appendChild(textArea);
-                textArea.focus();
-                textArea.select();
-                try {
-                    document.execCommand('copy');
-                    showMessage("Link Copied! (Fallback)");
-                } catch (err) {
-                    showMessage("Failed to copy link. Please copy manually: " + gameUrl);
                 }
-                document.body.removeChild(textArea);
             }
         }
 
