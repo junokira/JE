@@ -195,13 +195,13 @@
         let highScore = localStorage.getItem('dystopianFlapHighScore') || 0;
 
         // Game constants (adjusted for pixel art feel and mobile)
-        const PLAYER_WIDTH = 32; // Pixelated player width
-        const PLAYER_HEIGHT = 32; // Pixelated player height
+        const PLAYER_WIDTH = 32; // Pixelated player width (reverted to 32)
+        const PLAYER_HEIGHT = 32; // Pixelated player height (reverted to 32)
         const OBSTACLE_WIDTH = 60; // Width of the metal bins
-        const OBSTACLE_GAP_HEIGHT = 200; // Gap for the player to pass through
+        const OBSTACLE_GAP_HEIGHT = 150; // Gap for the player to pass through (adjusted to 150, more narrow)
         const GAME_SPEED = 2.5; // Overall game speed (for player and obstacles)
-        const GRAVITY = 0.22; // Increased gravity strength
-        const LIFT = -8.5; // Increased upward force when flapping
+        const GRAVITY = 0.2; // Increased gravity strength (reverted to 0.2)
+        const LIFT = -4.75; // Adjusted to half the previous magnitude (-9.5 / 2)
         const GROUND_HEIGHT = 50; // Height of the ground layer
 
         // Player object (smiley face)
@@ -348,6 +348,10 @@
         let eyeOscillationOffset = 0;
         const EYE_OSCILLATION_SPEED = 0.002;
         const EYE_OSCILLATION_AMPLITUDE = 15;
+
+        // New global variable for the eye's current tracked Y position
+        let eyeTrackedY = canvas.height / 2;
+        const EYE_TRACKING_SPEED = 0.05; // How quickly the eye tracks the gap
 
         // --- Background Building Data ---
         let backgroundBuildingsData = [];
@@ -641,18 +645,19 @@
         }
 
         // Draw the ominous watching eye (pupil tracks player, consistent red color)
-        function drawWatchingEye() {
+        function drawWatchingEye(eyeY) { // Added eyeY parameter
             const eyeRadius = 40;
             const irisRadius = eyeRadius * 0.6;
             const pupilRadius = 15;
 
-            // Eye center (fixed X, oscillating Y)
+            // Eye center (fixed X, dynamic Y)
             const eyeX = canvas.width / 2;
-            const eyeY = canvas.height / 2 + Math.sin(eyeOscillationOffset) * EYE_OSCILLATION_AMPLITUDE;
+            // The eyeY parameter is now passed in from the animate function
+            // const eyeY = canvas.height / 2 + Math.sin(eyeOscillationOffset) * EYE_OSCILLATION_AMPLITUDE; // This line is replaced
 
             // Calculate pupil offset to track player
             const dx = player.x - eyeX;
-            const dy = player.y - eyeY;
+            const dy = player.y - eyeY; // Use the passed eyeY
             const angle = Math.atan2(dy, dx);
 
             // Limit pupil movement within the iris
@@ -661,12 +666,12 @@
             const pupilOffsetY = Math.sin(angle) * pupilMaxOffset;
 
             const pupilX = eyeX + pupilOffsetX;
-            const pupilY = eyeY + pupilOffsetY;
+            const pupilY = eyeY + pupilOffsetY; // Use the passed eyeY
 
             // Eye white
             ctx.fillStyle = 'white';
             ctx.beginPath();
-            ctx.arc(eyeX, eyeY, eyeRadius, 0, Math.PI * 2);
+            ctx.arc(eyeX, eyeY, eyeRadius, 0, Math.PI * 2); // Use the passed eyeY
             ctx.fill();
             ctx.strokeStyle = '#333';
             ctx.lineWidth = 3;
@@ -675,7 +680,7 @@
             // Iris (red)
             ctx.fillStyle = 'red';
             ctx.beginPath();
-            ctx.arc(eyeX, eyeY, irisRadius, 0, Math.PI * 2);
+            ctx.arc(eyeX, eyeY, irisRadius, 0, Math.PI * 2); // Use the passed eyeY
             ctx.fill();
 
             // Pupil (black, as per reference image)
@@ -700,11 +705,43 @@
             currentTimeOfDay = (currentTimeOfDay + DAY_CYCLE_SPEED * deltaTime) % 1;
             eyeOscillationOffset += EYE_OSCILLATION_SPEED * deltaTime;
 
+            // Logic for eye tracking the obstacle gaps
+            let targetGapCenterY = canvas.height / 2; // Default to center if no obstacle is found
+            let activeObstacle = null;
+            let minHorizontalDistance = Infinity;
+
+            for (let i = 0; i < obstacles.length; i++) {
+                const o = obstacles[i];
+                const obstacleCenterX = o.x + o.width / 2;
+                const eyeCenterX = canvas.width / 2;
+                const distance = Math.abs(obstacleCenterX - eyeCenterX);
+
+                // Consider obstacles that are currently visible or just about to be
+                if (o.x < canvas.width && o.x + o.width > 0) { // Obstacle is visible on screen
+                    if (distance < minHorizontalDistance) {
+                        minHorizontalDistance = distance;
+                        activeObstacle = o;
+                    }
+                }
+            }
+
+            if (activeObstacle) {
+                targetGapCenterY = activeObstacle.topHeight + OBSTACLE_GAP_HEIGHT / 2;
+            }
+
+            // Smoothly move eyeTrackedY towards targetGapCenterY
+            eyeTrackedY += (targetGapCenterY - eyeTrackedY) * EYE_TRACKING_SPEED;
+
+            // Apply oscillation on top of the tracked position
+            const finalEyeY = eyeTrackedY + Math.sin(eyeOscillationOffset) * EYE_OSCILLATION_AMPLITUDE;
+
+
             // Only update game logic if game is running
             if (gameRunning) {
                 ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
 
                 drawBackgroundLayer(currentTimeOfDay, deltaTime);
+                drawWatchingEye(finalEyeY); // Draw eye BEFORE obstacles
                 player.update();
 
                 for (let i = 0; i < obstacles.length; i++) {
@@ -721,7 +758,7 @@
                     if (horizontalOverlap) {
                         // Collision with top obstacle: player's top is above the bottom edge of the top obstacle
                         // This now ends the game only if the player's top is significantly into the top pipe
-                        const topObstacleBodyCollision = player.y < o.topHeight - player.height * 0.2; // Player's head is 20% into the pipe
+                        const topObstacleBodyCollision = player.y < o.topHeight; // Player's top edge is above the pipe's bottom edge
 
                         // Collision with bottom obstacle: player's bottom is below the top of the bottom obstacle
                         const bottomObstacleCollision = player.y + player.height > canvas.height - o.bottomHeight - GROUND_HEIGHT;
@@ -754,9 +791,9 @@
                 // If game is not running, still draw background and eye for UI screens
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 drawBackgroundLayer(currentTimeOfDay, deltaTime);
+                drawWatchingEye(finalEyeY); // Draw eye even when game is not running
             }
             
-            drawWatchingEye(); // Always draw the eye
             player.draw(); // Always draw the player (even on start/game over screens)
 
             requestAnimationFrame(animate);
@@ -810,7 +847,7 @@
                 clearInterval(obstacleInterval);
             }
             createObstacle();
-            obstacleInterval = setInterval(createObstacle, 2000);
+            obstacleInterval = setInterval(createObstacle, 2000); // Reverted to 2000ms
 
             lastFrameTime = performance.now(); // Reset for smooth animation start
             // animate is already being called by requestAnimationFrame loop
@@ -887,7 +924,6 @@
         retryButton.addEventListener('click', async () => {
             if (Tone.context.state !== 'running') {
                 await Tone.start();
-                console.log('Audio context resumed on retry button click!');
             }
             startGame();
         });
