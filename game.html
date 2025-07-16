@@ -719,14 +719,16 @@
                     const horizontalOverlap = player.x < o.x + o.width && player.x + player.width > o.x;
 
                     if (horizontalOverlap) {
-                        // Collision with top obstacle: player's top is above a certain point within the top obstacle
-                        // Added a small buffer (5 pixels) to allow player to touch the very bottom of the top platform
-                        const topObstacleCollision = player.y < o.topHeight - 5; 
+                        // Collision with top obstacle: player's top is above the bottom edge of the top obstacle
+                        // This now ends the game only if the player's top is significantly into the top pipe
+                        // The previous condition `player.y < o.topHeight - 5` is removed to allow clipping
+                        const topObstacleBodyCollision = player.y < o.topHeight - player.height * 0.2; // Player's head is 20% into the pipe
 
                         // Collision with bottom obstacle: player's bottom is below the top of the bottom obstacle
                         const bottomObstacleCollision = player.y + player.height > canvas.height - o.bottomHeight - GROUND_HEIGHT;
 
-                        if (topObstacleCollision || bottomObstacleCollision) {
+                        // Only end game if player hits the body of the top obstacle OR the bottom obstacle
+                        if (topObstacleBodyCollision || bottomObstacleCollision) {
                             playHitSound();
                             endGame();
                         }
@@ -848,9 +850,9 @@
             if (gameRunning) {
                 player.flap();
                 playFlapSound();
-            } else if (gameOver || !gameRunning) {
-                startGame();
             }
+            // Removed the else if (gameOver || !gameRunning) { startGame(); }
+            // This ensures only explicit button clicks restart the game.
         });
 
         document.addEventListener('touchstart', async (e) => {
@@ -869,9 +871,9 @@
             if (gameRunning) {
                 player.flap();
                 playFlapSound();
-            } else if (gameOver || !gameRunning) {
-                startGame();
             }
+            // Removed the else if (gameOver || !gameRunning) { startGame(); }
+            // This ensures only explicit button clicks restart the game.
         }, { passive: false });
 
         // Button click handlers - these remain the same as they are specific
