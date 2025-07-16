@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWAKEN</title>
+    <!-- Google Fonts - Anton for dystopian messages -->
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+    <!-- Tone.js for sound effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
+    <style>
+        /* Custom CSS for the game */
+        body {
+            font-family: 'Anton', sans-serif; /* Use Anton for all text for dystopian feel */
+            background-color: #1a1a1a; /* Dark background for outside canvas */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden; /* Prevent scrolling */
+        }
+
+        #game-container {
+            position: relative;
+            width: 100%; /* Take full width on small screens */
+            max-width: 400px; /* Max width for desktop */
+            height: 100vh; /* Take full height on small screens */
+            max-height: 700px; /* Max height for desktop */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #000; /* Black background for the game area */
+            border: 8px solid #333; /* Thick border for retro feel */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            border-radius: 12px; /* Rounded corners for the container */
+        }
+
+        canvas {
+            display: block;
+            background-color: transparent; /* Canvas background will be drawn by JS */
+            width: 100%; /* Canvas takes full width of container */
+            height: 100%; /* Canvas takes full height of container */
+            image-rendering: pixelated; /* Ensures pixel art stays sharp */
+            image-rendering: -moz-crisp-edges;
+            image-rendering: -webkit-optimize-contrast;
+        }
+
+        .game-ui {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(10, 10, 10, 0.98); /* Nearly black, more opaque */
+            color: #da4944; /* Red for messages */
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            z-index: 10; /* Ensure UI is above canvas */
+            border-radius: 12px; /* Match container border-radius */
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            /* Removed text-shadow for a clean look */
+        }
+
+        .game-ui h1 {
+            font-size: 2.5rem; /* Larger title */
+            margin-bottom: 20px;
+            /* Removed text-shadow for a clean look */
+        }
+
+        .game-ui p {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            /* Removed text-shadow for a clean look */
+        }
+
+        .game-button {
+            background-color: #da4944; /* Red button */
+            color: #1a1a1a; /* Dark text for button */
+            padding: 15px 30px;
+            font-size: 1.5rem;
+            border: 4px solid #a03330; /* Darker red border */
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 6px 6px #802825; /* Pixelated shadow, even darker red */
+            transition: all 0.1s ease-in-out;
+            margin-top: 20px;
+            -webkit-user-select: none; /* Disable text selection */
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            font-family: 'Anton', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .game-button:active {
+            box-shadow: 2px 2px #802825; /* Smaller shadow on click */
+            transform: translate(4px, 4px); /* Press effect */
+        }
+
+        #score-display {
+            position: absolute;
+            top: 20px;
+            width: 100%;
+            text-align: center;
+            color: #da4944; /* Red score */
+            font-size: 2rem;
+            /* Removed text-shadow for a clean look */
+            z-index: 5; /* Above canvas, below UI screens */
+            font-family: 'Anton', sans-serif;
+        }
+
+        /* Hide elements initially */
+        .hidden {
+            display: none;
+        }
+
+        #message-box {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            z-index: 100;
+            font-family: 'Anton', sans-serif;
+            font-size: 1rem;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            pointer-events: none; /* Allow clicks to pass through */
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="score-display">SCORE: 0</div>
+        <canvas id="gameCanvas"></canvas>
+
+        <!-- Start Screen -->
+        <div id="start-screen" class="game-ui">
+            <h1>AWAKEN</h1>
+            <p>Tap anywhere to start!</p>
+            <button id="startButton" class="game-button">PLAY</button>
+            <button id="shareStartButton" class="game-button">SHARE</button>
+            <button id="backStartButton" class="game-button">BACK</button>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="game-over-screen" class="game-ui hidden">
+            <h1>GAME OVER!</h1>
+            <p>SCORE: <span id="final-score">0</span></p>
+            <p>HIGH SCORE: <span id="high-score">0</span></p>
+            <button id="retryButton" class="game-button">RETRY</button>
+            <button id="shareGameOverButton" class="game-button">SHARE</button>
+            <button id="backGameOverButton" class="game-button">BACK</button>
+        </div>
+
+        <div id="message-box" class="hidden"></div>
+    </div>
+
+    <script>
+        // Get canvas and its 2D rendering context
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Get UI elements
+        const scoreDisplay = document.getElementById('score-display');
+        const startScreen = document.getElementById('start-screen');
+        const gameOverScreen = document.getElementById('game-over-screen');
+        const finalScoreSpan = document.getElementById('final-score');
+        const highScoreSpan = document.getElementById('high-score');
+        const startButton = document.getElementById('startButton');
+        const retryButton = document.getElementById('retryButton');
+        const shareStartButton = document.getElementById('shareStartButton');
+        const backStartButton = document.getElementById('backStartButton');
+        const shareGameOverButton = document.getElementById('shareGameOverButton');
+        const backGameOverButton = document.getElementById('backGameOverButton');
+        const messageBox = document.getElementById('message-box');
+
+
+        // Game state variables
+        let gameRunning = false;
+        let gameOver = false;
+        let score = 0;
+        let highScore = localStorage.getItem('dystopianFlapHighScore') || 0;
+
+        // Game constants (adjusted for pixel art feel and mobile)
+        const PLAYER_WIDTH = 32; // Pixelated player width
+        const PLAYER_HEIGHT = 32; // Pixelated player height
+        const OBSTACLE_WIDTH = 60; // Width of the metal bins
+        const OBSTACLE_GAP_HEIGHT = 200; // Gap for the player to pass through
+        const GAME_SPEED = 2.5; // Overall game speed (for player and obstacles)
+        const GRAVITY = 0.22; // Increased gravity strength
+        const LIFT = -8.5; // Increased upward force when flapping
+        const GROUND_HEIGHT = 50; // Height of the ground layer
+
+        // Player object (smiley face)
+        const player = {
+            x: 50, // Initial X position
+            y: canvas.height / 2, // Initial Y position (center)
+            width: PLAYER_WIDTH,
+            height: PLAYER_HEIGHT,
+            velocity: 0, // Current vertical velocity
+            draw: function() {
+                // Player color
+                ctx.fillStyle = '#FFD700'; // Gold/Yellow
+                ctx.strokeStyle = '#000'; // Black outline
+                ctx.lineWidth = 2;
+
+                // Draw face circle
+                ctx.beginPath();
+                ctx.arc(this.x + this.width / 2, this.y + this.height / 2, this.width / 2, 0, Math.PI * 2, true);
+                ctx.fill();
+                ctx.stroke();
+
+                // Draw eyes
+                ctx.fillStyle = '#000';
+                const eyeRadius = this.width * 0.08;
+                // Left eye
+                ctx.beginPath();
+                ctx.arc(this.x + this.width * 0.35, this.y + this.height * 0.4, eyeRadius, 0, Math.PI * 2, true);
+                ctx.fill();
+                // Right eye
+                ctx.beginPath();
+                ctx.arc(this.x + this.width * 0.65, this.y + this.height * 0.4, eyeRadius, 0, Math.PI * 2, true);
+                ctx.fill();
+                // Third eye on the forehead
+                ctx.beginPath();
+                ctx.arc(this.x + this.width / 2, this.y + this.height * 0.25, eyeRadius, 0, Math.PI * 2, true);
+                ctx.fill();
+
+                // Draw mouth
+                ctx.beginPath();
+                ctx.arc(this.x + this.width / 2, this.y + this.height * 0.65, this.width * 0.2, 0, Math.PI, false);
+                ctx.stroke();
+            },
+            update: function() {
+                this.velocity += GRAVITY; // Apply gravity
+                this.y += this.velocity; // Update position
+
+                // Prevent player from going too high (ceiling collision)
+                if (this.y < 0) {
+                    this.y = 0;
+                    this.velocity = 0;
+                    endGame(); // Game over if hits ceiling
+                }
+                // Ground collision is handled in main game loop
+            },
+            flap: function() {
+                this.velocity = LIFT; // Apply upward lift
+            }
+        };
+
+        // Array to hold obstacles (metal bins)
+        let obstacles = [];
+        let obstacleInterval; // To clear interval for obstacle generation
+
+        // Sound effects using Tone.js
+        const flapSound = new Tone.Synth().toDestination();
+        const scoreSound = new Tone.MembraneSynth().toDestination();
+        const hitSound = new Tone.NoiseSynth().toDestination();
+
+        // Function to play sound effects
+        function playFlapSound() {
+            flapSound.triggerAttackRelease("C4", "8n"); // A short note for flapping
+        }
+
+        function playScoreSound() {
+            scoreSound.triggerAttackRelease("C5", "16n"); // A higher note for scoring
+        }
+
+        function playHitSound() {
+            hitSound.triggerAttackRelease("16n"); // A noise for hitting
+        }
+
+        // Helper function for random building colors
+        function getRandomBuildingColor() {
+            const buildingColors = ['#222', '#333', '#444'];
+            return buildingColors[Math.floor(Math.random() * buildingColors.length)];
+        }
+
+        // Function to create a new obstacle pair (metal bins)
+        function createObstacle() {
+            const minHeight = 80; // Minimum height for an obstacle segment
+            const maxHeight = canvas.height - GROUND_HEIGHT - OBSTACLE_GAP_HEIGHT - minHeight;
+            const topObstacleHeight = Math.floor(Math.random() * (maxHeight - minHeight + 1)) + minHeight;
+            const bottomObstacleHeight = canvas.height - GROUND_HEIGHT - topObstacleHeight - OBSTACLE_GAP_HEIGHT;
+
+            obstacles.push({
+                x: canvas.width, // Start off-screen to the right
+                topHeight: topObstacleHeight,
+                bottomHeight: bottomObstacleHeight,
+                width: OBSTACLE_WIDTH,
+                passed: false // To track if player has passed for scoring
+            });
+        }
+
+        // Draw metal bin obstacle
+        function drawMetalBin(x, y, width, height) {
+            ctx.fillStyle = '#696969'; // Dim gray for metal
+            ctx.strokeStyle = '#404040'; // Darker gray for outline
+            ctx.lineWidth = 2;
+
+            // Main bin body
+            ctx.fillRect(x, y, width, height);
+            ctx.strokeRect(x, y, width, height);
+
+            // Top rim
+            ctx.fillStyle = '#808080'; // Gray for rim
+            ctx.fillRect(x - 2, y - 5, width + 4, 10);
+            ctx.strokeRect(x - 2, y - 5, width + 4, 10);
+
+            // Small lid handle (optional)
+            ctx.fillStyle = '#404040';
+            ctx.fillRect(x + width / 2 - 5, y - 10, 10, 5);
+        }
+
+        // Time of day variables for background
+        let currentTimeOfDay = 0; // 0 to 1, representing progress through day/night cycle
+        const DAY_CYCLE_SPEED = 0.00002; // Slower speed for sky transition
+
+        // For the watching eye movement
+        let eyeOscillationOffset = 0;
+        const EYE_OSCILLATION_SPEED = 0.002;
+        const EYE_OSCILLATION_AMPLITUDE = 15;
+
+        // --- Background Building Data ---
+        let backgroundBuildingsData = [];
+        const BG_BUILDING_COUNT = 5;
+        const BG_BUILDING_WIDTH_FACTOR = 1.5;
+        const BG_BUILDING_MIN_HEIGHT_RATIO = 0.4;
+        const BG_BUILDING_MAX_HEIGHT_RATIO = 0.7;
+        const BG_SCROLL_SPEED = GAME_SPEED * 0.2;
+
+        function initializeBackgroundBuildings() {
+            backgroundBuildingsData = [];
+            const baseBuildingWidth = canvas.width / BG_BUILDING_COUNT;
+            let currentX = 0; // Start buildings from X=0 for initial layout
+
+            for (let i = 0; i < BG_BUILDING_COUNT + 2; i++) { // Generate a few extra for seamless loop
+                const bldgWidth = baseBuildingWidth * BG_BUILDING_WIDTH_FACTOR;
+                const bldgHeight = canvas.height * (BG_BUILDING_MIN_HEIGHT_RATIO + Math.random() * (BG_BUILDING_MAX_HEIGHT_RATIO - BG_BUILDING_MIN_HEIGHT_RATIO));
+                const bldgY = canvas.height - GROUND_HEIGHT - bldgHeight;
+                const bldgColor = getRandomBuildingColor();
+                const hasAntenna = Math.random() < 0.2;
+
+                const windows = [];
+                const windowSize = 8;
+                for (let xOff = 0; xOff < bldgWidth / (windowSize * 2); xOff++) {
+                    for (let yOff = 0; yOff < bldgHeight / (windowSize * 2); yOff++) {
+                        windows.push({
+                            xOffset: xOff * windowSize * 2 + windowSize / 2,
+                            yOffset: yOff * windowSize * 2 + windowSize / 2,
+                            isLit: Math.random() < 0.3
+                        });
+                    }
+                }
+
+                backgroundBuildingsData.push({
+                    x: currentX, // Initial X position
+                    width: bldgWidth,
+                    height: bldgHeight,
+                    y: bldgY,
+                    color: bldgColor,
+                    hasAntenna: hasAntenna,
+                    windows: windows
+                });
+                currentX += bldgWidth; // Position next building after current one
+            }
+        }
+
+        // Draw dystopian buildings (for background only)
+        function drawBackgroundBuilding(building, timeOfDay) {
+            ctx.fillStyle = building.color;
+            ctx.fillRect(building.x, building.y, building.width, building.height);
+
+            let baseWindowBrightness;
+            if (timeOfDay < 0.25) { // Night to Dawn
+                baseWindowBrightness = 0.8 + (timeOfDay / 0.25) * 0.2;
+            } else if (timeOfDay < 0.5) { // Dawn to Day
+                baseWindowBrightness = 1.0 - ((timeOfDay - 0.25) / 0.25) * 0.8;
+            } else if (timeOfDay < 0.75) { // Day to Dusk
+                baseWindowBrightness = 0.2 + ((timeOfDay - 0.5) / 0.25) * 0.6;
+            } else { // Dusk to Night
+                baseWindowBrightness = 0.8 + ((timeOfDay - 0.75) / 0.25) * 0.2;
+            }
+
+            baseWindowBrightness = Math.max(0.1, Math.min(1.0, baseWindowBrightness));
+
+            const windowSize = 8;
+            building.windows.forEach(window => {
+                if (window.isLit) {
+                    ctx.fillStyle = `rgba(255, 255, 0, ${baseWindowBrightness})`;
+                    ctx.fillRect(
+                        building.x + window.xOffset,
+                        building.y + window.yOffset,
+                        windowSize, windowSize
+                    );
+                }
+            });
+
+            if (building.hasAntenna) {
+                ctx.fillStyle = '#666';
+                ctx.fillRect(building.x + building.width / 2 - 2, building.y - 30, 4, 30);
+                ctx.beginPath();
+                ctx.arc(building.x + building.width / 2, building.y - 30, 5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // Helper function to interpolate RGB colors
+        function lerpColor(color1, color2, factor) {
+            const result = [];
+            for (let i = 0; i < 3; i++) {
+                result[i] = Math.round(color1[i] + factor * (color2[i] - color1[i]));
+            }
+            return `rgb(${result[0]}, ${result[1]}, ${result[2]})`;
+        }
+
+        // Define sky color points as [R, G, B] arrays for smooth transition
+        const skyColors = [
+            { time: 0.0, color: [20, 20, 40] },   // Deep Night
+            { time: 0.25, color: [80, 50, 100] },  // Pre-dawn purple
+            { time: 0.5, color: [100, 150, 200] }, // Mid-day light blue
+            { time: 0.75, color: [150, 100, 120] }, // Dusk reddish
+            { time: 1.0, color: [20, 20, 40] }    // Back to Deep Night
+        ];
+
+        function getSkyColor(time) {
+            time = time % 1.0;
+
+            let startColor, endColor, startPoint, endPoint;
+
+            for (let i = 0; i < skyColors.length; i++) {
+                if (time >= skyColors[i].time) {
+                    startPoint = skyColors[i].time;
+                    startColor = skyColors[i].color;
+                    if (i + 1 < skyColors.length) {
+                        endPoint = skyColors[i + 1].time;
+                        endColor = skyColors[i + 1].color;
+                    } else {
+                        endPoint = 1.0;
+                        endColor = skyColors[0].color;
+                    }
+                } else {
+                    break;
+                }
+            }
+
+            const factor = (time - startPoint) / (endPoint - startPoint);
+            return lerpColor(startColor, endColor, factor);
+        }
+
+        function drawBackgroundLayer(time, deltaTime) {
+            ctx.fillStyle = getSkyColor(time);
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#333';
+            ctx.fillRect(0, canvas.height - GROUND_HEIGHT, canvas.width, GROUND_HEIGHT);
+            ctx.strokeStyle = '#111';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(0, canvas.height - GROUND_HEIGHT, canvas.width, GROUND_HEIGHT);
+
+            if (backgroundBuildingsData.length > 0) {
+                const firstBuilding = backgroundBuildingsData[0];
+                const totalBgWidth = firstBuilding.width * BG_BUILDING_COUNT; // Approximate total width for wrapping
+
+                for (let i = 0; i < backgroundBuildingsData.length; i++) {
+                    let bgBldg = backgroundBuildingsData[i];
+                    
+                    // Update x position based on scroll speed and delta time
+                    bgBldg.x -= (BG_SCROLL_SPEED * deltaTime / 16);
+
+                    // If a building goes completely off screen to the left, reposition it to the right
+                    if (bgBldg.x + bgBldg.width < 0) {
+                        // Find the rightmost building's current rendered position to place this one next to it
+                        let maxRightX = -Infinity;
+                        for(let j = 0; j < backgroundBuildingsData.length; j++) {
+                            if (backgroundBuildingsData[j].x > maxRightX) {
+                                maxRightX = backgroundBuildingsData[j].x;
+                            }
+                        }
+                        bgBldg.x = maxRightX + bgBldg.width; // Place it after the rightmost building
+                    }
+                    drawBackgroundBuilding(bgBldg, time);
+                }
+            }
+        }
+
+        // Draw the ominous watching eye
+        function drawWatchingEye() {
+            const eyeX = canvas.width / 2;
+            const eyeY = canvas.height / 2 + Math.sin(eyeOscillationOffset) * EYE_OSCILLATION_AMPLITUDE; // Oscillate vertically
+            const eyeRadius = 40;
+            const pupilRadius = 15;
+
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(eyeX, eyeY, eyeRadius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            ctx.fillStyle = 'red';
+            ctx.beginPath();
+            ctx.arc(eyeX, eyeY, eyeRadius * 0.6, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = 'black';
+            ctx.beginPath();
+            ctx.arc(eyeX, eyeY, pupilRadius, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+            ctx.beginPath();
+            ctx.arc(eyeX - pupilRadius * 0.5, eyeY - pupilRadius * 0.5, pupilRadius * 0.3, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // Main game loop
+        let lastFrameTime = performance.now();
+        function animate(currentTime) {
+            const deltaTime = currentTime - lastFrameTime;
+            lastFrameTime = currentTime;
+
+            currentTimeOfDay = (currentTimeOfDay + DAY_CYCLE_SPEED * deltaTime) % 1;
+            eyeOscillationOffset += EYE_OSCILLATION_SPEED * deltaTime;
+
+            if (!gameRunning && !gameOver) {
+                drawBackgroundLayer(currentTimeOfDay, deltaTime);
+                drawWatchingEye();
+                player.draw();
+                requestAnimationFrame(animate);
+                return;
+            }
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            drawBackgroundLayer(currentTimeOfDay, deltaTime);
+            player.update();
+
+            for (let i = 0; i < obstacles.length; i++) {
+                const o = obstacles[i];
+                o.x -= GAME_SPEED;
+
+                drawMetalBin(o.x, 0, o.width, o.topHeight);
+                drawMetalBin(o.x, canvas.height - o.bottomHeight - GROUND_HEIGHT, o.width, o.bottomHeight);
+
+                if (player.x < o.x + o.width &&
+                    player.x + player.width > o.x &&
+                    (player.y < o.topHeight || player.y + player.height > canvas.height - o.bottomHeight - GROUND_HEIGHT)) {
+                    playHitSound();
+                    endGame();
+                    return;
+                }
+
+                if (o.x + o.width < player.x && !o.passed) {
+                    score++;
+                    playScoreSound();
+                    scoreDisplay.textContent = `SCORE: ${score}`;
+                    o.passed = true;
+                }
+            }
+
+            obstacles = obstacles.filter(o => o.x + o.width > 0);
+
+            if (player.y + player.height > canvas.height - GROUND_HEIGHT) {
+                player.y = canvas.height - GROUND_HEIGHT - player.height;
+                player.velocity = 0;
+                playHitSound();
+                endGame();
+                return;
+            }
+
+            drawWatchingEye();
+            player.draw();
+
+            requestAnimationFrame(animate);
+        }
+
+        // Function to resize canvas and adjust player position
+        function resizeCanvas() {
+            const gameContainer = document.getElementById('game-container');
+            canvas.width = gameContainer.offsetWidth - 16;
+            canvas.height = gameContainer.offsetHeight - 16;
+
+            if (!gameRunning && !gameOver) {
+                player.y = canvas.height / 2;
+            }
+            initializeBackgroundBuildings();
+        }
+
+        // Function to show temporary messages
+        function showMessage(msg) {
+            messageBox.textContent = msg;
+            messageBox.classList.remove('hidden');
+            messageBox.style.opacity = 0; // Start hidden for transition
+            setTimeout(() => { messageBox.style.opacity = 1; }, 10); // Fade in
+            setTimeout(() => {
+                messageBox.style.opacity = 0;
+                messageBox.addEventListener('transitionend', () => {
+                    messageBox.classList.add('hidden');
+                }, { once: true });
+            }, 2000); // Fade out after 2 seconds
+        }
+
+        // Start game function
+        async function startGame() {
+            if (Tone.context.state !== 'running') {
+                await Tone.start();
+                console.log('Audio context resumed!');
+            }
+
+            score = 0;
+            scoreDisplay.textContent = `SCORE: ${score}`;
+            player.y = canvas.height / 2;
+            player.velocity = 0;
+            obstacles = [];
+            gameRunning = true;
+            gameOver = false;
+            startScreen.classList.add('hidden');
+            gameOverScreen.classList.add('hidden');
+            scoreDisplay.classList.remove('hidden');
+
+            if (obstacleInterval) {
+                clearInterval(obstacleInterval);
+            }
+            createObstacle();
+            obstacleInterval = setInterval(createObstacle, 2000);
+
+            lastFrameTime = performance.now(); // Reset for smooth animation start
+            // animate is already being called by requestAnimationFrame loop
+        }
+
+        // End game function
+        function endGame() {
+            gameRunning = false;
+            gameOver = true;
+            clearInterval(obstacleInterval);
+
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('dystopianFlapHighScore', highScore);
+            }
+
+            finalScoreSpan.textContent = score;
+            highScoreSpan.textContent = highScore;
+            gameOverScreen.classList.remove('hidden');
+            scoreDisplay.classList.add('hidden');
+        }
+
+        // Event listeners for user input (tap anywhere to flap)
+        document.addEventListener('click', async () => {
+            if (Tone.context.state !== 'running') {
+                await Tone.start();
+                console.log('Audio context resumed on click!');
+            }
+
+            if (gameRunning) {
+                player.flap();
+                playFlapSound();
+            } else if (gameOver || !gameRunning) {
+                startGame();
+            }
+        });
+
+        document.addEventListener('touchstart', async (e) => {
+            e.preventDefault();
+
+            if (Tone.context.state !== 'running') {
+                await Tone.start();
+                console.log('Audio context resumed on touchstart!');
+            }
+
+            if (gameRunning) {
+                player.flap();
+                playFlapSound();
+            } else if (gameOver || !gameRunning) {
+                startGame();
+            }
+        }, { passive: false });
+
+        // Button click handlers
+        startButton.addEventListener('click', async () => {
+            if (Tone.context.state !== 'running') {
+                await Tone.start();
+                console.log('Audio context resumed on start button click!');
+            }
+            startGame();
+        });
+        retryButton.addEventListener('click', async () => {
+            if (Tone.context.state !== 'running') {
+                await Tone.start();
+                console.log('Audio context resumed on retry button click!');
+            }
+            startGame();
+        });
+
+        // Share button logic
+        function handleShareClick() {
+            const gameUrl = window.location.href;
+            try {
+                navigator.clipboard.writeText(gameUrl).then(() => {
+                    showMessage("Link Copied!");
+                }).catch(() => {
+                    // Fallback if writeText fails (e.g., not secure context, permission issues)
+                    const textArea = document.createElement("textarea");
+                    textArea.value = gameUrl;
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    try {
+                        document.execCommand('copy');
+                        showMessage("Link Copied! (Fallback)");
+                    } catch (err) {
+                        showMessage("Failed to copy link. Please copy manually: " + gameUrl);
+                    }
+                    document.body.removeChild(textArea);
+                });
+            } catch (err) {
+                // Fallback for older browsers or restricted environments (like some iframes)
+                const textArea = document.createElement("textarea");
+                textArea.value = gameUrl;
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showMessage("Link Copied! (Fallback)");
+                } catch (err) {
+                    showMessage("Failed to copy link. Please copy manually: " + gameUrl);
+                }
+                document.body.removeChild(textArea);
+            }
+        }
+
+        shareStartButton.addEventListener('click', async () => {
+            if (Tone.context.state !== 'running') {
+                await Tone.start();
+            }
+            handleShareClick();
+        });
+        shareGameOverButton.addEventListener('click', async () => {
+            if (Tone.context.state !== 'running') {
+                await Tone.start();
+            }
+            handleShareClick();
+        });
+
+        // Back button logic
+        function handleBackClick() {
+            window.location.href = 'index.html';
+        }
+
+        backStartButton.addEventListener('click', async () => {
+            if (Tone.context.state !== 'running') {
+                await Tone.start();
+            }
+            handleBackClick();
+        });
+        backGameOverButton.addEventListener('click', async () => {
+            if (Tone.context.state !== 'running') {
+                await Tone.start();
+            }
+            handleBackClick();
+        });
+
+        // Initial setup on load
+        window.onload = () => {
+            resizeCanvas();
+            highScore = localStorage.getItem('dystopianFlapHighScore') || 0;
+            highScoreSpan.textContent = highScore;
+            scoreDisplay.textContent = `SCORE: 0`;
+            startScreen.classList.remove('hidden');
+            scoreDisplay.classList.add('hidden');
+            gameOverScreen.classList.add('hidden');
+            
+            lastFrameTime = performance.now(); // Initialize for the very first frame
+            requestAnimationFrame(animate); // Start the animation loop
+        };
+
+        // Resize canvas when window is resized
+        window.addEventListener('resize', resizeCanvas);
+
+    </script>
+</body>
+</html>
