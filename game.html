@@ -714,12 +714,22 @@
                     drawMetalBin(o.x, 0, o.width, o.topHeight);
                     drawMetalBin(o.x, canvas.height - o.bottomHeight - GROUND_HEIGHT, o.width, o.bottomHeight);
 
-                    if (player.x < o.x + o.width &&
-                        player.x + player.width > o.x &&
-                        (player.y < o.topHeight || player.y + player.height > canvas.height - o.bottomHeight - GROUND_HEIGHT)) {
-                        playHitSound();
-                        endGame();
-                        // No return here, allow animate to continue for background/eye
+                    // Collision detection
+                    // Horizontal overlap check
+                    const horizontalOverlap = player.x < o.x + o.width && player.x + player.width > o.x;
+
+                    if (horizontalOverlap) {
+                        // Collision with top obstacle: player's top is above a certain point within the top obstacle
+                        // Added a small buffer (5 pixels) to allow player to touch the very bottom of the top platform
+                        const topObstacleCollision = player.y < o.topHeight - 5; 
+
+                        // Collision with bottom obstacle: player's bottom is below the top of the bottom obstacle
+                        const bottomObstacleCollision = player.y + player.height > canvas.height - o.bottomHeight - GROUND_HEIGHT;
+
+                        if (topObstacleCollision || bottomObstacleCollision) {
+                            playHitSound();
+                            endGame();
+                        }
                     }
 
                     if (o.x + o.width < player.x && !o.passed) {
@@ -823,7 +833,13 @@
         }
 
         // Event listeners for user input (tap anywhere to flap)
-        document.addEventListener('click', async () => {
+        // Modified to only flap/start if the click/touch is NOT on a button
+        document.addEventListener('click', async (e) => {
+            // Check if the clicked element is a button
+            if (e.target.tagName === 'BUTTON') {
+                return; // Do nothing, let the button's specific handler take over
+            }
+
             if (Tone.context.state !== 'running') {
                 await Tone.start();
                 console.log('Audio context resumed on click!');
@@ -838,7 +854,12 @@
         });
 
         document.addEventListener('touchstart', async (e) => {
-            e.preventDefault();
+            e.preventDefault(); // Prevent default touch behavior like scrolling
+
+            // Check if the touched element is a button
+            if (e.target.tagName === 'BUTTON') {
+                return; // Do nothing, let the button's specific handler take over
+            }
 
             if (Tone.context.state !== 'running') {
                 await Tone.start();
@@ -853,7 +874,7 @@
             }
         }, { passive: false });
 
-        // Button click handlers
+        // Button click handlers - these remain the same as they are specific
         startButton.addEventListener('click', async () => {
             if (Tone.context.state !== 'running') {
                 await Tone.start();
