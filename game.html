@@ -353,104 +353,150 @@
         let eyeTrackedY = canvas.height / 2;
         const EYE_TRACKING_SPEED = 0.05; // How quickly the eye tracks the gap
 
-        // --- Background Building Data ---
-        let backgroundBuildingsData = [];
-        const BG_BUILDING_COUNT = 8; // Increased for more varied background
+        // --- Background Elements Data ---
+        let stars = [];
+        const numStars = 100;
+        const starMinSize = 1;
+        const starMaxSize = 3;
+
+        // Stores unique properties for each building instance by layer and global index
+        let backgroundElementStates = {}; 
+
+        const baseBuildingColors = ['#1a1a1a', '#222', '#333']; // Darker, middle, lighter
+        const buildingScrollSpeeds = [0.05, 0.1, 0.2]; // Slower for further layers
         const BG_BUILDING_MIN_WIDTH = 80;
         const BG_BUILDING_MAX_WIDTH = 150;
-        const BG_BUILDING_MIN_HEIGHT_RATIO = 0.3; // Make them potentially shorter
-        const BG_BUILDING_MAX_HEIGHT_RATIO = 0.8; // Make them potentially taller
-        const BG_SCROLL_SPEED = GAME_SPEED * 0.2;
+        const BG_BUILDING_MIN_HEIGHT_RATIO = 0.3;
+        const BG_BUILDING_MAX_HEIGHT_RATIO = 0.8;
 
-        // Akira-like colors for AWAKEN billboards
         const akiraBillboardColors = ['#FF0000', '#FFFF00', '#00FFFF', '#00FF00', '#FFA500']; // Red, Yellow, Cyan, Green, Orange
 
-        function initializeBackgroundBuildings() {
-            backgroundBuildingsData = [];
-            let currentSpawnX = 0; // To ensure initial coverage
+        const windowColorDark = [30, 30, 30]; // Dark gray for off windows
+        const windowColorLit = [255, 215, 0]; // Gold/Yellow for lit windows
 
-            // Generate enough buildings to fill more than two screen widths initially
-            const initialCoverageWidth = canvas.width * 2.5; 
+        let cameraX = 0; // Global camera position for parallax
 
-            while (currentSpawnX < initialCoverageWidth) {
-                const bldgWidth = BG_BUILDING_MIN_WIDTH + Math.random() * (BG_BUILDING_MAX_WIDTH - BG_BUILDING_MIN_WIDTH);
-                const bldgHeight = canvas.height * (BG_BUILDING_MIN_HEIGHT_RATIO + Math.random() * (BG_BUILDING_MAX_HEIGHT_RATIO - BG_BUILDING_MIN_HEIGHT_RATIO));
-                
-                // Buildings are always grounded, no vertical offset
-                const bldgY = canvas.height - GROUND_HEIGHT - bldgHeight;
+        // Helper function for linear interpolation
+        function getInterpolatedValue(valueA, valueB, factor) {
+            return valueA + factor * (valueB - valueA);
+        }
 
-                const bldgColor = getRandomBuildingColor();
-                const hasAntenna = Math.random() < 0.2;
-                // Assign billboard types randomly
-                const hasAwakenBillboard = Math.random() < 0.15; // 15% chance for AWAKEN
-                const hasEyeBillboard = Math.random() < 0.1; // 10% chance for EYE
-
-                let billboardColor = '#00FFFF'; // Default for eye billboard
-                if (hasAwakenBillboard) {
-                    billboardColor = akiraBillboardColors[Math.floor(Math.random() * akiraBillboardColors.length)];
-                }
-
-
-                const windows = [];
-                const windowSize = 8;
-                for (let xOff = 0; xOff * windowSize * 2 < bldgWidth - windowSize; xOff++) { // Ensure windows stay within width
-                    for (let yOff = 0; yOff * windowSize * 2 < bldgHeight - windowSize; yOff++) { // Ensure windows stay within height
-                        windows.push({
-                            xOffset: xOff * windowSize * 2 + windowSize / 2,
-                            yOffset: yOff * windowSize * 2 + windowSize / 2,
-                            isLit: Math.random() < 0.3
-                        });
-                    }
-                }
-
-                backgroundBuildingsData.push({
-                    x: currentSpawnX + Math.random() * 50, // Add small random offset for staggered effect
-                    width: bldgWidth,
-                    height: bldgHeight,
-                    y: bldgY,
-                    color: bldgColor,
-                    hasAntenna: hasAntenna,
-                    hasAwakenBillboard: hasAwakenBillboard, // New property
-                    hasEyeBillboard: hasEyeBillboard, // New property
-                    billboardColor: billboardColor, // Use the selected color
-                    windows: windows
-                });
-                currentSpawnX += bldgWidth + Math.random() * 30; // Add random gap between buildings
+        // Helper function to interpolate RGB colors
+        function lerpColor(color1, color2, factor) {
+            const result = [];
+            for (let i = 0; i < 3; i++) {
+                result[i] = Math.round(getInterpolatedValue(color1[i], color2[i], factor));
             }
-            // Sort buildings by Y position (height) to ensure correct layering when drawn
-            backgroundBuildingsData.sort((a, b) => a.y - b.y);
+            return `rgb(${result[0]}, ${result[1]}, ${result[2]})`;
+        }
+
+        // Define sky color points as [R, G, B] arrays for smooth transition
+        const skyColors = [
+            { time: 0.0, color: [20, 20, 40] },   // Deep Night
+            { time: 0.25, color: [80, 50, 100] },  // Pre-dawn purple
+            { time: 0.5, color: [100, 150, 200] }, // Mid-day light blue
+            { time: 0.75, color: [150, 100, 120] }, // Dusk reddish
+            { time: 1.0, color: [20, 20, 40] }    // Back to Deep Night
+        ];
+
+        function getSkyColor(time) {
+            time = time % 1.0;
+
+            let startColor, endColor, startPoint, endPoint;
+
+            for (let i = 0; i < skyColors.length; i++) {
+                if (time >= skyColors[i].time) {
+                    startPoint = skyColors[i].time;
+                    startColor = skyColors[i].color;
+                    if (i + 1 < skyColors.length) {
+                        endPoint = skyColors[i + 1].time;
+                        endColor = skyColors[i + 1].color;
+                    } else {
+                        endPoint = 1.0;
+                        endColor = skyColors[0].color; // Loop back to deep night
+                    }
+                } else {
+                    break;
+                }
+            }
+
+            const factor = (time - startPoint) / (endPoint - startPoint);
+            return lerpColor(startColor, endColor, factor);
+        }
+
+        // Initialize stars
+        function initializeStars() {
+            stars = [];
+            for (let i = 0; i < numStars; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * (canvas.height / 2), // Stars in upper half
+                    size: getInterpolatedValue(starMinSize, starMaxSize, Math.random())
+                });
+            }
+        }
+
+        // Draw a single star
+        function drawStar(star, alpha) {
+            ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+            // Draw a simple 5-pointed star shape or a square for pixel art
+            ctx.beginPath();
+            ctx.moveTo(star.x, star.y - star.size);
+            ctx.lineTo(star.x + star.size * 0.3, star.y - star.size * 0.3);
+            ctx.lineTo(star.x + star.size, star.y);
+            ctx.lineTo(star.x + star.size * 0.3, star.y + star.size * 0.3);
+            ctx.lineTo(star.x, star.y + star.size);
+            ctx.lineTo(star.x - star.size * 0.3, star.y + star.size * 0.3);
+            ctx.lineTo(star.x - star.size, star.y);
+            ctx.lineTo(star.x - star.size * 0.3, star.y - star.size * 0.3);
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        // Initialize background buildings data structure
+        function initializeBackgroundBuildings() {
+            // No need to clear backgroundBuildingsData here, it's a dynamic cache now.
+            // We ensure enough initial buildings are "generated" in the cache.
+            // The drawing loop will handle which ones are visible.
         }
 
         // Draw dystopian buildings (for background only)
-        function drawBackgroundBuilding(building, timeOfDay) {
+        function drawBackgroundBuilding(building, timeOfDay, layerIndex) {
             ctx.fillStyle = building.color;
             ctx.fillRect(building.x, building.y, building.width, building.height);
 
-            let baseWindowBrightness;
+            // Calculate window light factor based on time of day
+            let currentWindowLightFactor;
             if (timeOfDay < 0.25) { // Night to Dawn
-                baseWindowBrightness = 0.8 + (timeOfDay / 0.25) * 0.2;
+                currentWindowLightFactor = getInterpolatedValue(1.0, 0.2, timeOfDay / 0.25);
             } else if (timeOfDay < 0.5) { // Dawn to Day
-                baseWindowBrightness = 1.0 - ((timeOfDay - 0.25) / 0.25) * 0.8;
+                currentWindowLightFactor = getInterpolatedValue(0.2, 0.0, (timeOfDay - 0.25) / 0.25);
             } else if (timeOfDay < 0.75) { // Day to Dusk
-                baseWindowBrightness = 0.2 + ((timeOfDay - 0.5) / 0.25) * 0.6;
+                currentWindowLightFactor = getInterpolatedValue(0.0, 0.2, (timeOfDay - 0.5) / 0.25);
             } else { // Dusk to Night
-                baseWindowBrightness = 0.8 + ((timeOfDay - 0.75) / 0.25) * 0.2;
+                currentWindowLightFactor = getInterpolatedValue(0.2, 1.0, (timeOfDay - 0.75) / 0.25);
             }
-
-            baseWindowBrightness = Math.max(0.1, Math.min(1.0, baseWindowBrightness));
+            currentWindowLightFactor = Math.max(0, Math.min(1, currentWindowLightFactor)); // Clamp between 0 and 1
 
             const windowSize = 8;
+            const windowSpacing = 12; // Space between windows
+
             building.windows.forEach(window => {
-                // Ensure window is drawn within building bounds
                 const winX = building.x + window.xOffset;
                 const winY = building.y + window.yOffset;
-                if (winX >= building.x && (winX + windowSize) <= (building.x + building.width) &&
-                    winY >= building.y && (winY + windowSize) <= (building.y + building.height)) {
-                    if (window.isLit) {
-                        ctx.fillStyle = `rgba(255, 255, 0, ${baseWindowBrightness})`;
-                        ctx.fillRect(winX, winY, windowSize, windowSize);
-                    }
+
+                let windowFillColor;
+                if (window.isInitiallyLit && currentWindowLightFactor > 0.1) { // Only light if initially lit and light factor is significant
+                    windowFillColor = lerpColor(windowColorDark, windowColorLit, currentWindowLightFactor);
+                } else {
+                    windowFillColor = `rgb(${windowColorDark[0]}, ${windowColorDark[1]}, ${windowColorDark[2]})`;
                 }
+                
+                ctx.fillStyle = windowFillColor;
+                ctx.fillRect(winX, winY, windowSize, windowSize);
+                ctx.strokeStyle = '#000'; // Black border for windows
+                ctx.lineWidth = 1;
+                ctx.strokeRect(winX, winY, windowSize, windowSize);
             });
 
             if (building.hasAntenna) {
@@ -484,12 +530,11 @@
                              billboardWidth - screenPadding * 2, billboardHeight - screenPadding * 2);
 
                 // AWAKEN text
-                // Adjust font size to fit within the inner screen's height (40 - 12 = 28px)
                 ctx.font = 'bold 24px Anton'; // Reduced font size to fit
                 ctx.fillStyle = building.billboardColor; // Use the assigned Akira color
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                ctx.shadowColor = 'transparent'; // No shadow blur for crisp text
+                ctx.shadowColor = 'transparent'; 
                 ctx.shadowBlur = 0; 
                 
                 ctx.fillText('AWAKEN', billboardX + billboardWidth / 2, billboardY + billboardHeight / 2); // Centered
@@ -502,9 +547,8 @@
 
                 const billboardWidth = building.width * 0.8;
                 const billboardHeight = 40; // Fixed height for the billboard
-                // Position next to AWAKEN if both exist, otherwise center
                 const billboardX = building.x + (building.width - billboardWidth) / 2;
-                const billboardY = building.y + building.height * (building.hasAwakenBillboard ? 0.4 : 0.15); // Position below AWAKEN or higher if no AWAKEN
+                const billboardY = building.y + building.height * (building.hasAwakenBillboard ? 0.4 : 0.15); 
 
                 // Billboard background (outer frame)
                 ctx.fillStyle = '#444';
@@ -537,127 +581,110 @@
             }
         }
 
-        // Helper function to interpolate RGB colors
-        function lerpColor(color1, color2, factor) {
-            const result = [];
-            for (let i = 0; i < 3; i++) {
-                result[i] = Math.round(color1[i] + factor * (color2[i] - color1[i]));
-            }
-            return `rgb(${result[0]}, ${result[1]}, ${result[2]})`;
-        }
-
-        // Define sky color points as [R, G, B] arrays for smooth transition
-        const skyColors = [
-            { time: 0.0, color: [20, 20, 40] },   // Deep Night
-            { time: 0.25, color: [80, 50, 100] },  // Pre-dawn purple
-            { time: 0.5, color: [100, 150, 200] }, // Mid-day light blue
-            { time: 0.75, color: [150, 100, 120] }, // Dusk reddish
-            { time: 1.0, color: [20, 20, 40] }    // Back to Deep Night
-        ];
-
-        function getSkyColor(time) {
-            time = time % 1.0;
-
-            let startColor, endColor, startPoint, endPoint;
-
-            for (let i = 0; i < skyColors.length; i++) {
-                if (time >= skyColors[i].time) {
-                    startPoint = skyColors[i].time;
-                    startColor = skyColors[i].color;
-                    if (i + 1 < skyColors.length) {
-                        endPoint = skyColors[i + 1].time;
-                        endColor = skyColors[i + 1].color;
-                    } else {
-                        endPoint = 1.0;
-                        endColor = skyColors[0].color;
-                    }
-                } else {
-                    break;
-                }
-            }
-
-            const factor = (time - startPoint) / (endPoint - startPoint);
-            return lerpColor(startColor, endColor, factor);
-        }
-
         function drawBackgroundLayer(time, deltaTime) {
+            // Sky
             ctx.fillStyle = getSkyColor(time);
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+            // Stars
+            let currentStarAlpha;
+            if (time < 0.25) { // Night to Dawn
+                currentStarAlpha = getInterpolatedValue(1.0, 0.0, time / 0.25);
+            } else if (time < 0.75) { // Day
+                currentStarAlpha = 0.0;
+            } else { // Dusk to Night
+                currentStarAlpha = getInterpolatedValue(0.0, 1.0, (time - 0.75) / 0.25);
+            }
+            if (currentStarAlpha > 0) {
+                stars.forEach(star => drawStar(star, currentStarAlpha));
+            }
+
+            // Ground
             ctx.fillStyle = '#333';
             ctx.fillRect(0, canvas.height - GROUND_HEIGHT, canvas.width, GROUND_HEIGHT);
             ctx.strokeStyle = '#111';
             ctx.lineWidth = 2;
             ctx.strokeRect(0, canvas.height - GROUND_HEIGHT, canvas.width, GROUND_HEIGHT);
 
-            if (backgroundBuildingsData.length > 0) {
-                for (let i = 0; i < backgroundBuildingsData.length; i++) {
-                    let bgBldg = backgroundBuildingsData[i];
-                    
-                    // Update x position based on scroll speed and delta time
-                    bgBldg.x -= (BG_SCROLL_SPEED * deltaTime / 16);
+            // Parallax Buildings
+            cameraX += GAME_SPEED * deltaTime / 16; // Update global camera X
 
-                    // If a building goes completely off screen to the left, re-initialize it and move to the right
-                    if (bgBldg.x + bgBldg.width < 0) {
-                        // Re-randomize properties for this building
-                        bgBldg.width = BG_BUILDING_MIN_WIDTH + Math.random() * (BG_BUILDING_MAX_WIDTH - BG_BUILDING_MIN_WIDTH);
-                        bgBldg.height = canvas.height * (BG_BUILDING_MIN_HEIGHT_RATIO + Math.random() * (BG_BUILDING_MAX_HEIGHT_RATIO - BG_BUILDING_MIN_HEIGHT_RATIO));
-                        
-                        // Re-apply vertical layering offset
-                        bgBldg.y = canvas.height - GROUND_HEIGHT - bgBldg.height; // Always grounded
+            for (let layer = 0; layer < baseBuildingColors.length; layer++) {
+                const layerColor = baseBuildingColors[layer];
+                const layerScrollSpeed = buildingScrollSpeeds[layer];
+                const effectiveCameraX = cameraX * layerScrollSpeed;
 
-                        bgBldg.color = getRandomBuildingColor();
-                        bgBldg.hasAntenna = Math.random() < 0.2;
-                        bgBldg.hasAwakenBillboard = Math.random() < 0.15;
-                        bgBldg.hasEyeBillboard = Math.random() < 0.1;
-                        // Assign Akira color only if it's an AWAKEN billboard
-                        if (bgBldg.hasAwakenBillboard) {
-                            bgBldg.billboardColor = akiraBillboardColors[Math.floor(Math.random() * akiraBillboardColors.length)];
-                        } else {
-                            bgBldg.billboardColor = '#00FFFF'; // Default cyan for eye billboards
+                // Calculate the range of global building indices visible for this layer
+                // A "slot" is roughly the max building width + max gap
+                const maxBuildingSlotWidth = BG_BUILDING_MAX_WIDTH + 30; 
+                const firstVisibleGlobalIndex = Math.floor(effectiveCameraX / maxBuildingSlotWidth);
+                const numSlotsToDraw = Math.ceil(canvas.width / maxBuildingSlotWidth) + 2; // +2 for off-screen buffer
+
+                for (let i = 0; i < numSlotsToDraw; i++) {
+                    const globalBuildingIndex = firstVisibleGlobalIndex + i;
+                    const buildingKey = `${layer}_${globalBuildingIndex}`;
+
+                    if (!backgroundElementStates[buildingKey]) {
+                        // Generate new building properties if not already cached
+                        const bldgWidth = getInterpolatedValue(BG_BUILDING_MIN_WIDTH, BG_BUILDING_MAX_WIDTH, Math.random());
+                        const bldgHeight = canvas.height * getInterpolatedValue(BG_BUILDING_MIN_HEIGHT_RATIO, BG_BUILDING_MAX_HEIGHT_RATIO, Math.random());
+                        const bldgY = canvas.height - GROUND_HEIGHT - bldgHeight;
+                        const hasAntenna = Math.random() < 0.2;
+                        const hasAwakenBillboard = Math.random() < 0.15;
+                        const hasEyeBillboard = Math.random() < 0.1;
+                        let billboardColor = '#00FFFF';
+                        if (hasAwakenBillboard) {
+                            billboardColor = akiraBillboardColors[Math.floor(Math.random() * akiraBillboardColors.length)];
                         }
 
-                        // Reset its x position to just off the right edge, plus some random offset
-                        let maxVisibleX = -Infinity;
-                        for(let j=0; j<backgroundBuildingsData.length; j++) {
-                            maxVisibleX = Math.max(maxVisibleX, backgroundBuildingsData[j].x);
-                        }
-                        bgBldg.x = maxVisibleX + bgBldg.width + Math.random() * 30; // Add random gap
-
-                        // Re-generate windows for the new building dimensions
-                        bgBldg.windows = [];
+                        const windows = [];
                         const windowSize = 8;
-                        for (let xOff = 0; xOff * windowSize * 2 < bgBldg.width - windowSize; xOff++) {
-                            for (let yOff = 0; yOff * windowSize * 2 < bgBldg.height - windowSize; yOff++) {
-                                bgBldg.windows.push({
-                                    xOffset: xOff * windowSize * 2 + windowSize / 2,
-                                    yOffset: yOff * windowSize * 2 + windowSize / 2,
-                                    isLit: Math.random() < 0.3
+                        const windowSpacing = 12;
+                        for (let xOff = windowSpacing; xOff < bldgWidth - windowSpacing; xOff += windowSpacing) {
+                            for (let yOff = windowSpacing; yOff < bldgHeight - windowSpacing; yOff += windowSpacing) {
+                                windows.push({
+                                    xOffset: xOff,
+                                    yOffset: yOff,
+                                    isInitiallyLit: Math.random() < 0.5 // 50% chance to be initially lit
                                 });
                             }
                         }
+
+                        backgroundElementStates[buildingKey] = {
+                            width: bldgWidth,
+                            height: bldgHeight,
+                            y: bldgY,
+                            color: layerColor, // Use layer's base color
+                            hasAntenna: hasAntenna,
+                            hasAwakenBillboard: hasAwakenBillboard,
+                            hasEyeBillboard: hasEyeBillboard,
+                            billboardColor: billboardColor,
+                            windows: windows,
+                            xOffset: Math.random() * 30 // Small random offset within its slot
+                        };
                     }
-                    drawBackgroundBuilding(bgBldg, time);
+
+                    const building = backgroundElementStates[buildingKey];
+                    // Calculate current X position on canvas
+                    building.x = (globalBuildingIndex * maxBuildingSlotWidth) - effectiveCameraX + building.xOffset;
+
+                    drawBackgroundBuilding(building, time, layer);
                 }
-                // Re-sort buildings after repositioning to maintain layering
-                backgroundBuildingsData.sort((a, b) => a.y - b.y);
             }
         }
 
         // Draw the ominous watching eye (pupil tracks player, consistent red color)
-        function drawWatchingEye(eyeY) { // Added eyeY parameter
+        function drawWatchingEye(eyeY) { 
             const eyeRadius = 40;
             const irisRadius = eyeRadius * 0.6;
             const pupilRadius = 15;
 
             // Eye center (fixed X, dynamic Y)
             const eyeX = canvas.width / 2;
-            // The eyeY parameter is now passed in from the animate function
-            // const eyeY = canvas.height / 2 + Math.sin(eyeOscillationOffset) * EYE_OSCILLATION_AMPLITUDE; // This line is replaced
 
             // Calculate pupil offset to track player
             const dx = player.x - eyeX;
-            const dy = player.y - eyeY; // Use the passed eyeY
+            const dy = player.y - eyeY; 
             const angle = Math.atan2(dy, dx);
 
             // Limit pupil movement within the iris
@@ -666,12 +693,12 @@
             const pupilOffsetY = Math.sin(angle) * pupilMaxOffset;
 
             const pupilX = eyeX + pupilOffsetX;
-            const pupilY = eyeY + pupilOffsetY; // Use the passed eyeY
+            const pupilY = eyeY + pupilOffsetY; 
 
             // Eye white
             ctx.fillStyle = 'white';
             ctx.beginPath();
-            ctx.arc(eyeX, eyeY, eyeRadius, 0, Math.PI * 2); // Use the passed eyeY
+            ctx.arc(eyeX, eyeY, eyeRadius, 0, Math.PI * 2); 
             ctx.fill();
             ctx.strokeStyle = '#333';
             ctx.lineWidth = 3;
@@ -680,7 +707,7 @@
             // Iris (red)
             ctx.fillStyle = 'red';
             ctx.beginPath();
-            ctx.arc(eyeX, eyeY, irisRadius, 0, Math.PI * 2); // Use the passed eyeY
+            ctx.arc(eyeX, eyeY, irisRadius, 0, Math.PI * 2); 
             ctx.fill();
 
             // Pupil (black, as per reference image)
@@ -808,7 +835,8 @@
             if (!gameRunning && !gameOver) {
                 player.y = canvas.height / 2;
             }
-            initializeBackgroundBuildings();
+            initializeStars(); // Reinitialize stars on resize
+            initializeBackgroundBuildings(); // Reinitialize buildings on resize
         }
 
         // Function to show temporary messages
