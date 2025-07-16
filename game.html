@@ -721,7 +721,6 @@
                     if (horizontalOverlap) {
                         // Collision with top obstacle: player's top is above the bottom edge of the top obstacle
                         // This now ends the game only if the player's top is significantly into the top pipe
-                        // The previous condition `player.y < o.topHeight - 5` is removed to allow clipping
                         const topObstacleBodyCollision = player.y < o.topHeight - player.height * 0.2; // Player's head is 20% into the pipe
 
                         // Collision with bottom obstacle: player's bottom is below the top of the bottom obstacle
@@ -835,7 +834,6 @@
         }
 
         // Event listeners for user input (tap anywhere to flap)
-        // Modified to only flap/start if the click/touch is NOT on a button
         document.addEventListener('click', async (e) => {
             // Check if the clicked element is a button
             if (e.target.tagName === 'BUTTON') {
@@ -851,12 +849,15 @@
                 player.flap();
                 playFlapSound();
             }
-            // Removed the else if (gameOver || !gameRunning) { startGame(); }
-            // This ensures only explicit button clicks restart the game.
+            // No startGame() call here, only buttons should start the game.
         });
 
         document.addEventListener('touchstart', async (e) => {
-            e.preventDefault(); // Prevent default touch behavior like scrolling
+            // Only prevent default if the target is NOT a button.
+            // This allows native button behavior to proceed.
+            if (e.target.tagName !== 'BUTTON') {
+                e.preventDefault();
+            }
 
             // Check if the touched element is a button
             if (e.target.tagName === 'BUTTON') {
@@ -872,9 +873,8 @@
                 player.flap();
                 playFlapSound();
             }
-            // Removed the else if (gameOver || !gameRunning) { startGame(); }
-            // This ensures only explicit button clicks restart the game.
-        }, { passive: false });
+            // No startGame() call here, only buttons should start the game.
+        }, { passive: false }); // Keep passive: false if we want to prevent scrolling elsewhere
 
         // Button click handlers - these remain the same as they are specific
         startButton.addEventListener('click', async () => {
