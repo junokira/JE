@@ -291,10 +291,17 @@
 
         // Function to create a new obstacle pair (metal bins)
         function createObstacle() {
-            const minHeight = 80; // Minimum height for an obstacle segment
-            const maxHeight = canvas.height - GROUND_HEIGHT - OBSTACLE_GAP_HEIGHT - minHeight;
-            const topObstacleHeight = Math.floor(Math.random() * (maxHeight - minHeight + 1)) + minHeight;
-            const bottomObstacleHeight = canvas.height - GROUND_HEIGHT - topObstacleHeight - OBSTACLE_GAP_HEIGHT;
+            const safeZoneVertical = 60; // Minimum distance from top/bottom of playable area to gap
+            const minGapY = safeZoneVertical; // Minimum Y for the top of the gap
+            const maxGapY = canvas.height - GROUND_HEIGHT - OBSTACLE_GAP_HEIGHT - safeZoneVertical; // Maximum Y for the top of the gap
+
+            // Ensure maxGapY is not less than minGapY in case of very small canvas
+            const actualMaxGapY = Math.max(minGapY, maxGapY);
+
+            const gapY = Math.floor(Math.random() * (actualMaxGapY - minGapY + 1)) + minGapY;
+
+            const topObstacleHeight = gapY;
+            const bottomObstacleHeight = canvas.height - GROUND_HEIGHT - (gapY + OBSTACLE_GAP_HEIGHT);
 
             obstacles.push({
                 x: canvas.width, // Start off-screen to the right
@@ -305,7 +312,7 @@
             });
         }
 
-        // Draw metal bin obstacle
+        // Draw metal bin obstacle (enhanced)
         function drawMetalBin(x, y, width, height) {
             ctx.fillStyle = '#696969'; // Dim gray for metal
             ctx.strokeStyle = '#404040'; // Darker gray for outline
@@ -314,6 +321,14 @@
             // Main bin body
             ctx.fillRect(x, y, width, height);
             ctx.strokeRect(x, y, width, height);
+
+            // Add horizontal stripes/bands
+            ctx.fillStyle = '#555'; // Slightly darker gray for stripes
+            const stripeHeight = 5;
+            const stripeSpacing = 15;
+            for (let i = 0; i < height; i += stripeSpacing) {
+                ctx.fillRect(x, y + i, width, stripeHeight);
+            }
 
             // Top rim
             ctx.fillStyle = '#808080'; // Gray for rim
@@ -336,28 +351,46 @@
 
         // --- Background Building Data ---
         let backgroundBuildingsData = [];
-        const BG_BUILDING_COUNT = 5;
-        const BG_BUILDING_WIDTH_FACTOR = 1.5;
-        const BG_BUILDING_MIN_HEIGHT_RATIO = 0.4;
-        const BG_BUILDING_MAX_HEIGHT_RATIO = 0.7;
+        const BG_BUILDING_COUNT = 8; // Increased for more varied background
+        const BG_BUILDING_MIN_WIDTH = 80;
+        const BG_BUILDING_MAX_WIDTH = 150;
+        const BG_BUILDING_MIN_HEIGHT_RATIO = 0.3; // Make them potentially shorter
+        const BG_BUILDING_MAX_HEIGHT_RATIO = 0.8; // Make them potentially taller
         const BG_SCROLL_SPEED = GAME_SPEED * 0.2;
+
+        // Akira-like colors for AWAKEN billboards
+        const akiraBillboardColors = ['#FF0000', '#FFFF00', '#00FFFF', '#00FF00', '#FFA500']; // Red, Yellow, Cyan, Green, Orange
 
         function initializeBackgroundBuildings() {
             backgroundBuildingsData = [];
-            const baseBuildingWidth = canvas.width / BG_BUILDING_COUNT;
-            let currentX = 0; // Start buildings from X=0 for initial layout
+            let currentSpawnX = 0; // To ensure initial coverage
 
-            for (let i = 0; i < BG_BUILDING_COUNT + 2; i++) { // Generate a few extra for seamless loop
-                const bldgWidth = baseBuildingWidth * BG_BUILDING_WIDTH_FACTOR;
+            // Generate enough buildings to fill more than two screen widths initially
+            const initialCoverageWidth = canvas.width * 2.5; 
+
+            while (currentSpawnX < initialCoverageWidth) {
+                const bldgWidth = BG_BUILDING_MIN_WIDTH + Math.random() * (BG_BUILDING_MAX_WIDTH - BG_BUILDING_MIN_WIDTH);
                 const bldgHeight = canvas.height * (BG_BUILDING_MIN_HEIGHT_RATIO + Math.random() * (BG_BUILDING_MAX_HEIGHT_RATIO - BG_BUILDING_MIN_HEIGHT_RATIO));
+                
+                // Buildings are always grounded, no vertical offset
                 const bldgY = canvas.height - GROUND_HEIGHT - bldgHeight;
+
                 const bldgColor = getRandomBuildingColor();
                 const hasAntenna = Math.random() < 0.2;
+                // Assign billboard types randomly
+                const hasAwakenBillboard = Math.random() < 0.15; // 15% chance for AWAKEN
+                const hasEyeBillboard = Math.random() < 0.1; // 10% chance for EYE
+
+                let billboardColor = '#00FFFF'; // Default for eye billboard
+                if (hasAwakenBillboard) {
+                    billboardColor = akiraBillboardColors[Math.floor(Math.random() * akiraBillboardColors.length)];
+                }
+
 
                 const windows = [];
                 const windowSize = 8;
-                for (let xOff = 0; xOff < bldgWidth / (windowSize * 2); xOff++) {
-                    for (let yOff = 0; yOff < bldgHeight / (windowSize * 2); yOff++) {
+                for (let xOff = 0; xOff * windowSize * 2 < bldgWidth - windowSize; xOff++) { // Ensure windows stay within width
+                    for (let yOff = 0; yOff * windowSize * 2 < bldgHeight - windowSize; yOff++) { // Ensure windows stay within height
                         windows.push({
                             xOffset: xOff * windowSize * 2 + windowSize / 2,
                             yOffset: yOff * windowSize * 2 + windowSize / 2,
@@ -367,16 +400,21 @@
                 }
 
                 backgroundBuildingsData.push({
-                    x: currentX, // Initial X position
+                    x: currentSpawnX + Math.random() * 50, // Add small random offset for staggered effect
                     width: bldgWidth,
                     height: bldgHeight,
                     y: bldgY,
                     color: bldgColor,
                     hasAntenna: hasAntenna,
+                    hasAwakenBillboard: hasAwakenBillboard, // New property
+                    hasEyeBillboard: hasEyeBillboard, // New property
+                    billboardColor: billboardColor, // Use the selected color
                     windows: windows
                 });
-                currentX += bldgWidth; // Position next building after current one
+                currentSpawnX += bldgWidth + Math.random() * 30; // Add random gap between buildings
             }
+            // Sort buildings by Y position (height) to ensure correct layering when drawn
+            backgroundBuildingsData.sort((a, b) => a.y - b.y);
         }
 
         // Draw dystopian buildings (for background only)
@@ -399,13 +437,15 @@
 
             const windowSize = 8;
             building.windows.forEach(window => {
-                if (window.isLit) {
-                    ctx.fillStyle = `rgba(255, 255, 0, ${baseWindowBrightness})`;
-                    ctx.fillRect(
-                        building.x + window.xOffset,
-                        building.y + window.yOffset,
-                        windowSize, windowSize
-                    );
+                // Ensure window is drawn within building bounds
+                const winX = building.x + window.xOffset;
+                const winY = building.y + window.yOffset;
+                if (winX >= building.x && (winX + windowSize) <= (building.x + building.width) &&
+                    winY >= building.y && (winY + windowSize) <= (building.y + building.height)) {
+                    if (window.isLit) {
+                        ctx.fillStyle = `rgba(255, 255, 0, ${baseWindowBrightness})`;
+                        ctx.fillRect(winX, winY, windowSize, windowSize);
+                    }
                 }
             });
 
@@ -415,6 +455,81 @@
                 ctx.beginPath();
                 ctx.arc(building.x + building.width / 2, building.y - 30, 5, 0, Math.PI * 2);
                 ctx.fill();
+            }
+
+            // Draw AWAKEN billboard if applicable
+            if (building.hasAwakenBillboard) {
+                ctx.save(); // Save current canvas state
+
+                const billboardWidth = building.width * 0.8;
+                const billboardHeight = 40; // Fixed height for the billboard
+                const billboardX = building.x + (building.width - billboardWidth) / 2;
+                const billboardY = building.y + building.height * 0.15; // Position higher up on the building
+
+                // Billboard outer frame
+                ctx.fillStyle = '#444';
+                ctx.fillRect(billboardX, billboardY, billboardWidth, billboardHeight);
+                ctx.strokeStyle = '#222';
+                ctx.lineWidth = 3;
+                ctx.strokeRect(billboardX, billboardY, billboardWidth, billboardHeight);
+
+                // Inner black screen
+                const screenPadding = 6;
+                ctx.fillStyle = '#000';
+                ctx.fillRect(billboardX + screenPadding, billboardY + screenPadding,
+                             billboardWidth - screenPadding * 2, billboardHeight - screenPadding * 2);
+
+                // AWAKEN text
+                // Adjust font size to fit within the inner screen's height (40 - 12 = 28px)
+                ctx.font = 'bold 24px Anton'; // Reduced font size to fit
+                ctx.fillStyle = building.billboardColor; // Use the assigned Akira color
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.shadowColor = 'transparent'; // No shadow blur for crisp text
+                ctx.shadowBlur = 0; 
+                
+                ctx.fillText('AWAKEN', billboardX + billboardWidth / 2, billboardY + billboardHeight / 2); // Centered
+                ctx.restore(); // Restore canvas state
+            }
+
+            // Draw EYE billboard if applicable
+            if (building.hasEyeBillboard) {
+                ctx.save(); // Save current canvas state
+
+                const billboardWidth = building.width * 0.8;
+                const billboardHeight = 40; // Fixed height for the billboard
+                // Position next to AWAKEN if both exist, otherwise center
+                const billboardX = building.x + (building.width - billboardWidth) / 2;
+                const billboardY = building.y + building.height * (building.hasAwakenBillboard ? 0.4 : 0.15); // Position below AWAKEN or higher if no AWAKEN
+
+                // Billboard background (outer frame)
+                ctx.fillStyle = '#444';
+                ctx.fillRect(billboardX, billboardY, billboardWidth, billboardHeight);
+                ctx.strokeStyle = '#222';
+                ctx.lineWidth = 3;
+                ctx.strokeRect(billboardX, billboardY, billboardWidth, billboardHeight);
+
+                // Inner black screen
+                const screenPadding = 6;
+                ctx.fillStyle = '#000';
+                ctx.fillRect(billboardX + screenPadding, billboardY + screenPadding,
+                             billboardWidth - screenPadding * 2, billboardHeight - screenPadding * 2);
+
+                // Draw the stylized eye
+                const eyeCenterX = billboardX + billboardWidth / 2;
+                const eyeCenterY = billboardY + billboardHeight / 2;
+                const eyeSize = billboardWidth * 0.4;
+
+                ctx.fillStyle = building.billboardColor; // Eye color matches billboard text color (Cyan)
+                ctx.beginPath();
+                ctx.ellipse(eyeCenterX, eyeCenterY, eyeSize / 2, eyeSize / 3, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#000'; // Black pupil
+                ctx.beginPath();
+                ctx.arc(eyeCenterX, eyeCenterY, eyeSize * 0.15, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore(); // Restore canvas state
             }
         }
 
@@ -472,39 +587,83 @@
             ctx.strokeRect(0, canvas.height - GROUND_HEIGHT, canvas.width, GROUND_HEIGHT);
 
             if (backgroundBuildingsData.length > 0) {
-                // Calculate the total width of all background buildings to determine the loop point
-                let totalBackgroundWidth = 0;
-                for(const bldg of backgroundBuildingsData) {
-                    totalBackgroundWidth += bldg.width;
-                }
-
                 for (let i = 0; i < backgroundBuildingsData.length; i++) {
                     let bgBldg = backgroundBuildingsData[i];
                     
                     // Update x position based on scroll speed and delta time
                     bgBldg.x -= (BG_SCROLL_SPEED * deltaTime / 16);
 
-                    // If a building goes completely off screen to the left, reposition it to the right
+                    // If a building goes completely off screen to the left, re-initialize it and move to the right
                     if (bgBldg.x + bgBldg.width < 0) {
-                        // Find the rightmost building's current position and place this one after it
-                        let maxRightX = -Infinity;
-                        for(let j = 0; j < backgroundBuildingsData.length; j++) {
-                            maxRightX = Math.max(maxRightX, backgroundBuildingsData[j].x);
+                        // Re-randomize properties for this building
+                        bgBldg.width = BG_BUILDING_MIN_WIDTH + Math.random() * (BG_BUILDING_MAX_WIDTH - BG_BUILDING_MIN_WIDTH);
+                        bgBldg.height = canvas.height * (BG_BUILDING_MIN_HEIGHT_RATIO + Math.random() * (BG_BUILDING_MAX_HEIGHT_RATIO - BG_BUILDING_MIN_HEIGHT_RATIO));
+                        
+                        // Re-apply vertical layering offset
+                        bgBldg.y = canvas.height - GROUND_HEIGHT - bgBldg.height; // Always grounded
+
+                        bgBldg.color = getRandomBuildingColor();
+                        bgBldg.hasAntenna = Math.random() < 0.2;
+                        bgBldg.hasAwakenBillboard = Math.random() < 0.15;
+                        bgBldg.hasEyeBillboard = Math.random() < 0.1;
+                        // Assign Akira color only if it's an AWAKEN billboard
+                        if (bgBldg.hasAwakenBillboard) {
+                            bgBldg.billboardColor = akiraBillboardColors[Math.floor(Math.random() * akiraBillboardColors.length)];
+                        } else {
+                            bgBldg.billboardColor = '#00FFFF'; // Default cyan for eye billboards
                         }
-                        bgBldg.x = maxRightX + bgBldg.width; // Place it immediately after the rightmost
+
+                        // Reset its x position to just off the right edge, plus some random offset
+                        let maxVisibleX = -Infinity;
+                        for(let j=0; j<backgroundBuildingsData.length; j++) {
+                            maxVisibleX = Math.max(maxVisibleX, backgroundBuildingsData[j].x);
+                        }
+                        bgBldg.x = maxVisibleX + bgBldg.width + Math.random() * 30; // Add random gap
+
+                        // Re-generate windows for the new building dimensions
+                        bgBldg.windows = [];
+                        const windowSize = 8;
+                        for (let xOff = 0; xOff * windowSize * 2 < bgBldg.width - windowSize; xOff++) {
+                            for (let yOff = 0; yOff * windowSize * 2 < bgBldg.height - windowSize; yOff++) {
+                                bgBldg.windows.push({
+                                    xOffset: xOff * windowSize * 2 + windowSize / 2,
+                                    yOffset: yOff * windowSize * 2 + windowSize / 2,
+                                    isLit: Math.random() < 0.3
+                                });
+                            }
+                        }
                     }
                     drawBackgroundBuilding(bgBldg, time);
                 }
+                // Re-sort buildings after repositioning to maintain layering
+                backgroundBuildingsData.sort((a, b) => a.y - b.y);
             }
         }
 
-        // Draw the ominous watching eye
+        // Draw the ominous watching eye (pupil tracks player, consistent red color)
         function drawWatchingEye() {
-            const eyeX = canvas.width / 2;
-            const eyeY = canvas.height / 2 + Math.sin(eyeOscillationOffset) * EYE_OSCILLATION_AMPLITUDE; // Oscillate vertically
             const eyeRadius = 40;
+            const irisRadius = eyeRadius * 0.6;
             const pupilRadius = 15;
 
+            // Eye center (fixed X, oscillating Y)
+            const eyeX = canvas.width / 2;
+            const eyeY = canvas.height / 2 + Math.sin(eyeOscillationOffset) * EYE_OSCILLATION_AMPLITUDE;
+
+            // Calculate pupil offset to track player
+            const dx = player.x - eyeX;
+            const dy = player.y - eyeY;
+            const angle = Math.atan2(dy, dx);
+
+            // Limit pupil movement within the iris
+            const pupilMaxOffset = irisRadius - pupilRadius;
+            const pupilOffsetX = Math.cos(angle) * pupilMaxOffset;
+            const pupilOffsetY = Math.sin(angle) * pupilMaxOffset;
+
+            const pupilX = eyeX + pupilOffsetX;
+            const pupilY = eyeY + pupilOffsetY;
+
+            // Eye white
             ctx.fillStyle = 'white';
             ctx.beginPath();
             ctx.arc(eyeX, eyeY, eyeRadius, 0, Math.PI * 2);
@@ -513,19 +672,22 @@
             ctx.lineWidth = 3;
             ctx.stroke();
 
+            // Iris (red)
             ctx.fillStyle = 'red';
             ctx.beginPath();
-            ctx.arc(eyeX, eyeY, eyeRadius * 0.6, 0, Math.PI * 2);
+            ctx.arc(eyeX, eyeY, irisRadius, 0, Math.PI * 2);
             ctx.fill();
 
-            ctx.fillStyle = 'black';
+            // Pupil (black, as per reference image)
+            ctx.fillStyle = 'black'; 
             ctx.beginPath();
-            ctx.arc(eyeX, eyeY, pupilRadius, 0, Math.PI * 2);
+            ctx.arc(pupilX, pupilY, pupilRadius, 0, Math.PI * 2);
             ctx.fill();
 
+            // Glint
             ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
             ctx.beginPath();
-            ctx.arc(eyeX - pupilRadius * 0.5, eyeY - pupilRadius * 0.5, pupilRadius * 0.3, 0, Math.PI * 2);
+            ctx.arc(pupilX - pupilRadius * 0.5, pupilY - pupilRadius * 0.5, pupilRadius * 0.3, 0, Math.PI * 2);
             ctx.fill();
         }
 
@@ -557,8 +719,7 @@
                         (player.y < o.topHeight || player.y + player.height > canvas.height - o.bottomHeight - GROUND_HEIGHT)) {
                         playHitSound();
                         endGame();
-                        requestAnimationFrame(animate); // Keep animating background and eye
-                        return; // Stop game logic
+                        // No return here, allow animate to continue for background/eye
                     }
 
                     if (o.x + o.width < player.x && !o.passed) {
@@ -576,8 +737,7 @@
                     player.velocity = 0;
                     playHitSound();
                     endGame();
-                    requestAnimationFrame(animate); // Keep animating background and eye
-                    return; // Stop game logic
+                    // No return here, allow animate to continue for background/eye
                 }
             } else {
                 // If game is not running, still draw background and eye for UI screens
