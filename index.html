@@ -230,6 +230,11 @@
       padding: 0.75rem; /* Added padding */
       flex-grow: 1; /* Allow it to grow to fill space */
       margin-bottom: 0; /* Remove bottom margin if it's the last item in column */
+      cursor: pointer; /* Indicate clickability */
+      transition: background-color 0.3s ease; /* Smooth transition for hover */
+    }
+    .icon-text-block:hover {
+      background-color: #e0e0e0; /* Light gray highlight on hover */
     }
     .icon-text-block img {
       width: 3rem; /* Size of the icon */
@@ -241,10 +246,11 @@
     .shop-product-card {
       border: 1px solid black;
       padding: 1rem;
-      text-align: center;
+      /* Removed background-color: #fff; to match body background */
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      align-items: center;
+      text-align: center;
     }
 
     /* Apply aspect-square only on large screens and up */
@@ -280,24 +286,58 @@
       margin: 0 auto; /* Center image */
     }
 
-    .shop-product-card button {
-      background-color: black;
-      color: white;
-      padding: 0.5rem 1rem;
-      font-weight: bold;
-      text-transform: uppercase;
-      font-size: 0.875rem;
-      border: none;
-      cursor: pointer;
-      transition: background-color 0.2s;
-      width: calc(100% - 2rem); /* Adjusted width to be less long, similar to Shop All button */
-      max-width: 150px; /* Max width for consistency */
-      margin: 0.5rem auto 0 auto; /* Center button and add top margin */
-      display: block; /* Ensure it takes full width of its container */
+    .shop-product-card h3 {
+        font-family: 'Roboto Slab', serif;
+        font-size: 1.25rem;
+        font-weight: bold;
+        margin-top: 0.75rem; /* Space above title */
+        margin-bottom: 0.25rem; /* Space below title */
     }
-    .shop-product-card button:hover {
-      background-color: #333;
+    .shop-product-card p.price {
+        font-family: 'Roboto Condensed', sans-serif;
+        font-size: 1rem;
+        font-weight: bold;
+        margin-bottom: 0.75rem; /* Space below price */
     }
+
+    /* Shopify Buy Button specific styling adjustments */
+    /* This targets the div where the Shopify component will be rendered */
+    .shopify-buy-button-container { /* Generic class for all Shopify button divs */
+        width: 100%; /* Ensure it takes full width of its parent product-card */
+        margin: 0; /* Remove any default margins */
+        padding: 0; /* Remove any default padding */
+        box-sizing: border-box;
+    }
+    /* This targets the actual button rendered by Shopify */
+    .shopify-buy-button-container .shopify-buy__btn {
+        background-color: black !important; /* Override Shopify default button color */
+        border-radius: 0px !important; /* Ensure sharp corners */
+        font-family: 'Oswald', sans-serif !important; /* Match site font */
+        text-transform: uppercase !important;
+        letter-spacing: 0.1em !important;
+        padding: 0.75rem 1.5rem !important;
+        font-size: 1rem !important;
+        width: calc(100% - 2rem) !important; /* Make the button full width of its container, accounting for card padding */
+        max-width: 150px !important; /* Max width for consistency */
+        display: block !important; /* Ensure it's a block element */
+        margin: 0.5rem auto 0 auto !important; /* Center button and add top margin */
+    }
+    .shopify-buy-button-container .shopify-buy__btn:hover {
+        background-color: #333 !important; /* Darker on hover */
+    }
+    /* Hide Shopify's default product image, title, price if they appear */
+    .shopify-buy-button-container .shopify-buy__product__variant-img,
+    .shopify-buy-button-container .shopify-buy__product__title,
+    .shopify-buy-button-container .shopify-buy__product__price {
+        display: none !important;
+    }
+    /* Ensure the product container itself is centered if needed by Shopify */
+    .shopify-buy-button-container .shopify-buy__product {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
 
     /* Editorial Shots Section - Reverted to old styles for responsiveness */
     .editorial-shot-card {
@@ -481,7 +521,7 @@
       header nav {
         text-align: center; /* Center nav links */
         width: 100%;
-        margin-top: 0.5rem; /* Space above nav */
+        margin-top: 0.5rem;
         margin-right: 0;
         justify-content: center;
         flex-wrap: wrap; /* Allow nav items to wrap */
@@ -715,7 +755,7 @@
     </div>
   </header>
 
-  <!-- Hero News Story and Side Column -->
+  <!-- Hero News Grid Section -->
   <section class="content-section hero-news-section"> <!-- Added hero-news-section for specific max-width -->
     <div class="hero-news-grid">
       <!-- Middle Column (Main Story) - Now first in source order, order-2 on desktop -->
@@ -733,7 +773,7 @@
           </p>
         </div>
         <!-- "Smile Surveillance Live" moved above "Portrait and Text" and given grid styling -->
-        <div class="icon-text-block mt-4">
+        <div class="icon-text-block mt-4" onclick="window.location.href='game.html'">
           <img src="https://i.ibb.co/M5xjjWqM/3rd-eye-smiley.png" alt="Smiley" />
           <p class="font-roboto-condensed text-xs"><strong>Smile Surveillance Live</strong><br/>Witnesses report sightings of this icon throughout the city. Stay aware.</p>
         </div>
@@ -784,56 +824,87 @@
 
   <!-- Shop Section -->
   <section id="shop" class="content-section">
-    <h2 class="text-3xl font-anton text-center mb-4">Underground Market</h2>
+    <h2 class="text-3xl font-anton text-center mb-8 uppercase">Underground Market</h2>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6"> <!-- grid-cols-1 for mobile/tablet, lg:grid-cols-3 for desktop -->
-      <!-- Product Cards -->
-      <a href="product-detail.html?id=p6" class="shop-product-card lg:aspect-square group"> <!-- Added group for hover effects -->
+      <!-- Product 1: MCGA Cap -->
+      <a href="product-detail.html?id=p6" class="shop-product-card lg:aspect-square group">
         <div class="product-image-container">
           <img src="https://i.ibb.co/GvhVTBTc/MCGA-CAP.webp" alt="MCGA Cap" />
         </div>
         <h3 class="text-xl font-bold mt-3">MCGA Cap</h3>
-        <p class="text-sm mb-2">$50</p>
-        <button class="group-hover:bg-gray-800 transition-colors">Buy Now</button>
+        <p class="text-sm mb-2">R 250.00</p>
+        <!-- Actual Shopify Buy Button for MCGA Cap -->
+        <div id='product-component-1752606716841' class="shopify-buy-button-container"></div>
       </a>
+
+      <!-- Product 2: Fake News Hoodie -->
       <a href="product-detail.html?id=p2" class="shop-product-card lg:aspect-square group">
         <div class="product-image-container">
           <img src="https://i.ibb.co/mrTy6Mhw/fake-news-hoodie.webp" alt="Fake News Hoodie" />
         </div>
         <h3 class="text-xl font-bold mt-3">Fake News Hoodie</h3>
-        <p class="text-sm mb-2">$150</p>
-        <button class="group-hover:bg-gray-800 transition-colors">Buy Now</button>
+        <p class="text-sm mb-2">R 550.00</p>
+        <!-- Placeholder Shopify Button for Fake News Hoodie -->
+        <div id='product-component-placeholder-2' class="shopify-buy-button-container">
+          <!-- This is a placeholder. In a real Shopify setup, you would generate a unique embed code for this product. -->
+          <button class="shopify-buy__btn">Add to cart</button>
+        </div>
       </a>
+
+      <!-- Product 3: XTCY Tee -->
       <a href="product-detail.html?id=p1" class="shop-product-card lg:aspect-square group">
         <div class="product-image-container">
           <img src="https://i.ibb.co/twNrP2xF/XTCYYYY.webp" alt="XTCY Tee" />
         </div>
         <h3 class="text-xl font-bold mt-3">XTCY Tee</h3>
-        <p class="text-sm mb-2">$75</p>
-        <button class="group-hover:bg-gray-800 transition-colors">Buy Now</button>
+        <p class="text-sm mb-2">R 300.00</p>
+        <!-- Placeholder Shopify Button for XTCY Tee -->
+        <div id='product-component-placeholder-3' class="shopify-buy-button-container">
+          <!-- This is a placeholder. In a real Shopify setup, you would generate a unique embed code for this product. -->
+          <button class="shopify-buy__btn">Add to cart</button>
+        </div>
       </a>
+
+      <!-- Product 4: Vision Jacket -->
       <a href="product-detail.html?id=p4" class="shop-product-card lg:aspect-square group">
         <div class="product-image-container">
-          <img src="https://i.ibb.co/JFyXsdVv/vzn-jacket.webp" alt="Visions Hoodie" />
+          <img src="https://i.ibb.co/JFyXsdVv/vzn-jacket.webp" alt="Vision Jacket" />
         </div>
-        <h3 class="text-xl font-bold mt-3">Visions Hoodie</h3>
-        <p class="text-sm mb-2">$180</p>
-        <button class="group-hover:bg-gray-800 transition-colors">Buy Now</button>
+        <h3 class="text-xl font-bold mt-3">Vision Jacket</h3>
+        <p class="text-sm mb-2">R 800.00</p>
+        <!-- Placeholder Shopify Button for Vision Jacket -->
+        <div id='product-component-placeholder-4' class="shopify-buy-button-container">
+          <!-- This is a placeholder. In a real Shopify setup, you would generate a unique embed code for this product. -->
+          <button class="shopify-buy__btn">Add to cart</button>
+        </div>
       </a>
+
+      <!-- Product 5: Balaclava -->
       <a href="product-detail.html?id=p5" class="shop-product-card lg:aspect-square group">
         <div class="product-image-container">
-          <img src="https://i.ibb.co/V0FTWqC1/oberyyy.webp" alt="Burn Balaclava" />
+          <img src="https://i.ibb.co/V0FTWqC1/oberyyy.webp" alt="AWAKEN Balaclava" />
         </div>
-        <h3 class="text-xl font-bold mt-3">Burn Balaclava</h3>
-        <p class="text-sm mb-2">$75</p>
-        <button class="group-hover:bg-gray-800 transition-colors">Buy Now</button>
+        <h3 class="text-xl font-bold mt-3">AWAKEN Balaclava</h3>
+        <p class="text-sm mb-2">R 350.00</p>
+        <!-- Placeholder Shopify Button for Balaclava -->
+        <div id='product-component-placeholder-1' class="shopify-buy-button-container">
+          <!-- This is a placeholder. In a real Shopify setup, you would generate a unique embed code for this product. -->
+          <button class="shopify-buy__btn">Add to cart</button>
+        </div>
       </a>
+
+      <!-- Product 6: Awaken Tee -->
       <a href="product-detail.html?id=p3" class="shop-product-card lg:aspect-square group">
         <div class="product-image-container">
-          <img src="https://i.ibb.co/JRsBZr2d/BURN-BALACLAVAAA.webp" alt="Awareness Tee" />
+          <img src="https://i.ibb.co/JRsBZr2d/BURN-BALACLAVAAA.webp" alt="Awaken Tee" />
         </div>
-        <h3 class="text-xl font-bold mt-3">Awareness Tee</h3>
-        <p class="text-sm mb-2">$120</p>
-        <button class="group-hover:bg-gray-800 transition-colors">Buy Now</button>
+        <h3 class="text-xl font-bold mt-3">Awaken Tee</h3>
+        <p class="text-sm mb-2">R 280.00</p>
+        <!-- Placeholder Shopify Button for Awaken Tee -->
+        <div id='product-component-placeholder-5' class="shopify-buy-button-container">
+          <!-- This is a placeholder. In a real Shopify setup, you would generate a unique embed code for this product. -->
+          <button class="shopify-buy__btn">Add to cart</button>
+        </div>
       </a>
     </div>
     <div class="text-center mt-8 mb-8"> <!-- Moved button here -->
@@ -970,7 +1041,7 @@
   <!-- Fullscreen Modal Structure -->
   <div id="fullscreenModal" class="modal-overlay">
     <div class="modal-content">
-      <img id="fullscreenImage" src="" alt="">
+      <img id="fullscreenImage" src="" alt="Full Screen Poster">
       <!-- Removed the close button from HTML as requested -->
     </div>
   </div>
@@ -1197,6 +1268,154 @@
         updateCartDisplay(); // Initialize cart display on page load
       }
     });
+  </script>
+
+  <!-- Shopify Buy Button Script - Placed at the end of body for performance -->
+  <script type="text/javascript">
+  /*<![CDATA[*/
+  (function () {
+    var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+    if (window.ShopifyBuy) {
+      if (window.ShopifyBuy.UI) {
+        ShopifyBuyInit();
+      } else {
+        loadScript();
+      }
+    } else {
+      loadScript();
+    }
+    function loadScript() {
+      var script = document.createElement('script');
+      script.async = true;
+      script.src = scriptURL;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
+      script.onload = ShopifyBuyInit;
+    }
+    function ShopifyBuyInit() {
+      var client = ShopifyBuy.buildClient({
+        domain: 'awakencult.myshopify.com',
+        storefrontAccessToken: 'eab233c40ec30dfb41b9606b758144b8',
+      });
+      ui = ShopifyBuy.UI.onReady(client).then(function (ui) {
+        // Initialize the MCGA Cap product component
+        ui.createComponent('product', {
+          id: '7326365810791', // MCGA Cap Product ID
+          node: document.getElementById('product-component-1752606716841'),
+          moneyFormat: 'R%20%7B%7Bamount%7D%7D',
+          options: {
+            "product": {
+              "styles": {
+                "product": {
+                  "@media (min-width: 601px)": {
+                    "max-width": "100%", /* Ensure it fits within the product card */
+                    "margin-left": "0px",
+                    "margin-bottom": "0px"
+                  }
+                },
+                "button": {
+                  "background-color": "#c9544b", /* Will be overridden by custom CSS */
+                  ":hover": {
+                    "background-color": "#b54c44" /* Will be overridden by custom CSS */
+                  },
+                  ":focus": {
+                    "background-color": "#b54c44" /* Will be overridden by custom CSS */
+                  },
+                  "font-family": "Arial, sans-serif", /* Will be overridden by custom CSS */
+                  "border-radius": "0px"
+                }
+              },
+              "contents": {
+                "img": false,
+                "title": false,
+                "price": false
+              },
+              "text": {
+                "button": "Add to cart"
+              }
+            },
+            "productSet": {
+              "styles": {
+                "products": {
+                  "@media (min-width: 601px)": {
+                    "margin-left": "0px"
+                  }
+                }
+              }
+            },
+            "modalProduct": {
+              "contents": {
+                "img": false,
+                "imgWithCarousel": true
+              },
+              "styles": {
+                "product": {
+                  "@media (min-width: 601px)": {
+                    "max-width": "100%",
+                    "margin-left": "0px",
+                    "margin-bottom": "0px"
+                  }
+                },
+                "button": {
+                  "background-color": "#c9544b",
+                  ":hover": {
+                    "background-color": "#b54c44"
+                  },
+                  ":focus": {
+                    "background-color": "#b54c44"
+                  },
+                  "font-family": "Arial, sans-serif",
+                  "border-radius": "0px"
+                }
+              }
+            },
+            "option": {},
+            "cart": {
+              "styles": {
+                "button": {
+                  "background-color": "#c9544b",
+                  ":hover": {
+                    "background-color": "#b54c44"
+                  },
+                  ":focus": {
+                    "background-color": "#b54c44"
+                  },
+                  "font-family": "Arial, sans-serif",
+                  "border-radius": "0px"
+                }
+              }
+            },
+            "toggle": {
+              "styles": {
+                "toggle": {
+                  "background-color": "#c9544b",
+                  ":hover": {
+                    "background-color": "#b54c44"
+                  },
+                  ":focus": {
+                    "background-color": "#b54c44"
+                  },
+                  "font-family": "Arial, sans-serif"
+                }
+              }
+            }
+          },
+        });
+        // Note: For other products, you would repeat ui.createComponent with their specific IDs and nodes.
+        // Example for a placeholder product (if you had its actual Shopify ID and a corresponding div):
+        /*
+        ui.createComponent('product', {
+          id: 'YOUR_PRODUCT_ID_HERE', // Replace with actual Shopify Product ID
+          node: document.getElementById('product-component-placeholder-1'), // Replace with the ID of your placeholder div
+          moneyFormat: 'R%20%7B%7Bamount%7D%7D',
+          options: {
+            // ... same options as above, adjusted for the product if needed
+          }
+        });
+        */
+      });
+    }
+  })();
+  /*]]>*/
   </script>
 </body>
 </html>
