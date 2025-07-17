@@ -263,7 +263,7 @@
 
         // Array to hold obstacles (metal bins)
         let obstacles = [];
-        let obstacleInterval; // To clear interval for obstacle generation
+        let obstacleTimeout; // Changed to timeout for dynamic intervals
 
         // Sound effects using Tone.js
         const flapSound = new Tone.Synth().toDestination();
@@ -853,6 +853,31 @@
             }, 2000); // Fade out after 2 seconds
         }
 
+        // Function to get the current obstacle spawn interval based on score
+        function getObstacleSpawnInterval() {
+            const initialInterval = 2000; // milliseconds
+            const minInterval = 700; // milliseconds (adjusted for "really close")
+            const difficultyRampUpScore = 20; // Score at which interval reaches minimum (adjusted for "shouldn't take too long")
+
+            if (score >= difficultyRampUpScore) {
+                return minInterval;
+            } else {
+                // Linear interpolation for interval reduction
+                const intervalRange = initialInterval - minInterval;
+                const currentReduction = (score / difficultyRampUpScore) * intervalRange;
+                return initialInterval - currentReduction;
+            }
+        }
+
+        // Function to schedule the next obstacle creation
+        function scheduleNextObstacle() {
+            if (!gameRunning) return; // Stop if game is not running
+
+            createObstacle();
+            const currentInterval = getObstacleSpawnInterval();
+            obstacleTimeout = setTimeout(scheduleNextObstacle, currentInterval);
+        }
+
         // Start game function
         async function startGame() {
             if (Tone.context.state !== 'running') {
@@ -871,11 +896,11 @@
             gameOverScreen.classList.add('hidden');
             scoreDisplay.classList.remove('hidden');
 
-            if (obstacleInterval) {
-                clearInterval(obstacleInterval);
+            // Clear any existing timeout before starting a new game
+            if (obstacleTimeout) {
+                clearTimeout(obstacleTimeout);
             }
-            createObstacle();
-            obstacleInterval = setInterval(createObstacle, 2000); // Reverted to 2000ms
+            scheduleNextObstacle(); // Start the first obstacle and subsequent ones
 
             lastFrameTime = performance.now(); // Reset for smooth animation start
             // animate is already being called by requestAnimationFrame loop
@@ -885,7 +910,7 @@
         function endGame() {
             gameRunning = false;
             gameOver = true;
-            clearInterval(obstacleInterval);
+            clearTimeout(obstacleTimeout); // Clear the timeout on game over
 
             if (score > highScore) {
                 highScore = score;
