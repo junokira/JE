@@ -221,6 +221,88 @@
       line-height: 1.8; /* Increased line height for readability */
     }
 
+    .cult-exclusive-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid black;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .cult-exclusive-header a {
+      display: flex; /* Make links flexible containers */
+      align-items: center; /* Vertically align content */
+      text-decoration: none; /* Remove default underline */
+      color: inherit; /* Inherit color */
+      transition: color 0.3s ease; /* Smooth transition for text color */
+      position: relative; /* Added for pseudo-element positioning */
+      overflow: hidden; /* Ensures pseudo-element doesn't overflow */
+    }
+    .cult-exclusive-header a:hover {
+      color: #d94a44; /* Red text on hover */
+    }
+    
+    /* Container for the eye logo image and its overlay */
+    .eye-logo-container {
+      position: relative; /* For absolute positioning of pseudo-element */
+      height: 2rem; /* Matches h-8 from Tailwind */
+      width: auto; /* Allow width to adjust based on content */
+      display: inline-block; /* Allows width to shrink-wrap content */
+      vertical-align: middle; /* To align with text if needed */
+      margin-right: 0.5rem; /* Matches mr-2 from Tailwind */
+      flex-shrink: 0; /* Prevent it from shrinking in flex container */
+    }
+
+    .eye-logo-container img {
+      /* These properties will make the image fill the inline-block container's height and auto-scale width */
+      height: 100%;
+      width: auto; /* Allow width to scale proportionally */
+      object-fit: contain; /* Ensure the image fits within its bounds */
+      display: block;
+      z-index: 1; /* Ensure original image is below the overlay */
+      transition: opacity 0.3s ease; /* Smooth transition for hiding original image */
+    }
+
+    .eye-logo-container:hover img {
+      opacity: 0; /* Hide the black image to reveal the red masked pseudo-element */
+    }
+
+    /* Pseudo-element for the red overlay */
+    .eye-logo-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%; /* Will match the auto-calculated width of the container */
+      background-color: #d94a44; /* The desired red color */
+      /* Use the original black logo as a mask */
+      mask-image: url('https://i.ibb.co/23z6psTD/NEW-EYE-LOGO_BLACK_VEC.png');
+      mask-size: contain;
+      mask-repeat: no-repeat;
+      mask-position: center;
+      opacity: 0; /* Hidden by default */
+      transition: opacity 0.3s ease; /* Smooth transition for overlay */
+      pointer-events: none; /* Allow clicks to pass through */
+      z-index: 2; /* Above the image */
+      /* For WebKit browsers */
+      -webkit-mask-image: url('https://i.ibb.co/23z6psTD/NEW-EYE-LOGO_BLACK_VEC.png');
+      -webkit-mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+    }
+
+    .eye-logo-container:hover::before {
+      opacity: 1; /* Show red overlay on hover */
+    }
+
+    .cult-exclusive-header a span {
+      transition: color 0.3s ease, text-decoration 0.3s ease; /* Smooth transition for text */
+    }
+    .cult-exclusive-header a:hover span {
+      text-decoration: none; /* Removed underline from text on hover */
+    }
+
     .icon-text-block {
       display: flex;
       align-items: center;
@@ -760,10 +842,16 @@
     <div class="hero-news-grid">
       <!-- Middle Column (Main Story) - Now first in source order, order-2 on desktop -->
       <div class="lg:col-span-1 flex flex-col justify-between lg:order-2">
-        <!-- Sun Picture Exclusive -->
-        <div class="flex items-center justify-between border-b border-black pb-2 mb-4">
-          <img src="https://i.ibb.co/23z6psTD/NEW-EYE-LOGO-BLACK-VEC.png" alt="The Sun Logo" class="h-8 w-auto mr-2" />
-          <span class="font-roboto-condensed text-xs font-bold uppercase">Cult Picture Exclusive</span>
+        <!-- Cult Picture Exclusive Header -->
+        <div class="cult-exclusive-header">
+          <a href="eye.html">
+            <div class="eye-logo-container">
+              <img src="https://i.ibb.co/23z6psTD/NEW-EYE-LOGO_BLACK_VEC.png" alt="The Sun Logo" />
+            </div>
+          </a>
+          <a href="cult.html">
+            <span class="font-roboto-condensed text-xs font-bold uppercase">Cult Picture Exclusive</span>
+          </a>
         </div>
         <div>
           <h3 class="font-anton main-headline uppercase">THE VEIL IS THINNING</h3>
@@ -777,13 +865,13 @@
           <img src="https://i.ibb.co/M5xjjWqM/3rd-eye-smiley.png" alt="Smiley" />
           <p class="font-roboto-condensed text-xs"><strong>Smile Surveillance Live</strong><br/>Witnesses report sightings of this icon throughout the city. Stay aware.</p>
         </div>
-        <!-- New Filler Content for Empty Space -->
-        <div class="news-card mt-4">
+        <!-- Breaking News Card - Now links to breaking-news.html -->
+        <a href="breaking-news.html" class="news-card mt-4 block no-underline text-black">
           <div class="news-card-content">
             <strong class="uppercase">Breaking News:</strong><br/>
             Unexplained energy surges reported near the city's ancient monolith. Coincidence or a sign? More details to follow.
           </div>
-        </div>
+        </a>
       </div>
 
       <!-- Left Column - Now second in source order, order-1 on desktop -->
@@ -921,7 +1009,7 @@
 
   <!-- Fullscreen Video Section - Now links to YouTube -->
   <div class="video-section" onclick="window.open('https://www.youtube.com/@awakencult', '_blank')" style="cursor: pointer;">
-    <video autoplay loop muted playsinline class="w-full h-full object-cover">
+    <video id="backgroundVideo" autoplay loop muted playsinline class="w-full h-full object-cover">
       <source src="https://raw.githubusercontent.com/junokira/NWO/main/nwo%20web%20w-2.mp4" type="video/mp4" />
       Your browser does not support the video tag.
     </video>
@@ -1033,7 +1121,7 @@
       <div class="social-icons">
         <a href="https://instagram.com/awakencult" class="hover:text-gray-600" target="_blank"><i class="fab fa-instagram"></i></a>
         <a href="https://x.com/awakencult" class="hover:text-gray-600" target="_blank"><i class="fab fa-twitter"></i></a>
-        <a href="https://youtube.com/@awakencult" class="hover:text-gray-600" target="_blank"><i class="fab fa-youtube"></i></a>
+        <a href="https://youtube.com/@awakencult" target="_blank"><i class="fab fa-youtube"></i></a>
       </div>
     </div>
   </footer>
@@ -1261,6 +1349,16 @@
                 marqueeContentWrapper.style.animation = `marquee var(--marquee-speed) linear infinite`;
             }
         });
+      }
+
+      // Explicitly play video on page load for better consistency
+      const backgroundVideo = document.getElementById('backgroundVideo');
+      if (backgroundVideo) {
+          backgroundVideo.play().catch(error => {
+              // Autoplay was prevented. This is common if video is not muted or user hasn't interacted.
+              // console.log("Video autoplay prevented:", error);
+              // You might want to show a play button here if autoplay fails.
+          });
       }
 
       // Only call updateCartDisplay if the cart elements are present in the DOM
