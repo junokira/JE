@@ -649,8 +649,8 @@
             currentImageIndex = index;
             const image = imageData[currentImageIndex];
             detailImage.src = image.src;
-            detailImageDescription.textContent = image.description; // Display the description
-            detailImageTitle.textContent = 'CULT PICTURE EXCLUSIVE'; // Set title as requested
+            // detailImageTitle.textContent = image.title; // Removed as per user request
+            detailImageDescription.textContent = ''; // Clear description as per user request
             updateDetailImageCounter();
 
             gridView.classList.remove('active');
@@ -698,8 +698,8 @@
             }
             const newImage = imageData[currentImageIndex];
             detailImage.src = newImage.src;
-            detailImageDescription.textContent = newImage.description; // Display the description
-            detailImageTitle.textContent = 'CULT PICTURE EXCLUSIVE'; // Set title as requested
+            // detailImageTitle.textContent = newImage.title; // Removed as per user request
+            detailImageDescription.textContent = ''; // Clear description as per user request
             updateDetailImageCounter();
         }
 
