@@ -24,16 +24,16 @@
     }
   </style>
  </head>
- <!-- Updated body background color and vertical padding for equal spacing -->
- <body class="bg-[#f2f0e8] flex justify-center px-2 py-8 sm:py-10 md:py-12">
-  <!-- Outer wrapper for centering and max-w on larger screens -->
-  <div class="w-full max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl mx-auto">
-    <!-- Main magazine container with border and relative positioning for internal absolute elements -->
+ <!-- Updated body background color, removed vertical padding to allow full cover fill, and added h-screen overflow-hidden -->
+ <body class="bg-[#f2f0e8] flex justify-center h-screen overflow-hidden">
+  <!-- Outer wrapper for centering and max-w on larger screens, now flex-col and h-full -->
+  <div class="w-full max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl mx-auto flex flex-col h-full">
+    <!-- Main magazine container with border and relative positioning, now flex-grow flex-col -->
     <!-- Updated border color -->
-    <div class="relative w-full border-2 border-[#c9544b] pr-10 md:pr-12">
+    <div class="relative w-full border-2 border-[#c9544b] pr-10 md:pr-12 flex-grow flex flex-col">
       <!-- Top red header bar -->
-      <!-- Updated background color -->
-      <div class="flex bg-[#c9544b] text-white px-2 py-1 relative">
+      <!-- Updated background color, added flex-shrink-0 to prevent shrinking -->
+      <div class="flex bg-[#c9544b] text-white px-2 py-1 relative flex-shrink-0">
         <!-- Left white box with C and Daily Cult logo, now a clickable link -->
         <a href="index.html" class="flex items-center bg-white text-[#c9544b] px-1 py-0.5 border border-black relative min-w-[120px] h-14 sm:min-w-[150px] sm:h-16 md:min-w-[180px] md:h-14 group">
           <div class="flex items-center">
@@ -80,16 +80,17 @@
           </span>
         </a>
       </div>
-      <!-- Main large image, now clickable -->
-      <a href="main-image-details.html">
-        <img alt="Man wearing a white mask with a AWAKEN symbol, holding a bottle, with 'NEW WORLD ORDER' text" class="w-full object-cover h-auto max-h-[80vh]" src="https://i.ibb.co/8DgDMRg3/xtcy-3.webp"/>
+      <!-- Main large image, now clickable and flex-grow -->
+      <a href="main-image-details.html" class="block w-full flex-grow overflow-hidden">
+        <!-- Reverted to object-cover to eliminate empty space, prioritizing fill over showing full image -->
+        <img alt="Person wearing a white mask with an eye symbol, holding a bottle, with 'NEW WORLD ORDER' text" class="w-full h-full object-cover" src="https://i.ibb.co/8DgDMRg3/xtcy-3.webp"/>
       </a>
       <!-- Small inset image top right, now clickable -->
       <!-- Adjusted right position to move it slightly more right -->
       <div class="absolute top-[18%] right-[10%] border-2 border-[#c9544b] bg-white w-[35%] max-w-[160px] h-auto max-h-[160px]">
         <a href="small-image-details.html">
           <!-- Increased max-h for the image to show more of it -->
-          <img alt="Close-up of a hand holding a bottle of AWAKEN smiley faces" class="w-full h-auto max-h-[130px] object-cover" src="https://i.ibb.co/gN1TLnM/XTCY-ART.webp"/>
+          <img alt="Close-up of a person in a mask holding a stack of cookies with eye symbols" class="w-full h-auto max-h-[130px] object-cover" src="https://i.ibb.co/gN1TLnM/XTCY-ART.webp"/>
         </a>
         <!-- Reduced min-h for the text container to make it smaller -->
         <div class="text-[8px] sm:text-[9px] leading-normal font-roboto-condensed font-normal p-1 min-h-[20px] sm:min-h-[24px] select-none">
