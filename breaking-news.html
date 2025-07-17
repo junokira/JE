@@ -24,15 +24,14 @@
     }
   </style>
  </head>
- <!-- Updated body background color, removed vertical padding to allow full cover fill, and added h-screen overflow-hidden -->
- <body class="bg-[#f2f0e8] flex justify-center h-screen overflow-hidden">
-  <!-- Outer wrapper for centering and max-w on larger screens, now flex-col and h-full -->
-  <div class="w-full max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl mx-auto flex flex-col h-full">
-    <!-- Main magazine container with border and relative positioning, now flex-grow flex-col -->
-    <!-- Updated border color -->
-    <div class="relative w-full border-2 border-[#c9544b] pr-10 md:pr-12 flex-grow flex flex-col">
-      <!-- Top red header bar -->
-      <!-- Updated background color, added flex-shrink-0 to prevent shrinking -->
+ <!-- Body now only has h-screen and overflow-hidden to prevent scrolling. -->
+ <body class="bg-[#f2f0e8] flex justify-center px-2 h-screen overflow-hidden">
+  <!-- Outer wrapper now has minimal vertical padding to make it fill more, and takes full height -->
+  <div class="w-full max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl mx-auto flex flex-col h-full py-0">
+    <!-- Main magazine container with border and relative positioning, flex-grow to take available space -->
+    <!-- Removed right padding entirely as the vertical bar is gone -->
+    <div class="relative w-full border-2 border-[#c9544b] flex-grow flex flex-col">
+      <!-- Top red header bar - flex-shrink-0 to prevent it from shrinking -->
       <div class="flex bg-[#c9544b] text-white px-2 py-1 relative flex-shrink-0">
         <!-- Left white box with C and Daily Cult logo, now a clickable link -->
         <a href="index.html" class="flex items-center bg-white text-[#c9544b] px-1 py-0.5 border border-black relative min-w-[120px] h-14 sm:min-w-[150px] sm:h-16 md:min-w-[180px] md:h-14 group">
@@ -61,23 +60,15 @@
             September 15 2005
           </span>
         </div>
-        <!-- Price box - repositioned next to date -->
-        <div class="bg-black text-white text-sm sm:text-base md:text-[14px] font-roboto-condensed font-bold px-1 ml-1 mt-3 w-8 h-5 sm:w-10 sm:h-6 md:w-[30px] md:h-[18px] leading-tight select-none flex items-center justify-center rounded-sm">
-          35p
-        </div>
+        <!-- Price box - REMOVED -->
         <!-- Exclusive box on right, now clickable -->
         <!-- Updated border color and text shades -->
-        <a href="cult.html" class="ml-auto flex flex-col justify-center bg-blue-900 border border-[#c9544b] px-2 py-1 relative w-32 h-14 sm:w-40 sm:h-16 md:w-[160px] md:h-[56px] group">
+        <a href="exclusive.html" class="ml-auto flex flex-col justify-center bg-blue-900 border border-[#c9544b] px-2 py-1 relative w-32 h-14 sm:w-40 sm:h-16 md:w-[160px] md:h-[56px] group">
           <!-- Changed yellow-400 to a slightly deeper yellow-500, added drop-shadow -->
           <span class="font-anton text-2xl sm:text-3xl md:text-[36px] leading-tight text-yellow-500 select-none drop-shadow-[0_0_2px_black]" style="transform: skew(-10deg);">
             EXCLUSIVE
           </span>
-          <!-- Changed blue-400 to a slightly darker blue-500 -->
-          <span class="font-roboto-condensed font-bold text-xs sm:text-sm md:text-[18px] leading-tight text-blue-500 select-none" style="transform: skew(-10deg); margin-top: -6px;">
-            MORE AMAZING
-            <br/>
-            PHOTOS INSIDE
-          </span>
+          <!-- Removed "MORE AMAZING PHOTOS INSIDE" text -->
         </a>
       </div>
       <!-- Main large image, now clickable and flex-grow -->
@@ -87,7 +78,7 @@
       </a>
       <!-- Small inset image top right, now clickable -->
       <!-- Adjusted right position to move it slightly more right -->
-      <div class="absolute top-[18%] right-[10%] border-2 border-[#c9544b] bg-white w-[35%] max-w-[160px] h-auto max-h-[160px]">
+      <div class="absolute top-[18%] right-[5%] border-2 border-[#c9544b] bg-white w-[35%] max-w-[160px] h-auto max-h-[160px]">
         <a href="small-image-details.html">
           <!-- Increased max-h for the image to show more of it -->
           <img alt="Close-up of a person in a mask holding a stack of cookies with eye symbols" class="w-full h-auto max-h-[130px] object-cover" src="https://i.ibb.co/gN1TLnM/XTCY-ART.webp"/>
@@ -102,31 +93,16 @@
         GET SET: The mask lays out lines of truth
       </div>
       <!-- Bottom headline text -->
-      <!-- Adjusted bottom position for more balanced spacing -->
-      <div class="absolute bottom-[12%] left-0 w-full px-2 select-none">
-        <h1 class="font-anton text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[72px] leading-tight drop-shadow-[0_0_3px_black] -tracking-[0.05em]">
+      <!-- Adjusted bottom position for more balanced spacing and responsive font size -->
+      <div class="absolute bottom-[8%] left-0 w-full px-2 select-none">
+        <h1 class="font-anton text-white text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-[72px] leading-tight drop-shadow-[0_0_3px_black] -tracking-[0.05em]">
           JUJU BOY
         </h1>
-        <p class="font-roboto-slab text-white text-base sm:text-lg md:text-xl lg:text-2xl font-bold drop-shadow-[0_0_3px_black]">
+        <p class="font-roboto-slab text-white text-sm sm:text-base md:text-xl lg:text-2xl font-bold drop-shadow-[0_0_3px_black]">
           Supermodel Juju Boy took XTCY!
         </p>
       </div>
-      <!-- Right vertical text bar -->
-      <div class="absolute top-0 right-0 h-full flex flex-col justify-center items-center select-none w-10 md:w-12">
-        <!-- Updated text and color -->
-        <div class="text-[8px] sm:text-[9px] md:text-[10px] font-roboto-condensed font-bold leading-tight text-black rotate-90 whitespace-nowrap">
-          AWAKEN CULT - ISSUE DATE - PAGE:
-          <span class="text-[#c9544b]">
-            B
-          </span>
-          <span class="text-yellow-400">
-            C
-          </span>
-          <span class="text-blue-600">
-            M
-          </span>
-        </div>
-      </div>
+      <!-- Right vertical text bar - REMOVED -->
     </div>
   </div>
  </body>
