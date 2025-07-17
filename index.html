@@ -381,38 +381,25 @@
         margin-bottom: 0.75rem;
     }
 
-    /* Shopify Buy Button specific styling adjustments */
-    .shopify-buy-button-container {
-        width: 100%;
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+    /* Custom Add to Cart Button Styling */
+    .add-to-cart-btn {
+        background-color: black;
+        color: white;
+        border-radius: 0px;
+        font-family: 'Oswald', sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        width: calc(100% - 2rem);
+        max-width: 150px;
+        display: block;
+        margin: 0.5rem auto 0 auto;
+        cursor: pointer;
+        transition: background-color 0.2s;
     }
-    .shopify-buy-button-container .shopify-buy__btn {
-        background-color: black !important;
-        border-radius: 0px !important;
-        font-family: 'Oswald', sans-serif !important;
-        text-transform: uppercase !important;
-        letter-spacing: 0.1em !important;
-        padding: 0.75rem 1.5rem !important;
-        font-size: 1rem !important;
-        width: calc(100% - 2rem) !important;
-        max-width: 150px !important;
-        display: block !important;
-        margin: 0.5rem auto 0 auto !important;
-    }
-    .shopify-buy-button-container .shopify-buy__btn:hover {
-        background-color: #333 !important;
-    }
-    .shopify-buy-button-container .shopify-buy__product__variant-img,
-    .shopify-buy-button-container .shopify-buy__product__title,
-    .shopify-buy-button-container .shopify-buy__product__price {
-        display: none !important;
-    }
-    .shopify-buy-button-container .shopify-buy__product {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    .add-to-cart-btn:hover {
+        background-color: #333;
     }
 
 
@@ -812,6 +799,15 @@
       padding: 2rem;
       color: #777;
     }
+    /* New style for ASCII art */
+    .empty-cart-ascii {
+        font-family: 'monospace', 'Courier New', Courier, monospace;
+        white-space: pre; /* Preserve whitespace and line breaks */
+        font-size: 0.8rem; /* Smaller font for ASCII art */
+        line-height: 1; /* Tight line height for ASCII art */
+        margin: 1rem auto; /* Center it */
+        color: #555; /* Slightly darker than default empty message */
+    }
     @media (max-width: 767px) {
       .cart-overlay {
         width: 100%;
@@ -927,87 +923,66 @@
     <h2 class="text-3xl font-anton text-center mb-8 uppercase">Underground Market</h2>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6"> <!-- grid-cols-1 for mobile/tablet, lg:grid-cols-3 for desktop -->
       <!-- Product 1: MCGA Cap -->
-      <a href="product-detail.html?id=p6" class="shop-product-card lg:aspect-square group">
-        <div class="product-image-container">
+      <div class="shop-product-card lg:aspect-square group">
+        <a href="product-detail.html?id=p6" class="product-image-container block">
           <img src="https://i.ibb.co/GvhVTBTc/MCGA-CAP.webp" alt="MCGA Cap" />
-        </div>
+        </a>
         <h3 class="text-xl font-bold mt-3">MCGA Cap</h3>
         <p class="text-sm mb-2">R 250.00</p>
-        <!-- Actual Shopify Buy Button for MCGA Cap -->
-        <div id='product-component-1752606716841' class="shopify-buy-button-container"></div>
-      </a>
+        <button class="add-to-cart-btn" onclick="addToCart(0)">Add to cart</button>
+      </div>
 
       <!-- Product 2: Fake News Hoodie -->
-      <a href="product-detail.html?id=p2" class="shop-product-card lg:aspect-square group">
-        <div class="product-image-container">
+      <div class="shop-product-card lg:aspect-square group">
+        <a href="product-detail.html?id=p2" class="product-image-container block">
           <img src="https://i.ibb.co/mrTy6Mhw/fake-news-hoodie.webp" alt="Fake News Hoodie" />
-        </div>
+        </a>
         <h3 class="text-xl font-bold mt-3">Fake News Hoodie</h3>
         <p class="text-sm mb-2">R 550.00</p>
-        <!-- Placeholder Shopify Button for Fake News Hoodie -->
-        <div id='product-component-placeholder-2' class="shopify-buy-button-container">
-          <!-- This is a placeholder. In a real Shopify setup, you would generate a unique embed code for this product. -->
-          <button class="shopify-buy__btn">Add to cart</button>
-        </div>
-      </a>
+        <button class="add-to-cart-btn" onclick="addToCart(1)">Add to cart</button>
+      </div>
 
       <!-- Product 3: XTCY Tee -->
-      <a href="product-detail.html?id=p1" class="shop-product-card lg:aspect-square group">
-        <div class="product-image-container">
+      <div class="shop-product-card lg:aspect-square group">
+        <a href="product-detail.html?id=p1" class="product-image-container block">
           <img src="https://i.ibb.co/twNrP2xF/XTCYYYY.webp" alt="XTCY Tee" />
-        </div>
+        </a>
         <h3 class="text-xl font-bold mt-3">XTCY Tee</h3>
         <p class="text-sm mb-2">R 300.00</p>
-        <!-- Placeholder Shopify Button for XTCY Tee -->
-        <div id='product-component-placeholder-3' class="shopify-buy-button-container">
-          <!-- This is a placeholder. In a real Shopify setup, you would generate a unique embed code for this product. -->
-          <button class="shopify-buy__btn">Add to cart</button>
-        </div>
-      </a>
+        <button class="add-to-cart-btn" onclick="addToCart(2)">Add to cart</button>
+      </div>
 
       <!-- Product 4: Vision Jacket -->
-      <a href="product-detail.html?id=p4" class="shop-product-card lg:aspect-square group">
-        <div class="product-image-container">
+      <div class="shop-product-card lg:aspect-square group">
+        <a href="product-detail.html?id=p4" class="product-image-container block">
           <img src="https://i.ibb.co/JFyXsdVv/vzn-jacket.webp" alt="Vision Jacket" />
-        </div>
+        </a>
         <h3 class="text-xl font-bold mt-3">Vision Jacket</h3>
         <p class="text-sm mb-2">R 800.00</p>
-        <!-- Placeholder Shopify Button for Vision Jacket -->
-        <div id='product-component-placeholder-4' class="shopify-buy-button-container">
-          <!-- This is a placeholder. In a real Shopify setup, you would generate a unique embed code for this product. -->
-          <button class="shopify-buy__btn">Add to cart</button>
-        </div>
-      </a>
+        <button class="add-to-cart-btn" onclick="addToCart(3)">Add to cart</button>
+      </div>
 
       <!-- Product 5: Balaclava -->
-      <a href="product-detail.html?id=p5" class="shop-product-card lg:aspect-square group">
-        <div class="product-image-container">
+      <div class="shop-product-card lg:aspect-square group">
+        <a href="product-detail.html?id=p5" class="product-image-container block">
           <img src="https://i.ibb.co/V0FTWqC1/oberyyy.webp" alt="AWAKEN Balaclava" />
-        </div>
+        </a>
         <h3 class="text-xl font-bold mt-3">AWAKEN Balaclava</h3>
         <p class="text-sm mb-2">R 350.00</p>
-        <!-- Placeholder Shopify Button for Balaclava -->
-        <div id='product-component-placeholder-1' class="shopify-buy-button-container">
-          <!-- This is a placeholder. In a real Shopify setup, you would generate a unique embed code for this product. -->
-          <button class="shopify-buy__btn">Add to cart</button>
-        </div>
-      </a>
+        <button class="add-to-cart-btn" onclick="addToCart(4)">Add to cart</button>
+      </div>
 
       <!-- Product 6: Awaken Tee -->
-      <a href="product-detail.html?id=p3" class="shop-product-card lg:aspect-square group">
-        <div class="product-image-container">
+      <div class="shop-product-card lg:aspect-square group">
+        <a href="product-detail.html?id=p3" class="product-image-container block">
           <img src="https://i.ibb.co/JRsBZr2d/BURN-BALACLAVAAA.webp" alt="Awaken Tee" />
-        </div>
+        </a>
         <h3 class="text-xl font-bold mt-3">Awaken Tee</h3>
         <p class="text-sm mb-2">R 280.00</p>
-        <!-- Placeholder Shopify Button for Awaken Tee -->
-        <div id='product-component-placeholder-5' class="shopify-buy-button-container">
-          <!-- This is a placeholder. In a real Shopify setup, you would generate a unique embed code for this product. -->
-          <button class="shopify-buy__btn">Add to cart</button>
-        </div>
-      </a>
+        <button class="add-to-cart-btn" onclick="addToCart(5)">Add to cart</button>
+      </div>
     </div>
-    <div class="text-center mt-16 mb-16"> <!-- Increased margin to mt-16 mb-16 -->
+    <div class="text-center mt-16 mb-4">
       <a href="shop.html" class="inline-block bg-[#d94a44] text-white px-8 py-4 font-bold uppercase text-lg hover:bg-[#b92a1e] transition-colors">Shop All Artifacts</a>
     </div>
   </section>
@@ -1029,7 +1004,7 @@
 
   <!-- New Ad Section -->
   <section id="campaign" class="w-full h-screen relative overflow-hidden">
-    <div class="flex flex-col lg:flex-row w-full h-full"> <!-- Changed md:flex-row to lg:flex-row -->
+    <div class="flex flex-col lg:flex-row w-full h-full">
       <!-- Left side with woman -->
       <div class="w-full lg:w-1/2 relative flex-shrink-0 background-image-cover-adjusted mobile-full-height">
         <!-- Background image for the woman's side -->
@@ -1055,16 +1030,16 @@
              style="background-image: url('https://i.ibb.co/jv3BthpX/3oj3434.png'); background-color: #7a3f2a;">
         </div>
         <!-- AWAKEN text moved above product images -->
-        <div class="absolute left-10 bottom-[55vh] lg:bottom-[33vh] text-white font-serif font-extrabold text-6xl leading-none select-none z-10"> <!-- Changed md:bottom to lg:bottom -->
+        <div class="absolute left-10 bottom-[55vh] lg:bottom-[33vh] text-white font-serif font-extrabold text-6xl leading-none select-none z-10">
           AWAKEN
         </div>
-        <!-- Product images (cigarette packs) overlay -->
-        <div class="absolute left-10 bottom-[15vh] lg:bottom-[10vh] flex space-x-4 z-10"> <!-- Changed md:bottom to lg:bottom -->
+        <!-- Product images (cigarette packs) overlay - Adjusted for mobile stacking -->
+        <div class="absolute left-10 bottom-[15vh] lg:bottom-[10vh] flex flex-col space-y-4 lg:flex-row lg:space-x-4 z-10">
           <img alt="Red cigarette pack with two cigarettes" class="h-44 w-auto rounded-md shadow-lg" src="https://i.ibb.co/S49t2Jm8/ballsl.png" />
           <img alt="Gold cigarette pack with two cigarettes" class="h-44 w-auto rounded-md shadow-lg" src="https://i.ibb.co/nN3JW0tz/CREAM-BALLY.png" />
         </div>
         <!-- Bottom text overlay -->
-        <p class="absolute left-10 bottom-[5vh] lg:bottom-10 text-white text-xs font-serif max-w-xs z-10" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.7);"> <!-- Changed md:bottom to lg:bottom -->
+        <p class="absolute left-10 bottom-[5vh] lg:bottom-10 text-white text-xs font-serif max-w-xs z-10" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.7);">
           Red or Lightsm 100’s — just get a lot to like.
         </p>
       </div>
@@ -1090,7 +1065,7 @@
       </div>
     </div>
 
-    <a href="join-us.html" class="block no-underline"> <!-- Wrapped in anchor tag -->
+    <a href="join-us.html" class="block no-underline">
       <h2 class="newsletter-headline-main font-tattler uppercase">OPEN YOUR EYES</h2>
     </a>
     
@@ -1107,7 +1082,7 @@
   <!-- Editorial Shots Section - Updated with content and links -->
   <section class="editorial-shots-grid content-section">
     <h2 class="text-3xl font-anton text-center mb-8">Dispatches from the Archives</h2>
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6"> <!-- grid-cols-1 for mobile/tablet, lg:grid-cols-3 for desktop -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <a href="https://instagram.com/awakencult" target="_blank" class="editorial-shot-card block no-underline text-black">
         <div class="editorial-image-container">
           <img src="https://i.ibb.co/fVC0cbZ6/snsb.png" alt="The Silent Observer" />
@@ -1133,7 +1108,7 @@
         </div>
       </a>
     </div>
-    <div class="text-center mt-16 mb-16"> <!-- Increased margin to mt-16 mb-16 -->
+    <div class="text-center mt-16 mb-4">
       <a href="archives.html" class="inline-block bg-[#d94a44] text-white px-8 py-4 font-bold uppercase text-lg hover:bg-[#b92a1e] transition-colors">View All Archives</a>
     </div>
   </section>
@@ -1153,12 +1128,12 @@
   <!-- Fullscreen Modal Structure -->
   <div id="fullscreenModal" class="modal-overlay">
     <div class="modal-content">
-      <img id="fullscreenImage" src="" alt="">
+      <img id="fullscreenImage" src="" alt="Full Screen Poster">
       <!-- Removed the close button from HTML as requested -->
     </div>
   </div>
 
-  <!-- Shopping Cart Overlay - Re-added and consistent with main site -->
+  <!-- Shopping Cart Overlay -->
   <div id="cart-overlay" class="cart-overlay">
     <div class="cart-header">
       <span>Your Artifacts</span>
@@ -1166,24 +1141,43 @@
     </div>
     <div id="cart-items" class="cart-items">
       <!-- Cart items will be injected here by JavaScript -->
-      <p class="empty-cart-message" id="empty-cart-message">Your cart is empty. Acquire some truth.</p>
+      <p class="empty-cart-message" id="empty-cart-message">
+        <pre class="empty-cart-ascii">
+  .------.
+ /  o   o \
+|    ---   |
+ \  '---'  /
+  `------'
+  NO ITEMS
+  IN CART
+        </pre>
+      </p>
     </div>
     <div class="cart-summary">
       <p>Total: <span id="cart-total">$0.00</span></p>
-      <button class="cart-checkout-btn rounded-md" onclick="proceedToCheckout()">Proceed to Checkout</button>
+      <button class="cart-checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout</button>
     </div>
   </div>
 
   <script>
-    // Placeholder for cart functionality (copied from other pages for consistency)
-    let cart = JSON.parse(localStorage.getItem('awakenCart'))
- || [];
+    // Define product data with Shopify Variant IDs
+    // IMPORTANT: Replace the 'shopifyVariantId' values with your actual Shopify product variant IDs.
+    // You can find these in your Shopify Admin by going to Products, clicking a product,
+    // and then if it has variants, clicking on a variant. The ID will be in the URL.
+    const products = [
+        { id: 'p6', name: 'MCGA Cap', price: 250.00, image: 'https://i.ibb.co/GvhVTBTc/MCGA-CAP.webp', shopifyVariantId: '44796300435751' },
+        { id: 'p2', name: 'Fake News Hoodie', price: 550.00, image: 'https://i.ibb.co/mrTy6Mhw/fake-news-hoodie.webp', shopifyVariantId: '44796300468512' },
+        { id: 'p1', name: 'XTCY Tee', price: 300.00, image: 'https://i.ibb.co/twNrP2xF/XTCYYYY.webp', shopifyVariantId: '44796300501273' },
+        { id: 'p4', name: 'Vision Jacket', price: 800.00, image: 'https://i.ibb.co/JFyXsdVv/vzn-jacket.webp', shopifyVariantId: '44796300534034' },
+        { id: 'p5', name: 'AWAKEN Balaclava', price: 350.00, image: 'https://i.ibb.co/V0FTWqC1/oberyyy.webp', shopifyVariantId: '44796300566805' },
+        { id: 'p3', name: 'Awaken Tee', price: 280.00, image: 'https://i.ibb.co/JRsBZr2d/BURN-BALACLAVAAA.webp', shopifyVariantId: '44796300599576' }
+    ];
 
-    // Check if cart elements exist before trying to access them
+    let cart = JSON.parse(localStorage.getItem('awakenCart')) || [];
+
     const cartOverlay = document.getElementById('cart-overlay');
     let cartCountSpan, cartItemsDiv, cartTotalSpan, emptyCartMessage;
 
-    // Only get elements if cartOverlay exists, preventing null errors
     if (cartOverlay) {
         cartCountSpan = document.getElementById('cart-count');
         cartItemsDiv = document.getElementById('cart-items');
@@ -1191,23 +1185,47 @@
         emptyCartMessage = document.getElementById('empty-cart-message');
     }
 
-
     function toggleCart() {
-      if (cartOverlay) { // Only toggle if cart overlay exists
+      if (cartOverlay) {
         cartOverlay.classList.toggle('active');
       }
     }
 
+    function addToCart(productIndex) {
+      const product = products[productIndex];
+      const existingItemIndex = cart.findIndex(item => item.id === product.id);
+
+      if (existingItemIndex > -1) {
+        cart[existingItemIndex].quantity += 1;
+      } else {
+        cart.push({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          image: product.image,
+          shopifyVariantId: product.shopifyVariantId, // Include Shopify Variant ID
+          quantity: 1
+        });
+      }
+      updateCartDisplay();
+      showCustomAlert(`${product.name} added to cart!`);
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCartDisplay();
+    }
+
     function updateCartDisplay() {
       if (!cartItemsDiv || !cartCountSpan || !cartTotalSpan || !emptyCartMessage) {
-        // console.error("Cart elements not found. Cart display cannot be updated.");
-        return; // Exit if cart elements are not found
+        return;
       }
 
-      cartItemsDiv.innerHTML = ''; // Clear current items
+      cartItemsDiv.innerHTML = '';
       let total = 0;
 
       if (cart.length === 0) {
+        // Display ASCII art when cart is empty
         emptyCartMessage.style.display = 'block';
       } else {
         emptyCartMessage.style.display = 'none';
@@ -1217,8 +1235,8 @@
           cartItemDiv.innerHTML = `
             <img src="${item.image}" alt="${item.name}" class="cart-item-image rounded" />
             <div class="cart-item-details">
-              <h4>${item.name} (${item.size})</h4>
-              <p>$${item.price.toFixed(2)} x ${item.quantity}</p>
+              <h4>${item.name}</h4>
+              <p>R ${item.price.toFixed(2)} x ${item.quantity}</p>
             </div>
             <button class="cart-item-remove" onclick="removeFromCart(${index})">Remove</button>
           `;
@@ -1227,14 +1245,25 @@
         });
       }
 
-      cartTotalSpan.textContent = `$${total.toFixed(2)}`;
+      cartTotalSpan.textContent = `R ${total.toFixed(2)}`;
       cartCountSpan.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
-      localStorage.setItem('awakenCart', JSON.stringify(cart)); // Save cart to local storage
+      localStorage.setItem('awakenCart', JSON.stringify(cart));
     }
 
-    function removeFromCart(index) {
-      cart.splice(index, 1);
-      updateCartDisplay();
+    // Function to proceed to Shopify checkout
+    function proceedToCheckout() {
+      if (cart.length === 0) {
+        showCustomAlert('Your cart is empty. Please add some artifacts before checking out.');
+        return;
+      }
+
+      const shopifyStoreDomain = 'awakencult.myshopify.com'; // Your Shopify store domain
+      const cartPath = cart
+        .map(item => `${item.shopifyVariantId}:${item.quantity}`)
+        .join(',');
+
+      const checkoutUrl = `https://${shopifyStoreDomain}/cart/${cartPath}`;
+      window.location.href = checkoutUrl; // Redirect to Shopify checkout
     }
 
     // Custom Alert Function (replaces window.alert)
@@ -1262,51 +1291,35 @@
 
         setTimeout(() => {
             alertBox.style.opacity = 1;
-        }, 10); // Small delay to trigger transition
+        }, 10);
 
         setTimeout(() => {
             alertBox.style.opacity = 0;
             alertBox.addEventListener('transitionend', () => alertBox.remove());
-        }, 3000); // Disappear after 3 seconds
+        }, 3000);
     }
-
-    function proceedToCheckout() {
-      if (cart.length > 0) {
-        showCustomAlert('Proceeding to checkout! Your artifacts are on their way to awaken you further.');
-        cart = []; // Clear cart after "checkout"
-        updateCartDisplay();
-        toggleCart(); // Close cart
-      } else {
-        showCustomAlert('Your cart is empty. Please add some artifacts before checking out.');
-      }
-    }
-
 
     document.addEventListener('DOMContentLoaded', () => {
       const posterWrappers = document.querySelectorAll('.poster-item-wrapper');
       const fullscreenModal = document.getElementById('fullscreenModal');
       const fullscreenImage = document.getElementById('fullscreenImage');
-      // The closeModalButton is intentionally removed from HTML as requested
 
-      // Function to open modal
       const openModal = (imageSrc) => {
         fullscreenImage.src = imageSrc;
-        if (fullscreenModal) { // Add null check for fullscreenModal
+        if (fullscreenModal) {
           fullscreenModal.classList.add('active');
-          document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+          document.body.style.overflow = 'hidden';
         }
       };
 
-      // Function to close modal
       const closeModal = () => {
-        if (fullscreenModal) { // Add null check for fullscreenModal
+        if (fullscreenModal) {
           fullscreenModal.classList.remove('active');
-          document.body.style.overflow = ''; // Restore scrolling
-          fullscreenImage.src = ''; // Clear image source
+          document.body.style.overflow = '';
+          fullscreenImage.src = '';
         }
       };
 
-      // Add click listeners to each poster
       posterWrappers.forEach(wrapper => {
         wrapper.addEventListener('click', () => {
           const img = wrapper.querySelector('img');
@@ -1316,228 +1329,57 @@
         });
       });
 
-      // Add click listener to the modal overlay itself to close it (if click is not on the image)
-      if (fullscreenModal) { // Add null check for fullscreenModal
+      if (fullscreenModal) {
         fullscreenModal.addEventListener('click', (event) => {
-          if (event.target === fullscreenModal) { // Only close if the direct click target is the overlay
+          if (event.target === fullscreenModal) {
             closeModal();
           }
         });
       }
 
-      // Add keyboard listener for Escape key to close modal
       document.addEventListener('keydown', (event) => {
-        if (fullscreenModal && event.key === 'Escape' && fullscreenModal.classList.contains('active')) { // Add null check
+        if (fullscreenModal && event.key === 'Escape' && fullscreenModal.classList.contains('active')) {
           closeModal();
         }
       });
 
-      // Marquee content duplication and animation setup for seamless loop
       const marqueeContentWrapper = document.querySelector('.marquee-container .marquee-content-wrapper');
       const originalMarqueeText = document.querySelector('.marquee-container .marquee-text');
 
       if (marqueeContentWrapper && originalMarqueeText) {
         const originalContent = originalMarqueeText.outerHTML;
-
-        // Clear existing content to prevent multiple duplications on re-run
         marqueeContentWrapper.innerHTML = '';
-
-        // Duplicate the content multiple times to ensure continuous flow
-        // A good rule of thumb is to duplicate enough times so the total content width
-        // is at least 2-3 times the container width.
-        // We'll start with 3 duplications for robustness.
         for (let i = 0; i < 3; i++) {
             marqueeContentWrapper.innerHTML += originalContent;
         }
 
-        // Use requestAnimationFrame to ensure layout is stable before measuring
         requestAnimationFrame(() => {
             const firstMarqueeTextElement = marqueeContentWrapper.firstElementChild;
             if (firstMarqueeTextElement) {
-                // Get the actual rendered width of one segment of the marquee text
                 const singleTextWidth = firstMarqueeTextElement.offsetWidth;
-
-                // Set the CSS custom properties for animation distance and speed
-                // The animation should translate by the exact width of one segment
                 marqueeContentWrapper.style.setProperty('--marquee-distance', `-${singleTextWidth}px`);
-                
-                // Calculate speed: 1 second per 150 pixels for a good balance of speed and readability
-                // Adjusted to 150 pixels per second for a good speed.
-                const pixelsPerSecond = 150; 
+                const pixelsPerSecond = 150;
                 const calculatedSpeed = singleTextWidth / pixelsPerSecond;
                 marqueeContentWrapper.style.setProperty('--marquee-speed', `${calculatedSpeed}s`);
-
-                // Re-apply animation to ensure it picks up new variables
-                marqueeContentWrapper.style.animation = 'none'; // Reset animation
-                void marqueeContentWrapper.offsetWidth; // Trigger reflow
+                marqueeContentWrapper.style.animation = 'none';
+                void marqueeContentWrapper.offsetWidth;
                 marqueeContentWrapper.style.animation = `marquee var(--marquee-speed) linear infinite`;
             }
         });
       }
 
-      // Explicitly play video on page load for better consistency
       const backgroundVideo = document.getElementById('backgroundVideo');
       if (backgroundVideo) {
           backgroundVideo.play().catch(error => {
               // Autoplay was prevented. This is common if video is not muted or user hasn't interacted.
               // console.log("Video autoplay prevented:", error);
-              // You might want to show a play button here if autoplay fails.
           });
       }
 
-      // Only call updateCartDisplay if the cart elements are present in the DOM
       if (cartOverlay) {
-        updateCartDisplay(); // Initialize cart display on page load
+        updateCartDisplay();
       }
     });
-  </script>
-
-  <!-- Shopify Buy Button Script - Placed at the end of body for performance -->
-  <script type="text/javascript">
-  /*<![CDATA[*/
-  (function () {
-    var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
-    if (window.ShopifyBuy) {
-      if (window.ShopifyBuy.UI) {
-        ShopifyBuyInit();
-      } else {
-        loadScript();
-      }
-    } else {
-      loadScript();
-    }
-    function loadScript() {
-      var script = document.createElement('script');
-      script.async = true;
-      script.src = scriptURL;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
-      script.onload = ShopifyBuyInit;
-    }
-    function ShopifyBuyInit() {
-      var client = ShopifyBuy.buildClient({
-        domain: 'awakencult.myshopify.com',
-        storefrontAccessToken: 'eab233c40ec30dfb41b9606b758144b8',
-      });
-      ui = ShopifyBuy.UI.onReady(client).then(function (ui) {
-        // Initialize the MCGA Cap product component
-        ui.createComponent('product', {
-          id: '7326365810791', // MCGA Cap Product ID
-          node: document.getElementById('product-component-1752606716841'),
-          moneyFormat: 'R%20%7B%7Bamount%7D%7D',
-          options: {
-            "product": {
-              "styles": {
-                "product": {
-                  "@media (min-width: 601px)": {
-                    "max-width": "100%", /* Ensure it fits within the product card */
-                    "margin-left": "0px",
-                    "margin-bottom": "0px"
-                  }
-                },
-                "button": {
-                  "background-color": "#c9544b", /* Will be overridden by custom CSS */
-                  ":hover": {
-                    "background-color": "#b54c44" /* Will be overridden by custom CSS */
-                  },
-                  ":focus": {
-                    "background-color": "#b54c44" /* Will be overridden by custom CSS */
-                  },
-                  "font-family": "Arial, sans-serif", /* Will be overridden by custom CSS */
-                  "border-radius": "0px"
-                }
-              },
-              "contents": {
-                "img": false,
-                "title": false,
-                "price": false
-              },
-              "text": {
-                "button": "Add to cart"
-              }
-            },
-            "productSet": {
-              "styles": {
-                "products": {
-                  "@media (min-width: 601px)": {
-                    "margin-left": "0px"
-                  }
-                }
-              }
-            },
-            "modalProduct": {
-              "contents": {
-                "img": false,
-                "imgWithCarousel": true
-              },
-              "styles": {
-                "product": {
-                  "@media (min-width: 601px)": {
-                    "max-width": "100%",
-                    "margin-left": "0px",
-                    "margin-bottom": "0px"
-                  }
-                },
-                "button": {
-                  "background-color": "#c9544b",
-                  ":hover": {
-                    "background-color": "#b54c44"
-                  },
-                  ":focus": {
-                    "background-color": "#b54c44"
-                  },
-                  "font-family": "Arial, sans-serif",
-                  "border-radius": "0px"
-                }
-              }
-            },
-            "option": {},
-            "cart": {
-              "styles": {
-                "button": {
-                  "background-color": "#c9544b",
-                  ":hover": {
-                    "background-color": "#b54c44"
-                  },
-                  ":focus": {
-                    "background-color": "#b54c44"
-                  },
-                  "font-family": "Arial, sans-serif",
-                  "border-radius": "0px"
-                }
-              }
-            },
-            "toggle": {
-              "styles": {
-                "toggle": {
-                  "background-color": "#c9544b",
-                  ":hover": {
-                    "background-color": "#b54c44"
-                  },
-                  ":focus": {
-                    "background-color": "#b54c44"
-                  },
-                  "font-family": "Arial, sans-serif"
-                }
-              }
-            }
-          },
-        });
-        // Note: For other products, you would repeat ui.createComponent with their specific IDs and nodes.
-        // Example for a placeholder product (if you had its actual Shopify ID and a corresponding div):
-        /*
-        ui.createComponent('product', {
-          id: 'YOUR_PRODUCT_ID_HERE', // Replace with actual Shopify Product ID
-          node: document.getElementById('product-component-placeholder-1'), // Replace with the ID of your placeholder div
-          moneyFormat: 'R%20%7B%7Bamount%7D%7D',
-          options: {
-            // ... same options as above, adjusted for the product if needed
-          }
-        });
-        */
-      });
-    }
-  })();
-  /*]]>*/
   </script>
 </body>
 </html>
