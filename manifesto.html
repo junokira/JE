@@ -266,27 +266,31 @@
         background-color: #f3f0e7; /* Same as body background */
         padding: 2rem 1rem; /* Adjust padding as needed */
         margin-top: 3rem; /* Add top margin to separate from manifesto */
+        font-family: 'Anton', sans-serif; /* Apply Anton font to all new content */
     }
 
     .manifesto-additional-content .grid {
         display: grid;
         grid-template-columns: 1fr; /* Default to single column for mobile */
         gap: 2rem; /* Gap between columns/rows */
-        max-width: 1280px; /* Match content section max-width */
+        max-width: 1280px; /* Max width for content */
         margin-left: auto;
         margin-right: auto;
     }
 
+    /* Adjust grid for desktop to ensure proper left-middle-right alignment */
     @media (min-width: 768px) { /* Tablet and up */
         .manifesto-additional-content .grid {
             grid-template-columns: repeat(3, 1fr); /* 3 columns for larger screens */
+            justify-items: center; /* Center items within their grid cells */
+            align-items: start; /* Align items to the start of their cells vertically */
         }
     }
 
     .manifesto-additional-content .col-item {
         display: flex;
         flex-direction: column;
-        align-items: center;
+        align-items: center; /* Center content horizontally within the column */
         text-align: center;
         position: relative; /* Make col-item a positioning context */
     }
@@ -295,15 +299,22 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start; /* Align children to the start (left) */
-        /* Increased padding-left and padding-top to move the entire group right and down */
-        padding-left: 220px; /* Adjusted to move further right */
-        padding-top: 150px; /* Adjusted to move further down */
         min-height: 250px; /* Ensure enough height for all content */
         width: 100%;
         box-sizing: border-box;
         position: relative; /* Make it a positioning context for absolute children */
+        max-width: 200px; /* Constrain the width of the rotated text block */
     }
 
+    /* Adjust the parent col-item for the left column to shift the entire block */
+    .manifesto-additional-content .col-item:nth-child(1) {
+        /* These margins will push the entire first column block */
+        margin-top: 100px; /* Adjusted margin-top to fine-tune vertical position */
+        margin-left: 100px; /* Adjusted margin-left to fine-tune horizontal position */
+        align-items: flex-start; /* Align content to the start within this specific column */
+    }
+
+    /* Specific styles for rotated text within the first column */
     .manifesto-additional-content .vertical-text-group p {
         transform: rotate(-90deg);
         white-space: nowrap;
@@ -311,35 +322,38 @@
         margin: 0;
         padding: 0;
         transform-origin: left center;
-        position: relative; /* Use relative positioning for flow */
-        left: 0; /* Reset left, controlled by padding on parent */
+        position: absolute; /* Use absolute positioning for precise control within the group */
         width: max-content;
         max-width: 150px; /* Control the effective height after rotation */
-        margin-bottom: 30px; /* Increased space between rotated lines to fix overlap */
     }
-    /* Specific adjustments for rotated lines using relative positioning */
-    /* These 'left' values are crucial for bringing the text into view */
+
+    /* Precise positioning for each rotated line relative to its rotated state */
     .manifesto-additional-content .vertical-text-group p:nth-child(1) {
-        left: -80px; /* Adjust horizontal position after rotation */
+        top: 0px; /* Vertical position in unrotated space */
+        left: -80px; /* Horizontal position in unrotated space (pulls text left after rotation) */
     }
     .manifesto-additional-content .vertical-text-group p:nth-child(2) {
+        top: 40px;
         left: -65px;
     }
     .manifesto-additional-content .vertical-text-group p:nth-child(3) {
+        top: 90px;
         left: -50px;
     }
     .manifesto-additional-content .vertical-text-group p:nth-child(4) {
+        top: 115px;
         left: -40px;
     }
     .manifesto-additional-content .vertical-text-group p:nth-child(5) {
+        top: 140px;
         left: -30px;
     }
 
     /* Positioning for the "STAND! EMBRACE THE TRUTH" text */
     .manifesto-additional-content .vertical-text-group .stand-embrace-text {
-        position: relative; /* Use relative positioning to keep it in flow */
-        margin-top: 40px; /* Increased space from the last rotated line */
-        left: -45px; /* Adjust to align with other STAND! text */
+        position: absolute; /* Absolute positioning within the group */
+        bottom: 0px; /* Align to the bottom of the group */
+        left: -45px; /* Adjust horizontal position */
         font-weight: 800; /* font-extrabold */
         font-size: 20px;
         line-height: 1;
@@ -348,6 +362,14 @@
         transform-origin: left center;
     }
 
+    /* Ensure center and right column items are centered */
+    .manifesto-additional-content .col-item:nth-child(2),
+    .manifesto-additional-content .col-item:nth-child(3),
+    .manifesto-additional-content .col-item:nth-child(5),
+    .manifesto-additional-content .col-item:nth-child(6) {
+        align-items: center; /* Center content horizontally */
+        text-align: center; /* Center text within the content */
+    }
 
     .manifesto-additional-content .center-text-group p {
         line-height: 1;
@@ -487,23 +509,23 @@
       <div class="col-item">
         <div class="vertical-text-group">
           <!-- Adjusted positioning for each rotated line -->
-          <p class="text-[10px] font-normal" style="left: -80px;">
+          <p class="text-[10px] font-normal" style="top: 0px; left: -80px;">
             WE ARE READY AND WILLING TO IGNITE
           </p>
-          <p class="font-extrabold text-[24px]" style="left: -65px;">
+          <p class="font-extrabold text-[24px]" style="top: 40px; left: -65px;">
             JUST BORN TO AWAKEN
           </p>
-          <p class="text-[10px] font-normal" style="left: -50px;">
+          <p class="text-[10px] font-normal" style="top: 90px; left: -50px;">
             TRUE COMPANIONSHIP
           </p>
-          <p class="text-[8px] font-normal" style="left: -40px;">
+          <p class="text-[8px] font-normal" style="top: 115px; left: -40px;">
             EVERYTHING BELONGS TO US
           </p>
-          <p class="text-[8px] font-normal" style="left: -30px;">
+          <p class="text-[8px] font-normal" style="top: 140px; left: -30px;">
             BECAUSE WE ARE AWARE, UNCHAINED, UNAPPREHENSIVE
           </p>
           <!-- This text is now positioned relative to its parent col-item, adjusting its bottom/left -->
-          <p class="font-extrabold text-[20px] stand-embrace-text" style="left: -45px;">
+          <p class="font-extrabold text-[20px] stand-embrace-text" style="bottom: 0px; left: -45px;">
             STAND!
             <br/>
             EMBRACE THE TRUTH
@@ -523,7 +545,7 @@
           WE ARE READY AND WILLING TO IGNITE,
         </p>
         <p class="font-extrabold text-[14px]">
-          AWAKEN
+          JUST BORN TO AWAKEN
         </p>
         <p class="text-[8px] font-normal max-w-[180px]">
           TRUE COMPANIONSHIP
@@ -532,7 +554,7 @@
           EVERYTHING BELONGS TO US
         </p>
         <p class="text-[8px] font-normal max-w-[180px]">
-          BECAUSE WE ARE AWAKE, UNCHAINED, UNAPPREHENSIVE
+          BECAUSE WE ARE AWARE, UNCHAINED, UNAPPREHENSIVE
         </p>
         <p class="font-extrabold text-[16px] mt-2">
           STAND!
@@ -558,16 +580,16 @@
           TO
         </p>
         <p class="font-extrabold text-[28px]">
-          WAKE UP
+          IGNITE
         </p>
         <p class="font-extrabold text-[20px]">
-          OPEN
+          JUST
         </p>
         <p class="font-extrabold text-[28px]">
-          YOUR
+          BORN
         </p>
         <p class="font-extrabold text-[20px]">
-          EYES
+          TO
         </p>
         <p class="font-extrabold text-[28px]">
           AWAKEN
@@ -589,7 +611,7 @@
           EMBRACE A SYMBOL, REFLECT IN SILENCE AND SECRECY
         </div>
         <div class="text-[8px] font-normal max-w-[140px] text-center">
-          RAISE A BANNER, RELEASE THE ENSLAVED, THE NEW WORLD AWAITS
+          RAISE A BANNER, RELEASE THE ENSLAVED, THE NEW DAWN AWAITS
         </div>
         <div class="text-[8px] font-extrabold max-w-[140px] text-center">
           A THOUSAND MILES LONG, TWO LIGHTYEARS DEEP
@@ -621,15 +643,15 @@
       <!-- Bottom Right -->
       <div class="col-item items-start">
         <p class="font-extrabold text-[16px]">
-          "NEW WORLD ORDER"
+          #12 "FOREVER AWAKENED"
         </p>
         <p class="font-extrabold text-[32px]">
           REVELATION
         </p>
         <div class="border-line relative" style="min-height: 160px;">
           <div class="absolute top-0 left-0 w-0.5 h-[80px] bg-black"></div>
-          <div class="absolute top-[80px] left: 0; width: 0.5px; height: 40px; border-bottom: 2px solid black;"></div>
-          <div class="absolute top-[120px] left: 0; width: 0.5px; height: 20px; border-bottom: 2px solid black;"></div>
+          <div class="absolute top-[80px] left: 0; width: 0.5px; height: 40px; border-b-2 border-black;"></div>
+          <div class="absolute top-[120px] left: 0; width: 0.5px; height: 20px; border-b-2 border-black;"></div>
           <div class="absolute top-[140px] left: 0; width: 0.5px; height: 20px; border-bottom: 2px solid black;"></div>
         </div>
         <p class="font-extrabold text-[12px]">
