@@ -39,7 +39,7 @@
       margin-right: auto;
     }
 
-    /* Header specific styles - Consistent with homepage header (without marquee) */
+    /* Header specific styles - Consistent with main site */
     header {
         background-color: #d94a44;
         display: flex;
@@ -295,6 +295,7 @@
         position: relative; /* Make col-item a positioning context */
     }
 
+    /* Desktop styles for vertical-text-group */
     .manifesto-additional-content .vertical-text-group {
         display: flex;
         flex-direction: column;
@@ -306,15 +307,16 @@
         max-width: 200px; /* Constrain the width of the rotated text block */
     }
 
-    /* Adjust the parent col-item for the left column to shift the entire block */
-    .manifesto-additional-content .col-item:nth-child(1) {
-        /* These margins will push the entire first column block */
-        margin-top: 100px; /* Adjusted margin-top to fine-tune vertical position */
-        margin-left: 100px; /* Adjusted margin-left to fine-tune horizontal position */
-        align-items: flex-start; /* Align content to the start within this specific column */
+    /* Adjust the parent col-item for the left column to shift the entire block on desktop */
+    @media (min-width: 768px) {
+      .manifesto-additional-content .col-item:nth-child(1) {
+          margin-top: 100px;
+          margin-left: 100px;
+          align-items: flex-start;
+      }
     }
 
-    /* Specific styles for rotated text within the first column */
+    /* Desktop styles for rotated text within the first column */
     .manifesto-additional-content .vertical-text-group p {
         transform: rotate(-90deg);
         white-space: nowrap;
@@ -322,45 +324,25 @@
         margin: 0;
         padding: 0;
         transform-origin: left center;
-        position: absolute; /* Use absolute positioning for precise control within the group */
+        position: absolute;
         width: max-content;
-        max-width: 150px; /* Control the effective height after rotation */
+        max-width: 150px;
     }
 
-    /* Precise positioning for each rotated line relative to its rotated state */
-    .manifesto-additional-content .vertical-text-group p:nth-child(1) {
-        top: 0px; /* Vertical position in unrotated space */
-        left: -80px; /* Horizontal position in unrotated space (pulls text left after rotation) */
-    }
-    .manifesto-additional-content .vertical-text-group p:nth-child(2) {
-        top: 40px;
-        left: -65px;
-    }
-    .manifesto-additional-content .vertical-text-group p:nth-child(3) {
-        top: 90px;
-        left: -50px;
-    }
-    .manifesto-additional-content .vertical-text-group p:nth-child(4) {
-        top: 115px;
-        left: -40px;
-    }
-    .manifesto-additional-content .vertical-text-group p:nth-child(5) {
-        top: 140px;
-        left: -30px;
-    }
-
-    /* Positioning for the "STAND! EMBRACE THE TRUTH" text */
+    /* Precise positioning for each rotated line relative to its rotated state on desktop */
+    .manifesto-additional-content .vertical-text-group p:nth-child(1) { top: 0px; left: -80px; }
+    .manifesto-additional-content .vertical-text-group p:nth-child(2) { top: 40px; left: -65px; }
+    .manifesto-additional-content .vertical-text-group p:nth-child(3) { top: 90px; left: -50px; }
+    .manifesto-additional-content .vertical-text-group p:nth-child(4) { top: 115px; left: -40px; }
+    .manifesto-additional-content .vertical-text-group p:nth-child(5) { top: 140px; left: -30px; }
     .manifesto-additional-content .vertical-text-group .stand-embrace-text {
-        position: absolute; /* Absolute positioning within the group */
-        bottom: 0px; /* Align to the bottom of the group */
-        left: -45px; /* Adjust horizontal position */
-        font-weight: 800; /* font-extrabold */
+        bottom: 0px;
+        left: -45px;
+        font-weight: 800;
         font-size: 20px;
         line-height: 1;
-        white-space: nowrap;
-        transform: rotate(-90deg);
-        transform-origin: left center;
     }
+
 
     /* Ensure center and right column items are centered */
     .manifesto-additional-content .col-item:nth-child(2),
@@ -432,6 +414,72 @@
         width: 2px;
         height: 20px;
         border-bottom: 2px solid black;
+    }
+
+    /* Mobile specific adjustments for the first column and rotated text */
+    @media (max-width: 767px) {
+      /* The parent column item for the rotated text */
+      .manifesto-additional-content .col-item:nth-child(1) {
+          margin: 0; /* Reset desktop margins */
+          width: 100%; /* Take full width */
+          display: flex; /* Enable flexbox */
+          justify-content: center; /* Center horizontally */
+          align-items: center; /* Center vertically */
+          min-height: 450px; /* Ample space for the rotated block */
+          padding: 2rem 0; /* Add some vertical padding */
+      }
+
+      /* The container for the rotated text block */
+      .manifesto-additional-content .vertical-text-group {
+          padding: 0; /* Remove any conflicting padding */
+          /* Define dimensions for the container *before* rotation */
+          /* These dimensions will swap when rotated - width becomes effective height, height becomes effective width */
+          width: 400px;  /* This will be the effective height after rotation */
+          height: 300px; /* This will be the effective width after rotation */
+          display: flex;
+          flex-direction: column;
+          justify-content: center; /* Center content vertically within this block (before rotation) */
+          align-items: center; /* Center content horizontally within this block (before rotation) */
+          position: relative; /* Keep relative for containing the rotated content */
+          overflow: visible; /* Ensure nothing is clipped */
+
+          /* Apply rotation to the entire container itself */
+          transform: rotate(-90deg);
+          transform-origin: center center; /* Rotate around its center */
+      }
+
+      /* Individual p tags within the rotated container */
+      .manifesto-additional-content .vertical-text-group p {
+          position: static; /* Remove absolute positioning on mobile */
+          transform: none; /* Remove individual rotation on mobile */
+          white-space: nowrap;
+          line-height: 1.2; /* Add some line height for spacing */
+          margin: 0.5rem 0; /* Add vertical margin between lines */
+          padding: 0;
+          text-align: center; /* Center text within each p tag */
+      }
+
+      /* Specific styles for the "STAND! EMBRACE THE TRUTH" text on mobile */
+      .manifesto-additional-content .vertical-text-group .stand-embrace-text {
+          font-weight: 800;
+          font-size: 20px;
+          line-height: 1.2;
+          margin-top: 1rem; /* More space above this prominent text */
+      }
+
+      /* Ensure the bottom middle image is truly centered on mobile */
+      .manifesto-additional-content .col-item:nth-child(5) img {
+          max-width: 80%;
+          width: auto;
+          margin-left: auto;
+          margin-right: auto;
+      }
+      /* Ensure the entire bottom-middle col-item is centered on mobile */
+      .manifesto-additional-content .col-item:nth-child(5) {
+          width: 100%;
+          align-items: center;
+          text-align: center;
+      }
     }
 
   </style>
@@ -508,24 +556,24 @@
       <!-- Top Left Vertical Text -->
       <div class="col-item">
         <div class="vertical-text-group">
-          <!-- Adjusted positioning for each rotated line -->
-          <p class="text-[10px] font-normal" style="top: 0px; left: -80px;">
+          <!-- Individual p tags no longer have absolute positioning on mobile -->
+          <p class="text-[10px] font-normal">
             WE ARE READY AND WILLING TO IGNITE
           </p>
-          <p class="font-extrabold text-[24px]" style="top: 40px; left: -65px;">
+          <p class="font-extrabold text-[24px]">
             JUST BORN TO AWAKEN
           </p>
-          <p class="text-[10px] font-normal" style="top: 90px; left: -50px;">
+          <p class="text-[10px] font-normal">
             TRUE COMPANIONSHIP
           </p>
-          <p class="text-[8px] font-normal" style="top: 115px; left: -40px;">
+          <p class="text-[8px] font-normal">
             EVERYTHING BELONGS TO US
           </p>
-          <p class="text-[8px] font-normal" style="top: 140px; left: -30px;">
+          <p class="text-[8px] font-normal">
             BECAUSE WE ARE AWARE, UNCHAINED, UNAPPREHENSIVE
           </p>
-          <!-- This text is now positioned relative to its parent col-item, adjusting its bottom/left -->
-          <p class="font-extrabold text-[20px] stand-embrace-text" style="bottom: 0px; left: -45px;">
+          <!-- This text is now positioned by flexbox within the rotated group -->
+          <p class="font-extrabold text-[20px] stand-embrace-text">
             STAND!
             <br/>
             EMBRACE THE TRUTH
@@ -598,37 +646,37 @@
       <!-- Bottom Left -->
       <div class="col-item">
         <img alt="AWAKEN Symbol" class="w-24 h-24" height="100" src="https://i.ibb.co/M5xjjWqM/3rd-eye-smiley.png" width="100"/>
-        <div class="text-[8px] font-extrabold text-center max-w-[140px]">
+        <div class="text-[12px] font-extrabold text-center max-w-[180px]"> <!-- Increased font size -->
           STAND WITH
           <span class="font-normal">
           [AND REJOICE] // AWAKEN
           </span>
         </div>
-        <div class="text-[8px] font-normal max-w-[140px] text-center">
+        <div class="text-[10px] font-normal max-w-[180px] text-center"> <!-- Increased font size -->
           SO MANY TRUTHS TO UNCOVER SO MANY MINDS TO FREE
         </div>
-        <div class="text-[8px] font-normal max-w-[140px] text-center">
+        <div class="text-[10px] font-normal max-w-[180px] text-center"> <!-- Increased font size -->
           EMBRACE A SYMBOL, REFLECT IN SILENCE AND SECRECY
         </div>
-        <div class="text-[8px] font-normal max-w-[140px] text-center">
+        <div class="text-[10px] font-normal max-w-[180px] text-center"> <!-- Increased font size -->
           RAISE A BANNER, RELEASE THE ENSLAVED, THE NEW DAWN AWAITS
         </div>
-        <div class="text-[8px] font-extrabold max-w-[140px] text-center">
+        <div class="text-[10px] font-extrabold max-w-[180px] text-center"> <!-- Increased font size -->
           A THOUSAND MILES LONG, TWO LIGHTYEARS DEEP
         </div>
-        <div class="text-[8px] font-normal max-w-[140px] text-center">
+        <div class="text-[10px] font-normal max-w-[180px] text-center"> <!-- Increased font size -->
           COULDN'T BREAK US, TRUTH EMERGES STRONG. MOUNTAINS KEEP BACK DRAGONIC WINGS AS CALMLY AS POSSIBLE, AS CALMLY AS
         </div>
-        <div class="text-[8px] font-normal max-w-[140px] text-center">
+        <div class="text-[10px] font-normal max-w-[180px] text-center"> <!-- Increased font size -->
           POSSIBLE ...
         </div>
         <img alt="AWAKEN Hand Symbol" class="w-16 h-20 mx-auto" height="80" src="https://i.ibb.co/fVC0cbZ6/snsb.png" width="60"/>
-        <div class="text-[8px] font-extrabold max-w-[140px] text-center">
+        <div class="text-[10px] font-extrabold max-w-[180px] text-center"> <!-- Increased font size -->
           UNYIELDING RESISTANCE ICONIC TRUTH DEVOTED VIGILANCE NATURE, NATURE, NATURE SOME GREAT REWARD CODE OF AWAKENING
         </div>
       </div>
       <!-- Bottom Center -->
-      <div class="col-item items-start">
+      <div class="col-item">
         <p class="font-extrabold text-[28px]">
           THE DAY IS HERE...
         </p>
@@ -638,7 +686,7 @@
         <p class="font-extrabold text-[28px]">
           THE DAY IS HERE...
         </p>
-        <img alt="AWAKEN Collective" class="w-full" height="120" src="https://i.ibb.co/DPKd5pY6/jhbhjb.png" width="220"/>
+        <img alt="AWAKEN Collective" class="max-w-xs mx-auto" height="120" src="https://i.ibb.co/DPKd5pY6/jhbhjb.png" width="220"/>
       </div>
       <!-- Bottom Right -->
       <div class="col-item items-start">
