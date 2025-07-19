@@ -158,24 +158,7 @@
       margin: 0 auto;
     }
 
-    /* New: Image Grid below hero text (on black background) - Adjusted for mobile */
-    .underground-market-image-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr); /* Always 3 columns */
-      gap: 0; /* No gap between images */
-      padding: 0 0.5rem; /* Horizontal padding */
-      width: 100%;
-      background-color: black; /* Black background for this section */
-      box-sizing: border-box; /* Include padding in width */
-    }
-    .underground-market-image-grid img {
-      width: 100%;
-      height: auto;
-      display: block; /* Remove extra space below image */
-      object-fit: cover; /* Ensure images cover the area */
-      flex-shrink: 0; /* Prevent images from shrinking */
-    }
-
+    /* Product Grid Section */
     .product-grid-section {
       padding-top: 3rem;
     }
@@ -585,7 +568,6 @@
     }
     .cover-wide-shut .feature-list {
         font-family: 'Roboto Condensed', sans-serif;
-        font-size: 0.75rem;
         list-style: none;
         padding: 0;
         margin: 0;
@@ -675,6 +657,9 @@
       font-size: 0.75rem;
       cursor: pointer;
       border-radius: 0; /* Sharp corners */
+    }
+    .cart-item-remove:hover {
+      background-color: #b92a1e;
     }
     .cart-summary {
       padding: 1rem;
@@ -891,10 +876,10 @@
   </section>
 
   <!-- New Image Grid below Hero Section (on black background) -->
-  <section class="underground-market-image-grid">
-    <img src="https://i.ibb.co/5x4jkM92/Chat-GPT-Image-Jul-15-2025-at-05-05-06-PM.webp" alt="Market Image 1" />
-    <img src="https://i.ibb.co/Jw5NW7yv/Chat-GPT-Image-Jul-15-2025-at-05-05-18-PM.webp" alt="Market Image 2" />
-    <img src="https://i.ibb.co/bjQJDRVq/bully.webp" alt="Market Image 3" />
+  <section class="grid grid-cols-1 lg:grid-cols-3 gap-0 px-2 bg-black w-full box-border">
+    <img src="https://i.ibb.co/5x4jkM92/Chat-GPT-Image-Jul-15-2025-at-05-05-06-PM.webp" alt="Market Image 1" class="hidden lg:block w-full h-auto object-cover flex-shrink-0" />
+    <img src="https://i.ibb.co/Jw5NW7yv/Chat-GPT-Image-Jul-15-2025-at-05-05-18-PM.webp" alt="Market Image 2" class="hidden lg:block w-full h-auto object-cover flex-shrink-0" />
+    <img src="https://i.ibb.co/bjQJDRVq/bully.webp" alt="Market Image 3" class="block w-full h-auto object-cover flex-shrink-0" />
   </section>
 
   <!-- Product Grid Section -->
