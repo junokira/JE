@@ -166,7 +166,6 @@
     .product-detail-image {
       max-width: 100%;
       height: auto;
-      /* Removed border: 1px solid #ccc; */
       margin-bottom: 1.5rem; /* Space below image on mobile */
     }
 
@@ -201,7 +200,6 @@
       border-color: #d94a44;
       box-shadow: 0 0 5px rgba(217, 74, 68, 0.5);
     }
-
 
     .product-detail-title {
       font-family: 'Anton', sans-serif;
@@ -304,6 +302,11 @@
       background-color: #fff;
       text-align: left;
       border-radius: 0; /* Sharp corners */
+      display: flex; /* Added for vertical centering of button */
+      flex-direction: column; /* Stack content vertically */
+      justify-content: space-between; /* Push button to bottom */
+      align-items: stretch; /* Ensure items stretch to fill height */
+      height: 100%; /* Ensure all cards have consistent height */
     }
     .related-article-card img {
       width: 100%;
@@ -315,12 +318,35 @@
       font-family: 'Roboto Slab', serif;
       font-size: 1.2rem;
       font-weight: bold;
-      margin-bottom: 0.5rem;
+      margin-top: 0.5rem; /* Added margin for consistency */
+      margin-bottom: 0.25rem; /* Adjusted margin for consistency */
     }
     .related-article-card p {
       font-size: 0.9rem;
       line-height: 1.4;
       color: #555;
+      flex-grow: 1; /* Allow description to take available space */
+      margin-bottom: 0.75rem; /* Added margin for consistency */
+    }
+    .related-article-card .view-artifact-button {
+      background-color: black;
+      color: white;
+      padding: 0.6rem 1.2rem; /* Adjusted padding */
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 0.8rem; /* Adjusted font size */
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      display: inline-block; /* Make it behave like a button */
+      margin-top: auto; /* Push button to bottom */
+      align-self: center; /* Center the button within the flex container */
+      width: calc(100% - 2rem); /* Adjusted to account for card padding */
+      max-width: 150px; /* Max width for consistency */
+      text-align: center; /* Center text within button */
+    }
+    .related-article-card .view-artifact-button:hover {
+      background-color: #333;
     }
 
     /* Cart Overlay - Consistent with main site */
@@ -398,6 +424,9 @@
       font-size: 0.75rem;
       cursor: pointer;
       border-radius: 0; /* Sharp corners */
+    }
+    .cart-item-remove:hover {
+      background-color: #b92a1e;
     }
     .cart-summary {
       padding: 1rem;
@@ -590,8 +619,8 @@
         <a href="shop.html">Shop</a>
         <a href="manifesto.html">Manifesto</a>
         <a href="join-us.html">Join Us</a>
-        <a href="index.html#about">About</a>
         <a href="archives.html">Archive</a>
+        <a href="index.html#about">About</a>
         <div class="cart-icon-container" onclick="toggleCart()">
           <i class="fas fa-shopping-cart"></i>
           <span class="cart-count" id="cart-count">0</span>
@@ -639,24 +668,27 @@
       <div class="related-articles-section w-full">
         <h2>More Dispatches From The Market</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div class="related-article-card">
-            <img src="https://i.ibb.co/GvhVTBTc/MCGA-CAP.webp" alt="Related Product 1" />
+          <!-- Related Product 1: MCGA Cap -->
+          <a href="product-detail.html?id=p6" class="related-article-card block no-underline text-black">
+            <img src="https://i.ibb.co/GvhVTBTc/MCGA-CAP.webp" alt="MCGA Cap" />
             <h3>The Cap of Conformity</h3>
             <p>A subtle nod to the movement, perfect for blending in while standing out to those who know.</p>
-            <button class="bg-black text-white px-4 py-2 text-sm mt-2 hover:bg-gray-800" onclick="window.location.href='product-detail.html?id=p6'">View Artifact</button>
-          </div>
-          <div class="related-article-card">
-            <img src="https://i.ibb.co/V0FTWqC1/oberyyy.webp" alt="Related Product 2" />
+            <span class="view-artifact-button">View Artifact</span>
+          </a>
+          <!-- Related Product 2: Third Eye Balaclava -->
+          <a href="product-detail.html?id=p5" class="related-article-card block no-underline text-black">
+            <img src="https://i.ibb.co/V0FTWqC1/oberyyy.webp" alt="Third Eye Balaclava" />
             <h3>The Veil of Anonymity</h3>
             <p>For those times when the truth must be spoken, but your identity must remain a mystery.</p>
-            <button class="bg-black text-white px-4 py-2 text-sm mt-2 hover:bg-gray-800" onclick="window.location.href='product-detail.html?id=p5'">View Artifact</button>
-          </div>
-          <div class="related-article-card">
-            <img src="https://i.ibb.co/JFyXsdVv/vzn-jacket.webp" alt="Related Product 3" />
+            <span class="view-artifact-button">View Artifact</span>
+          </a>
+          <!-- Related Product 3: Vision Jacket -->
+          <a href="product-detail.html?id=p4" class="related-article-card block no-underline text-black">
+            <img src="https://i.ibb.co/JFyXsdVv/vzn-jacket.webp" alt="Vision Jacket" />
             <h3>The Visionary's Garb</h3>
             <p>Embody the future. This piece is for those who see beyond the immediate, into the true design.</p>
-            <button class="bg-black text-white px-4 py-2 text-sm mt-2 hover:bg-gray-800" onclick="window.location.href='product-detail.html?id=p4'">View Artifact</button>
-          </div>
+            <span class="view-artifact-button">View Artifact</span>
+          </a>
         </div>
       </div>
     </div>
@@ -691,7 +723,10 @@
   </footer>
 
   <script>
-    // Product Data (duplicated for simplicity, in a real app this would be fetched or global)
+    // Product Data with Shopify Variant IDs
+    // IMPORTANT: Replace the 'shopifyVariantId' values with your actual Shopify product variant IDs.
+    // You can find these in your Shopify Admin by going to Products, clicking a product,
+    // and then then going to the variant details. The ID will be in the URL.
     const products = [
       {
         id: 'p1',
@@ -700,12 +735,13 @@
         image: 'https://i.ibb.co/twNrP2xF/XTCYYYY.webp',
         additionalImages: [
           'https://i.ibb.co/twNrP2xF/XTCYYYY.webp',
-          'https://i.ibb.co/JRsBZr2d/BURN-BALACLAVAAA.webp', /* Example additional image */
-          'https://i.ibb.co/mrTy6Mhw/fake-news-hoodie.webp' /* Another example */
+          'https://i.ibb.co/JRsBZr2d/BURN-BALACLAVAAA.webp',
+          'https://i.ibb.co/mrTy6Mhw/fake-news-hoodie.webp'
         ],
         description: 'Embrace the euphoria of truth with the XTCY Tee. Crafted for comfort and clarity, this garment is a statement of your awakened state. Limited run for true believers.',
         sizes: ['S', 'M', 'L', 'XL'],
-        lore: "Worn by the first initiates during the Great Revelation, this tee symbolizes the initial rush of clarity."
+        lore: "Worn by the first initiates during the Great Revelation, this tee symbolizes the initial rush of clarity.",
+        shopifyVariantId: '44796300501273'
       },
       {
         id: 'p2',
@@ -719,13 +755,14 @@
         ],
         description: 'In an era saturated with manufactured narratives, the "Fake News" Hoodie stands as a defiant emblem of critical thought. Crafted for comfort in the coming storm, its bold declaration is a shield against deception and a beacon for those who question. Join the ranks of the discerning.',
         sizes: ['S', 'M', 'L', 'XL', 'XXL'],
-        lore: "A staple among the truth-seekers, this hoodie was first seen during the 'Information Purge' of 2023."
+        lore: "A staple among the truth-seekers, this hoodie was first seen during the 'Information Purge' of 2023.",
+        shopifyVariantId: '44796300468512'
       },
       {
         id: 'p3',
         name: 'Awareness Tee',
         price: 120,
-        image: 'https://i.ibb.co/JRsBZr2d/BURN-BALACLAVAAA.webp',
+        image: 'https://i.ibb.co/JRsBZr2d/BURN-BALACLAVAAA.webp', /* Updated image for p3 */
         additionalImages: [
           'https://i.ibb.co/JRsBZr2d/BURN-BALACLAVAAA.webp',
           'https://i.ibb.co/twNrP2xF/XTCYYYY.webp',
@@ -733,7 +770,8 @@
         ],
         description: 'The Awareness Tee is more than fabric; it\'s a canvas for your expanded consciousness. Featuring intricate designs that hint at deeper truths, it invites inquiry and recognition from fellow awakened souls.',
         sizes: ['S', 'M', 'L'],
-        lore: "Rumored to be inspired by ancient glyphs discovered in the 'Forbidden Archives', promoting heightened awareness."
+        lore: "Rumored to be inspired by ancient glyphs discovered in the 'Forbidden Archives', promoting heightened awareness.",
+        shopifyVariantId: '44796300599576'
       },
       {
         id: 'p4',
@@ -747,7 +785,8 @@
         ],
         description: 'Experience clarity with the Visions Hoodie. Its unique design represents the unfolding of hidden realities, offering warmth and comfort as you navigate the complexities of the awakened world.',
         sizes: ['M', 'L', 'XL', 'XXL'],
-        lore: "This design appeared to our founder in a profound vision, depicting the layers of reality peeling away."
+        lore: "This design appeared to our founder in a profound vision, depicting the layers of reality peeling away.",
+        shopifyVariantId: '44796300534034'
       },
       {
         id: 'p5',
@@ -755,13 +794,15 @@
         price: 75,
         image: 'https://i.ibb.co/V0FTWqC1/oberyyy.webp',
         additionalImages: [
-          'https://i.ibb.co/vxWt75mW/green-BALLY.webp',
+          'https://i.ibb.co/V0FTWqC1/oberyyy.webp',
+          'https://i.ibb.co/vxWt75mW/green-BALLY.webp', /* Added green balaclava as an additional image for p5 */
           'https://i.ibb.co/GvhVTBTc/MCGA-CAP.webp',
           'https://i.ibb.co/JRsBZr2d/BURN-BALACLAVAAA.webp'
         ],
-        description: 'Conceal your identity, reveal your true self. The Burn Balaclava is a symbol of rebellion against the system, a statement that you are ready to shed the old world and embrace the new.',
+        description: 'Conceal your identity, reveal your true self. The Third Eye Balaclava is a symbol of rebellion against the system, a statement that you are ready to shed the old world and embrace the new.',
         sizes: ['One Size'],
-        lore: "First donned by the anonymous 'Shadow Collective' during their silent protests against the illusion."
+        lore: "First donned by the anonymous 'Shadow Collective' during their silent protests against the illusion.",
+        shopifyVariantId: '44796300566805'
       },
       {
         id: 'p6',
@@ -775,70 +816,99 @@
         ],
         description: 'Make Cults Great Again. This cap is a bold declaration, a nod to the resurgence of true belief and collective action. Wear it proudly as a member of the AWAKEN movement.',
         sizes: ['One Size'],
-        lore: "A rallying cry from the early days of the movement, repurposed for the modern awakened."
+        lore: "A rallying cry from the early days of the movement, repurposed for the modern awakened.",
+        shopifyVariantId: '44796300435751'
       },
-      {
-                id: 'p6',
-        name: 'Third Eye Balaclava',
-        price: 120,
-        image: 'https://i.ibb.co/vxWt75mW/green-BALLY.webp',
-        description: 'The Awareness Tee is more than fabric; it\'s a canvas for your expanded consciousness. Featuring intricate designs that hint at deeper truths, it invites inquiry and recognition from fellow awakened souls.',
-        sizes: ['S', 'M', 'L'],
-        lore: "Rumored to be inspired by ancient glyphs discovered in the 'Forbidden Archives', promoting heightened awareness."
-      },
+      // Additional products with dummy Shopify IDs
       {
         id: 'p7',
         name: 'Exclusive Baby Tee',
         price: 90,
         image: 'https://i.ibb.co/ZpfbtRZT/aeaken-exclusive.png',
-        description: 'Carry your revelations with you. This durable backpack is designed for the journey of truth-seeking, with hidden compartments for your most sacred findings.',
-        sizes: ['One Size'],
-        lore: "Equipped for the long road ahead, used by our scouts in their expeditions for ancient knowledge."
+        additionalImages: [
+          'https://i.ibb.co/ZpfbtRZT/aeaken-exclusive.png',
+          'https://placehold.co/300x300/C0C0C0/FFF?text=TEE+2',
+          'https://placehold.co/300x300/D0D0D0/FFF?text=TEE+3'
+        ],
+        description: 'An exclusive artifact for the inner circle. Limited edition, imbued with subtle energies of awakening.',
+        sizes: ['XS', 'S', 'M'],
+        lore: "Reserved for those who have passed the second initiation, a mark of true dedication.",
+        shopifyVariantId: '44796300632347'
       },
       {
         id: 'p8',
         name: 'Shook Tee',
         price: 40,
         image: 'https://i.ibb.co/qM5H0KXG/shook-final.webp',
-        description: 'Protect your hands as you dismantle the old world. These gloves offer comfort and grip, perfect for handling the delicate threads of reality.',
+        additionalImages: [
+          'https://i.ibb.co/qM5H0KXG/shook-final.webp',
+          'https://placehold.co/300x300/E0E0E0/FFF?text=SHOOK+2',
+          'https://placehold.co/300x300/F0F0F0/FFF?text=SHOOK+3'
+        ],
+        description: 'For those moments when the truth hits hard. A comfortable tee that expresses your state of mind.',
         sizes: ['S', 'M', 'L'],
-        lore: "Worn by code-breakers and truth-weavers, essential for intricate work in the digital realm."
+        lore: "A popular design after the 'Great Revelation' when many were truly shook by the truth.",
+        shopifyVariantId: '44796300665118'
       },
       {
         id: 'p9',
         name: 'NWO Tank',
         price: 25,
         image: 'https://i.ibb.co/60JYHjrZ/tank.webp',
-        description: 'Start your day with a dose of truth. This mug is inscribed with ancient symbols of awakening, perfect for your morning rituals.',
-        sizes: ['One Size'],
-        lore: "Used in the daily ceremonies of clarity, helping initiates focus their intentions."
+        additionalImages: [
+          'https://i.ibb.co/60JYHjrZ/tank.webp',
+          'https://placehold.co/300x300/A0A0A0/FFF?text=TANK+2',
+          'https://placehold.co/300x300/B0B0B0/FFF?text=TANK+3'
+        ],
+        description: 'Embrace the New World Order, literally. A comfortable tank top for warmer climates or layered looks.',
+        sizes: ['S', 'M', 'L', 'XL'],
+        lore: "Favored by operatives in warmer sectors, allowing for maximum mobility and subtle messaging.",
+        shopifyVariantId: '44796300697889'
       },
       {
         id: 'p10',
         name: 'Combat Pants',
         price: 60,
         image: 'https://i.ibb.co/kgfzBRBr/pants.png',
-        description: 'See the world as it truly is. These glasses are designed to cut through the static and reveal the hidden patterns of control.',
-        sizes: ['One Size'],
-        lore: "Engineered by our perception specialists to aid in the discernment of true reality."
+        additionalImages: [
+          'https://i.ibb.co/kgfzBRBr/pants.png',
+          'https://placehold.co/300x300/C0C0C0/FFF?text=PANTS+2',
+          'https://placehold.co/300x300/D0D0D0/FFF?text=PANTS+3'
+        ],
+        description: 'Durable and versatile, designed for the urban explorer and truth-seeker. Ready for any mission.',
+        sizes: ['28', '30', '32', '34', '36'],
+        lore: "Standard issue for reconnaissance teams, built to withstand the rigors of uncovering hidden truths.",
+        shopifyVariantId: '44796300730660'
       },
       {
         id: 'p11',
         name: 'Truth Serum Vial',
         price: 100,
-        image: 'https://i.ibb.co/XZH1pMxf/poncho-2.webp',
+        image: 'https://i.ibb.co/XZH1pMxf/poncho-2.webp', /* Keeping this image, but noting it looks like a poncho */
+        additionalImages: [
+          'https://i.ibb.co/XZH1pMxf/poncho-2.webp',
+          'https://placehold.co/300x300/E0E0E0/FFF?text=VIAL+2',
+          'https://placehold.co/300x300/F0F0F0/FFF?text=VIAL+3'
+        ],
         description: 'A potent concoction designed to unlock dormant memories and accelerate your awakening. Use with caution.',
         sizes: ['One Size'],
-        lore: "A rare elixir, distilled from the tears of forgotten prophets and the essence of pure truth."
+        lore: "A rare elixir, distilled from the tears of forgotten prophets and the essence of pure truth.",
+        shopifyVariantId: '44796300763431'
       },
       {
         id: 'p12',
         name: 'Ameen Hoodie',
         price: 85,
         image: 'https://i.ibb.co/CfvwxPw/ameen-hoodie-sand.png',
-        description: 'Navigate the labyrinth of perception. This compass points not to cardinal directions, but to the true north of your inner being.',
-        sizes: ['One Size'],
-        lore: "An ancient artifact, rediscovered and re-calibrated to guide the awakened through the shifting landscapes of reality."
+        additionalImages: [
+          'https://i.ibb.co/CfvwxPw/ameen-hoodie-sand.png',
+          'https://placehold.co/300x300/A0A0A0/FFF?text=HOODIE+2',
+          'https://placehold.co/300x300/B0B0B0/FFF?text=HOODIE+3'
+        ],
+        description: 'A comfortable and stylish hoodie, perfect for those cool nights spent contemplating the universe and the path to awakening.',
+        sizes: ['S', 'M', 'L', 'XL'],
+        lore: "Named after a revered elder who guided many initiates through their initial awakening, embodying comfort and wisdom.",
+        shopifyVariantId: '44796300796202'
       }
     ];
 
@@ -921,16 +991,21 @@
         }, 3000); // Disappear after 3 seconds
     }
 
-
+    // Function to proceed to Shopify checkout
     function proceedToCheckout() {
-      if (cart.length > 0) {
-        showCustomAlert('Proceeding to checkout! Your artifacts are on their way to awaken you further.');
-        cart = []; // Clear cart after "checkout"
-        updateCartDisplay();
-        toggleCart(); // Close cart
-      } else {
+      if (cart.length === 0) {
         showCustomAlert('Your cart is empty. Please add some artifacts before checking out.');
+        return;
       }
+
+      const shopifyStoreDomain = 'shop.awakencult.com'; // Your Shopify store domain
+      const cartItemsForShopify = cart
+        .map(item => `updates[]=${item.shopifyVariantId}:${item.quantity}`)
+        .join('&');
+
+      // Redirect to Shopify's cart page with items pre-filled
+      const checkoutUrl = `https://${shopifyStoreDomain}/cart?${cartItemsForShopify}`;
+      window.location.href = checkoutUrl;
     }
 
     // Product Detail Page Logic
@@ -963,45 +1038,48 @@
 
         // Populate thumbnail gallery
         thumbnailGallery.innerHTML = ''; // Clear existing thumbnails
-        product.additionalImages.forEach(imgSrc => {
-          const thumb = document.createElement('img');
-          thumb.src = imgSrc;
-          thumb.alt = `${product.name} thumbnail`;
-          thumb.classList.add('thumbnail');
-          thumb.addEventListener('click', () => {
-            mainProductImage.src = imgSrc;
-            // Remove active class from all thumbnails
-            Array.from(thumbnailGallery.children).forEach(t => t.classList.remove('active'));
-            // Add active class to clicked thumbnail
-            thumb.classList.add('active');
-          });
-          thumbnailGallery.appendChild(thumb);
-        });
-        // Set the first thumbnail as active by default
-        if (thumbnailGallery.firstElementChild) {
-          thumbnailGallery.firstElementChild.classList.add('active');
+        if (product.additionalImages) {
+            product.additionalImages.forEach(imgSrc => {
+              const thumb = document.createElement('img');
+              thumb.src = imgSrc;
+              thumb.alt = `${product.name} thumbnail`;
+              thumb.classList.add('thumbnail');
+              thumb.addEventListener('click', () => {
+                mainProductImage.src = imgSrc;
+                // Remove active class from all thumbnails
+                Array.from(thumbnailGallery.children).forEach(t => t.classList.remove('active'));
+                // Add active class to clicked thumbnail
+                thumb.classList.add('active');
+              });
+              thumbnailGallery.appendChild(thumb);
+            });
+            // Set the first thumbnail as active by default
+            if (thumbnailGallery.firstElementChild) {
+              thumbnailGallery.firstElementChild.classList.add('active');
+            }
         }
-
 
         document.getElementById('add-to-cart-btn').addEventListener('click', () => {
           const selectedSize = sizeSelect.value;
           const quantity = parseInt(document.getElementById('product-quantity').value);
 
+          // Add to local cart only
           const existingItemIndex = cart.findIndex(item =>
-            item.id === product.id && item.size === selectedSize
+              item.id === product.id && item.size === selectedSize
           );
 
           if (existingItemIndex > -1) {
-            cart[existingItemIndex].quantity += quantity;
+              cart[existingItemIndex].quantity += quantity;
           } else {
-            cart.push({
-              id: product.id,
-              name: product.name,
-              price: product.price,
-              image: product.image,
-              size: selectedSize,
-              quantity: quantity
-            });
+              cart.push({
+                  id: product.id,
+                  name: product.name,
+                  price: product.price,
+                  image: product.image,
+                  size: selectedSize,
+                  quantity: quantity,
+                  shopifyVariantId: product.shopifyVariantId // Keep Shopify ID for checkout
+              });
           }
           updateCartDisplay();
           showCustomAlert(`${quantity} x ${product.name} (${selectedSize}) added to your cart!`);
