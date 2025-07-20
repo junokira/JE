@@ -231,7 +231,7 @@
     }
 
 
-    .product-card .view-artifact-btn {
+    .product-card .add-to-cart-btn {
       background-color: black; /* Matches homepage */
       color: white; /* Matches homepage */
       padding: 0.5rem 1rem; /* Matches homepage */
@@ -246,7 +246,7 @@
       margin: 0.5rem auto 0 auto; /* Center button and add top margin - Matches homepage */
       display: block; /* Ensure it takes full width of its container - Matches homepage */
     }
-    .product-card .view-artifact-btn:hover {
+    .product-card .add-to-cart-btn:hover {
       background-color: #333; /* Matches homepage */
     }
 
@@ -788,7 +788,7 @@
         font-size: 1rem; /* Matches homepage .shop-item p font size */
         margin-bottom: 0.5rem; /* Adjusted margin */
       }
-      .product-card .view-artifact-btn {
+      .product-card .add-to-cart-btn {
         font-size: 0.9rem; /* Matches homepage button font size */
         padding: 0.4rem 1rem; /* Matches homepage button padding */
         width: fit-content; /* Make button width fit content */
@@ -835,7 +835,7 @@
       .product-card .price {
         font-size: 0.9rem; /* Matches homepage .shop-item p font size */
       }
-      .product-card .view-artifact-btn {
+      .product-card .add-to-cart-btn {
         font-size: 0.8rem; /* Matches homepage button font size */
         padding: 0.4rem 1rem; /* Matches homepage button padding */
       }
@@ -1098,7 +1098,7 @@
         id: 'p7',
         name: 'Exclusive Baby Tee',
         price: 90,
-        image: 'https://i.ibb.co/ZpfbtRZT/aeaken-exclusive.png',
+        image: 'https://i.ibb.co/DfxVSv59/baby-tee-2-1.webp',
         description: 'Carry your revelations with you. This durable backpack is designed for the journey of truth-seeking, with hidden compartments for your most sacred findings.',
         sizes: ['One Size'],
         lore: "Equipped for the long road ahead, used by our scouts in their expeditions for ancient knowledge."
@@ -1161,6 +1161,7 @@
         productCard.className = 'product-card';
         // Make the entire card clickable
         productCard.onclick = () => {
+          // This will still navigate to product detail if the card itself is clicked
           window.location.href = `product-detail.html?id=${product.id}`;
         };
         productCard.innerHTML = `
@@ -1169,10 +1170,44 @@
           </div>
           <h3 class="text-xl font-bold mt-3">${product.name}</h3>
           <p class="text-sm mb-2">$${product.price.toFixed(2)}</p>
-          <button class="view-artifact-btn" onclick="event.stopPropagation(); window.location.href='product-detail.html?id=${product.id}'">Buy Now</button>
+          <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart('${product.id}')">Add to Cart</button>
         `;
         productListDiv.appendChild(productCard);
       });
+    }
+
+    // Function to add item to cart
+    function addToCart(productId) {
+      const productToAdd = products.find(p => p.id === productId);
+      if (!productToAdd) {
+        console.error('Product not found:', productId);
+        return;
+      }
+
+      // Determine the size to add. For simplicity, pick the first available size or 'One Size'/'N/A'.
+      let selectedSize = 'N/A';
+      if (productToAdd.sizes && productToAdd.sizes.length > 0) {
+          selectedSize = productToAdd.sizes[0]; // Take the first size by default
+      } else if (productToAdd.sizes && productToAdd.sizes.includes('One Size')) {
+          selectedSize = 'One Size';
+      }
+
+      const existingItemIndex = cart.findIndex(item => item.id === productId && item.size === selectedSize);
+
+      if (existingItemIndex > -1) {
+        cart[existingItemIndex].quantity += 1;
+      } else {
+        cart.push({
+          id: productToAdd.id,
+          name: productToAdd.name,
+          price: productToAdd.price,
+          image: productToAdd.image,
+          size: selectedSize,
+          quantity: 1
+        });
+      }
+      updateCartDisplay();
+      showCustomAlert(`${productToAdd.name} added to cart!`);
     }
 
     // Cart Overlay Functions (consistent with other pages)
@@ -1255,10 +1290,15 @@
 
     function proceedToCheckout() {
       if (cart.length > 0) {
-        showCustomAlert('Proceeding to checkout! Your artifacts are on their way to awaken you further.');
-        cart = []; // Clear cart after "checkout"
-        updateCartDisplay();
-        toggleCart(); // Close cart
+        console.log('Items in cart:', JSON.stringify(cart, null, 2)); // Log cart contents
+        showCustomAlert('Proceeding to checkout! Redirecting to shop.awakencult.com...');
+        // Simulate redirection after a short delay to allow alert to be seen
+        setTimeout(() => {
+          window.location.href = 'https://shop.awakencult.com'; // Redirect to the specified URL
+          cart = []; // Clear cart after "checkout"
+          localStorage.removeItem('awakenCart'); // Also clear from local storage
+          updateCartDisplay(); // Update display to show empty cart
+        }, 1500); // Wait 1.5 seconds before redirecting
       } else {
         showCustomAlert('Your cart is empty. Please add some artifacts before checking out.');
       }
