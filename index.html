@@ -726,9 +726,10 @@
     .cart-close-button {
       background: none;
       border: none;
-      color: white;
       font-size: 1.5rem;
       cursor: pointer;
+      color: white;
+      line-height: 1;
     }
     .cart-items {
       flex-grow: 1;
@@ -823,6 +824,94 @@
       .cart-overlay.active {
         right: 0;
       }
+    }
+
+    /* General Modal Overlay */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content-small {
+      background-color: #f3f0e7;
+      padding: 1.5rem;
+      border: 2px solid black;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      max-width: 400px;
+      width: 90%;
+      transform: translateY(-20px);
+      transition: transform 0.3s ease-in-out;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-overlay.active .modal-content-small {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid black;
+      padding-bottom: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .modal-header h3 {
+      font-family: 'Anton', sans-serif;
+      font-size: 1.8rem;
+      text-transform: uppercase;
+    }
+
+    .modal-close-button {
+      background: none;
+      border: none;
+      font-size: 2rem;
+      cursor: pointer;
+      color: #000;
+      line-height: 1;
+    }
+
+    .modal-body {
+      text-align: center;
+    }
+
+    .size-option-btn {
+      background-color: #eee;
+      border: 1px solid #ccc;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      transition: background-color 0.2s, border-color 0.2s;
+      border-radius: 4px;
+      font-family: 'Roboto Condensed', sans-serif;
+    }
+
+    .size-option-btn:hover {
+      background-color: #ddd;
+    }
+
+    .size-option-btn.selected {
+      background-color: #d94a44;
+      color: white;
+      border-color: #d94a44;
     }
   </style>
 </head>
@@ -962,22 +1051,22 @@
         <button class="add-to-cart-btn" data-product-index="3">Add to cart</button>
       </div>
 
-      <!-- Product 5: Balaclava -->
+      <!-- Product 5: Obey Sweater -->
       <div class="shop-product-card lg:aspect-square group">
         <a href="product-detail.html?id=p5" class="product-image-container block">
-          <img src="https://i.ibb.co/V0FTWqC1/oberyyy.webp" alt="AWAKEN Balaclava" />
+          <img src="https://i.ibb.co/V0FTWqC1/oberyyy.webp" alt="Obey Sweater" />
         </a>
-        <h3 class="text-xl font-bold mt-3">AWAKEN Balaclava</h3>
+        <h3 class="text-xl font-bold mt-3">Obey Sweater</h3>
         <p class="text-sm mb-2">R 350.00</p>
         <button class="add-to-cart-btn" data-product-index="4">Add to cart</button>
       </div>
 
-      <!-- Product 6: Awaken Tee -->
+      <!-- Product 6: Third Eye Balaclava -->
       <div class="shop-product-card lg:aspect-square group">
         <a href="product-detail.html?id=p3" class="product-image-container block">
-          <img src="https://i.ibb.co/JRsBZr2d/BURN-BALACLAVAAA.webp" alt="Awaken Tee" />
+          <img src="https://i.ibb.co/JRsBZr2d/BURN-BALACLAVAAA.webp" alt="Third Eye Balaclava" />
         </a>
-        <h3 class="text-xl font-bold mt-3">Awaken Tee</h3>
+        <h3 class="text-xl font-bold mt-3">Third Eye Balaclava</h3>
         <p class="text-sm mb-2">R 280.00</p>
         <button class="add-to-cart-btn" data-product-index="5">Add to cart</button>
       </div>
@@ -1158,6 +1247,24 @@
     </div>
   </div>
 
+  <!-- Size Selection Modal -->
+  <div id="size-selection-modal" class="modal-overlay hidden">
+    <div class="modal-content-small">
+      <div class="modal-header">
+        <h3 id="modal-product-name">Select Size</h3>
+        <button class="modal-close-button" onclick="hideSizeSelectionModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <img id="modal-product-image" src="" alt="Product Image" class="w-24 h-24 object-contain mx-auto mb-4 rounded" />
+        <p id="modal-product-price" class="text-lg font-bold mb-4"></p>
+        <div id="size-options" class="flex flex-wrap justify-center gap-2 mb-6">
+          <!-- Size buttons will be inserted here by JavaScript -->
+        </div>
+        <button id="add-to-cart-modal-btn" class="add-to-cart-btn w-full">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     // --- Shopify API Configuration ---
     const SHOPIFY_STORE_DOMAIN = 'awakencult.myshopify.com'; 
@@ -1168,15 +1275,51 @@
     // IMPORTANT: Ensure these 'shopifyVariantId' values are correct for your Shopify products.
     const products = [
         { id: 'p6', name: 'MCGA Cap', price: 250.00, image: 'https://i.ibb.co/GvhVTBTc/MCGA-CAP.webp', shopifyVariantId: 'gid://shopify/ProductVariant/41554201346151' }, // Updated with provided ID
-        { id: 'p2', name: 'Fake News Hoodie', price: 550.00, image: 'https://i.ibb.co/mrTy6Mhw/fake-news-hoodie.webp', shopifyVariantId: 'YOUR_VARIANT_ID_HERE' },
-        { id: 'p1', name: 'XTCY Tee', price: 300.00, image: 'https://i.ibb.co/twNrP2xF/XTCYYYY.webp', shopifyVariantId: 'YOUR_VARIANT_ID_HERE' },
-        { id: 'p4', name: 'Vision Jacket', price: 800.00, image: 'https://i.ibb.co/JFyXsdVv/vzn-jacket.webp', shopifyVariantId: 'YOUR_VARIANT_ID_HERE' },
-        { id: 'p5', name: 'AWAKEN Balaclava', price: 350.00, image: 'https://i.ibb.co/V0FTWqC1/oberyyy.webp', shopifyVariantId: 'YOUR_VARIANT_ID_HERE' },
-        { id: 'p3', name: 'Awaken Tee', price: 280.00, image: 'https://i.ibb.co/JRsBZr2d/BURN-BALACLAVAAA.webp', shopifyVariantId: 'YOUR_VARIANT_ID_HERE' }
+        {
+            id: 'p2',
+            name: 'Fake News Hoodie',
+            price: 550.00, // Base price, individual variant prices could be added to variants array if needed
+            image: 'https://i.ibb.co/mrTy6Mhw/fake-news-hoodie.webp',
+            variants: [ // This array will hold the variant details
+                { size: 'Small', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_HOODIE_S_VARIANT_ID' },
+                { size: 'Medium', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_HOODIE_M_VARIANT_ID' },
+                { size: 'Large', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_HOODIE_L_VARIANT_ID' },
+                { size: 'XL', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_HOODIE_XL_VARIANT_ID' },
+                { size: 'XXL', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_HOODIE_XXL_VARIANT_ID' }
+            ]
+        },
+        {
+            id: 'p1',
+            name: 'XTCY Tee',
+            price: 300.00,
+            image: 'https://i.ibb.co/twNrP2xF/XTCYYYY.webp',
+            variants: [
+                { size: 'Small', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_TEE_S_VARIANT_ID' },
+                { size: 'Medium', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_TEE_M_VARIANT_ID' },
+                { size: 'Large', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_TEE_L_VARIANT_ID' },
+                { size: 'XL', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_TEE_XL_VARIANT_ID' }
+            ]
+        },
+        {
+            id: 'p4',
+            name: 'Vision Jacket',
+            price: 800.00,
+            image: 'https://i.ibb.co/JFyXsdVv/vzn-jacket.webp',
+            variants: [
+                { size: 'Small', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_JACKET_S_VARIANT_ID' },
+                { size: 'Medium', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_JACKET_M_VARIANT_ID' },
+                { size: 'Large', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_JACKET_L_VARIANT_ID' },
+                { size: 'XL', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_JACKET_XL_VARIANT_ID' }
+            ]
+        },
+        { id: 'p5', name: 'Obey Sweater', price: 350.00, image: 'https://i.ibb.co/V0FTWqC1/oberyyy.webp', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_OBEY_SWEATER_VARIANT_ID' }, // Corrected name and added placeholder ID
+        { id: 'p3', name: 'Third Eye Balaclava', price: 280.00, image: 'https://i.ibb.co/JRsBZr2d/BURN-BALACLAVAAA.webp', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_BALACLAVA_VARIANT_ID' } // Corrected name and added placeholder ID
     ];
 
     let cart = JSON.parse(localStorage.getItem('awakenCart')) || [];
     let refParam = ''; // For the ?ref= parameter
+    let currentProductForModal = null; // Stores the product object currently being viewed in the modal
+    let selectedVariantInModal = null; // Stores the selected variant object from the modal
 
     // --- DOM Elements ---
     const cartOverlay = document.getElementById('cart-overlay');
@@ -1184,6 +1327,14 @@
     const cartItemsDiv = document.getElementById('cart-items');
     const cartTotalSpan = document.getElementById('cart-total');
     const emptyCartMessage = document.getElementById('empty-cart-message');
+
+    const sizeSelectionModal = document.getElementById('size-selection-modal');
+    const modalProductName = document.getElementById('modal-product-name');
+    const modalProductImage = document.getElementById('modal-product-image');
+    const modalProductPrice = document.getElementById('modal-product-price');
+    const sizeOptionsDiv = document.getElementById('size-options');
+    const addToCartModalBtn = document.getElementById('add-to-cart-modal-btn');
+
 
     // --- Utility Functions ---
     function showCustomAlert(message) {
@@ -1219,29 +1370,43 @@
     }
 
     /**
-     * Adds a product to the local cart and updates display.
-     * This function now uses the pre-defined 'products' array.
-     * @param {number} productIndex The index of the product in the 'products' array.
+     * Adds an item to the local cart. This is the core logic.
+     * @param {object} product The product object.
+     * @param {string} selectedShopifyVariantId The Shopify variant ID to add.
+     * @param {number} quantity The quantity to add.
      */
-    function addToCart(productIndex) {
-      const product = products[productIndex];
-      const existingItemIndex = cart.findIndex(item => item.id === product.id);
+    function addItemToCart(product, selectedShopifyVariantId, quantity = 1) {
+        const itemToAdd = {
+            id: product.id,
+            name: product.name,
+            price: product.price, // Use base product price, or variant-specific price if available
+            image: product.image,
+            shopifyVariantId: selectedShopifyVariantId,
+            quantity: quantity
+        };
 
-      if (existingItemIndex > -1) {
-        cart[existingItemIndex].quantity += 1;
-      } else {
-        cart.push({
-          id: product.id,
-          name: product.name,
-          price: product.price,
-          image: product.image,
-          shopifyVariantId: product.shopifyVariantId, // Include Shopify Variant ID
-          quantity: 1
-        });
-      }
-      updateCartDisplay();
-      showCustomAlert(`${product.name} added to cart!`);
+        // If the product has variants, we need to ensure the cart item reflects the selected size
+        if (product.variants && product.variants.length > 0) {
+            const selectedVariant = product.variants.find(v => v.shopifyVariantId === selectedShopifyVariantId);
+            if (selectedVariant) {
+                // Modify name to include size for display in cart
+                itemToAdd.name = `${product.name} (${selectedVariant.size})`;
+                // If variants have different prices, update price here:
+                // itemToAdd.price = selectedVariant.price || product.price; 
+            }
+        }
+
+        const existingItemIndex = cart.findIndex(item => item.shopifyVariantId === itemToAdd.shopifyVariantId);
+
+        if (existingItemIndex > -1) {
+            cart[existingItemIndex].quantity += quantity;
+        } else {
+            cart.push(itemToAdd);
+        }
+        updateCartDisplay();
+        showCustomAlert(`${itemToAdd.name} added to cart!`);
     }
+
 
     /**
      * Removes a product from the local cart.
@@ -1291,6 +1456,58 @@
       cartCountSpan.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
       localStorage.setItem('awakenCart', JSON.stringify(cart));
     }
+
+    /**
+     * Shows the size selection modal for a given product.
+     * @param {object} product The product object with variants.
+     */
+    function showSizeSelectionModal(product) {
+        currentProductForModal = product;
+        selectedVariantInModal = null; // Reset selection
+
+        modalProductName.textContent = product.name;
+        modalProductImage.src = product.image;
+        modalProductPrice.textContent = `R ${product.price.toFixed(2)}`; // Display base price initially
+
+        sizeOptionsDiv.innerHTML = ''; // Clear previous options
+
+        product.variants.forEach(variant => {
+            const button = document.createElement('button');
+            button.className = 'size-option-btn';
+            button.textContent = variant.size;
+            button.dataset.shopifyVariantId = variant.shopifyVariantId;
+            button.addEventListener('click', () => {
+                // Remove 'selected' class from all buttons
+                document.querySelectorAll('.size-option-btn').forEach(btn => btn.classList.remove('selected'));
+                // Add 'selected' class to the clicked button
+                button.classList.add('selected');
+                selectedVariantInModal = variant; // Store the selected variant object
+            });
+            sizeOptionsDiv.appendChild(button);
+        });
+
+        // Add to cart button in modal logic
+        addToCartModalBtn.onclick = () => {
+            if (selectedVariantInModal) {
+                addItemToCart(currentProductForModal, selectedVariantInModal.shopifyVariantId);
+                hideSizeSelectionModal();
+            } else {
+                showCustomAlert('Please select a size.');
+            }
+        };
+
+        sizeSelectionModal.classList.add('active');
+    }
+
+    /**
+     * Hides the size selection modal.
+     */
+    function hideSizeSelectionModal() {
+        sizeSelectionModal.classList.remove('active');
+        currentProductForModal = null;
+        selectedVariantInModal = null;
+    }
+
 
     /**
      * Creates a Shopify checkout and redirects to its webUrl.
@@ -1435,7 +1652,14 @@
         button.addEventListener('click', (event) => {
           const productIndex = parseInt(event.target.dataset.productIndex);
           if (!isNaN(productIndex)) {
-            addToCart(productIndex);
+            const product = products[productIndex];
+            if (product.variants && product.variants.length > 0) {
+                // If product has variants, show size selection modal
+                showSizeSelectionModal(product);
+            } else {
+                // If no variants, add directly to cart
+                addItemToCart(product, product.shopifyVariantId);
+            }
           } else {
             showCustomAlert('Error: Product index not found.');
           }
