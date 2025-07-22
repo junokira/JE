@@ -1268,8 +1268,11 @@
   <script>
     // --- Shopify API Configuration ---
     const SHOPIFY_STORE_DOMAIN = 'awakencult.myshopify.com'; 
-    const SHOPIFY_STOREFRONT_ACCESS_TOKEN = '9b83f6c258ceecdaed8978baaa28498cd'; // Your Storefront API Public Access Token
-    const SHOPIFY_GRAPHQL_ENDPOINT = `https://${SHOPIFY_STORE_DOMAIN}/api/2023-01/graphql.json`;
+    // IMPORTANT: If you regenerate your Shopify Storefront Access Token,
+    // make sure to update it here with the new value.
+    const SHOPIFY_STOREFRONT_ACCESS_TOKEN = 'af1c53acddd4c3e2499460673394c830'; 
+    // Updated API version to 2024-07 as the Checkout API was deprecated in older versions.
+    const SHOPIFY_GRAPHQL_ENDPOINT = `https://${SHOPIFY_STORE_DOMAIN}/api/2024-07/graphql.json`;
 
     // Define product data with Shopify Variant IDs
     // IMPORTANT: Ensure these 'shopifyVariantId' values are correct for your Shopify products.
@@ -1335,6 +1338,7 @@
     ];
 
     let cart = JSON.parse(localStorage.getItem('awakenCart')) || [];
+    let shopifyCartId = localStorage.getItem('shopifyCartId') || null; // Store Shopify cart ID
     let refParam = ''; // For the ?ref= parameter
     let currentProductForModal = null; // Stores the product object currently being viewed in the modal
     let selectedVariantInModal = null; // Stores the selected variant object from the modal
@@ -1395,12 +1399,22 @@
      */
     function addItemToCart(product, selectedShopifyVariantId, quantity = 1) {
         console.log('Adding item to cart:', product.name, 'Variant ID:', selectedShopifyVariantId);
+        
+        // Specific check for MCGA Cap
+        if (product.id === 'p6') { // Assuming 'p6' is the ID for MCGA Cap
+            const existingMCGA = cart.find(item => item.id === 'p6');
+            if (existingMCGA) {
+                showCustomAlert('You can only add 1 MCGA Cap to the cart.');
+                return; // Prevent adding more
+            }
+        }
+
         const itemToAdd = {
             id: product.id,
             name: product.name,
             price: product.price, // Use base product price, or variant-specific price if available
             image: product.image,
-            shopifyVariantId: selectedShopifyVariantId,
+            shopifyVariantId: selectedShopifyVariantId, // This will be merchandiseId for Cart API
             quantity: quantity
         };
 
@@ -1538,7 +1552,7 @@
 
 
     /**
-     * Creates a Shopify checkout and redirects to its webUrl.
+     * Creates a Shopify cart and redirects to its checkoutUrl.
      */
     async function proceedToShopifyCheckout() {
       if (cart.length === 0) {
@@ -1548,34 +1562,59 @@
 
       showCustomAlert('Preparing your checkout...');
 
-      // Build line items for Shopify checkout
-      const lineItems = cart.map(item => ({
-        variantId: item.shopifyVariantId,
+      const lines = cart.map(item => ({
+        merchandiseId: item.shopifyVariantId, // Use merchandiseId for Cart API
         quantity: item.quantity
       }));
 
-      console.log('Line items being sent to Shopify:', JSON.stringify(lineItems, null, 2));
+      console.log('Lines being sent to Shopify Cart API:', JSON.stringify(lines, null, 2));
+      console.log('Using Shopify Storefront Access Token:', SHOPIFY_STOREFRONT_ACCESS_TOKEN);
 
-      const query = `
-        mutation checkoutCreate($input: CheckoutCreateInput!) {
-          checkoutCreate(input: $input) {
-            checkout {
-              id
-              webUrl
-            }
-            checkoutUserErrors {
-              code
-              field
-              message
+      let query;
+      let variables;
+
+      if (shopifyCartId) {
+        // If cart exists, add lines to it
+        query = `
+          mutation cartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
+            cartLinesAdd(cartId: $cartId, lines: $lines) {
+              cart {
+                id
+                checkoutUrl
+              }
+              userErrors {
+                field
+                message
+              }
             }
           }
-        }
-      `;
-      const variables = {
-        input: {
-          lineItems: lineItems
-        }
-      };
+        `;
+        variables = {
+          cartId: shopifyCartId,
+          lines: lines
+        };
+      } else {
+        // If no cart, create a new one
+        query = `
+          mutation cartCreate($input: CartInput) {
+            cartCreate(input: $input) {
+              cart {
+                id
+                checkoutUrl
+              }
+              userErrors {
+                field
+                message
+              }
+            }
+          }
+        `;
+        variables = {
+          input: {
+            lines: lines
+          }
+        };
+      }
 
       try {
         const response = await fetch(SHOPIFY_GRAPHQL_ENDPOINT, {
@@ -1595,22 +1634,33 @@
         if (data.errors) {
           console.error('Shopify GraphQL Errors:', data.errors);
           const errorMessage = data.errors.map(err => err.message).join(', ') || 'Unknown GraphQL error.';
-          showCustomAlert('Error creating checkout: ' + errorMessage);
+          showCustomAlert('Error processing cart: ' + errorMessage);
           return;
         }
 
-        const checkoutResult = data.data.checkoutCreate?.checkout;
-        const errors = data.data.checkoutCreate?.checkoutUserErrors;
+        let cartResult;
+        let errors;
 
+        if (shopifyCartId) {
+            cartResult = data.data.cartLinesAdd?.cart;
+            errors = data.data.cartLinesAdd?.userErrors;
+        } else {
+            cartResult = data.data.cartCreate?.cart;
+            errors = data.data.cartCreate?.userErrors;
+        }
+        
         if (errors && errors.length > 0) {
-          console.error('Shopify Checkout User Errors:', errors);
-          const errorMessage = errors.map(err => `${err.field ? err.field + ': ' : ''}${err.message}`).join(', ') || 'Unknown checkout error.';
-          showCustomAlert('Checkout error: ' + errorMessage);
+          console.error('Shopify Cart User Errors:', errors);
+          const errorMessage = errors.map(err => `${err.field ? err.field + ': ' : ''}${err.message}`).join(', ') || 'Unknown cart error.';
+          showCustomAlert('Cart error: ' + errorMessage);
           return;
         }
 
-        if (checkoutResult && checkoutResult.webUrl) {
-          let finalCheckoutUrl = checkoutResult.webUrl;
+        if (cartResult && cartResult.checkoutUrl) {
+          shopifyCartId = cartResult.id; // Save the new cart ID
+          localStorage.setItem('shopifyCartId', shopifyCartId); // Persist cart ID
+          
+          let finalCheckoutUrl = cartResult.checkoutUrl;
           if (refParam) {
             const url = new URL(finalCheckoutUrl);
             url.searchParams.set('ref', refParam);
@@ -1625,11 +1675,11 @@
           showCustomAlert('Redirecting to Shopify checkout...');
           window.location.href = finalCheckoutUrl; // Redirect to Shopify
         } else {
-          showCustomAlert('Failed to get Shopify checkout URL. No checkout object or webUrl found.');
+          showCustomAlert('Failed to get Shopify checkout URL from cart. No cart object or checkoutUrl found.');
         }
 
       } catch (error) {
-        console.error('Network or unexpected error during Shopify checkout creation:', error);
+        console.error('Network or unexpected error during Shopify cart operation:', error);
         showCustomAlert('Network error or unexpected issue. Please check your connection and console for details.');
       }
     }
