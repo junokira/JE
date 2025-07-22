@@ -1281,11 +1281,11 @@
             price: 550.00, // Base price, individual variant prices could be added to variants array if needed
             image: 'https://i.ibb.co/mrTy6Mhw/fake-news-hoodie.webp',
             variants: [ // This array will hold the variant details
-                { size: 'Small', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_HOODIE_S_VARIANT_ID' },
-                { size: 'Medium', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_HOODIE_M_VARIANT_ID' },
-                { size: 'Large', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_HOODIE_L_VARIANT_ID' },
-                { size: 'XL', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_HOODIE_XL_VARIANT_ID' },
-                { size: 'XXL', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_HOODIE_XXL_VARIANT_ID' }
+                { size: 'Small', shopifyVariantId: 'gid://shopify/ProductVariant/41554317279335' },
+                { size: 'Medium', shopifyVariantId: 'gid://shopify/ProductVariant/41554317312103' },
+                { size: 'Large', shopifyVariantId: 'gid://shopify/ProductVariant/41554317344871' },
+                { size: 'XL', shopifyVariantId: 'gid://shopify/ProductVariant/41554317377639' },
+                { size: 'XXL', shopifyVariantId: 'gid://shopify/ProductVariant/41554317410407' }
             ]
         },
         {
@@ -1297,7 +1297,8 @@
                 { size: 'Small', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_TEE_S_VARIANT_ID' },
                 { size: 'Medium', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_TEE_M_VARIANT_ID' },
                 { size: 'Large', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_TEE_L_VARIANT_ID' },
-                { size: 'XL', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_TEE_XL_VARIANT_ID' }
+                { size: 'XL', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_TEE_XL_VARIANT_ID' },
+                { size: 'XXL', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_TEE_XXL_VARIANT_ID' }
             ]
         },
         {
@@ -1308,12 +1309,29 @@
             variants: [
                 { size: 'Small', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_JACKET_S_VARIANT_ID' },
                 { size: 'Medium', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_JACKET_M_VARIANT_ID' },
-                { size: 'Large', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_JACKET_L_VARIANT_ID' },
-                { size: 'XL', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_JACKET_XL_VARIANT_ID' }
+                { size: 'Large', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_JACKET_L_VARIANT_ID' }
             ]
         },
-        { id: 'p5', name: 'Obey Sweater', price: 350.00, image: 'https://i.ibb.co/V0FTWqC1/oberyyy.webp', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_OBEY_SWEATER_VARIANT_ID' }, // Corrected name and added placeholder ID
-        { id: 'p3', name: 'Third Eye Balaclava', price: 280.00, image: 'https://i.ibb.co/JRsBZr2d/BURN-BALACLAVAAA.webp', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_BALACLAVA_VARIANT_ID' } // Corrected name and added placeholder ID
+        {
+            id: 'p5',
+            name: 'Obey Sweater',
+            price: 350.00,
+            image: 'https://i.ibb.co/V0FTWqC1/oberyyy.webp',
+            variants: [
+                { size: 'Small', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_OBEY_SWEATER_S_VARIANT_ID' },
+                { size: 'Medium', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_OBEY_SWEATER_M_VARIANT_ID' },
+                { size: 'Large', shopifyVariantId: 'gid://shopify/ProductVariant/YOUR_OBEY_SWEATER_L_VARIANT_ID' }
+            ]
+        },
+        { 
+          id: 'p3', name: 'Third Eye Balaclava', price: 280.00, 
+        image: 'https://i.ibb.co/JRsBZr2d/BURN-BALACLAVAAA.webp', 
+        variants: [
+                { color: 'Black', shopifyVariantId: 'gid://shopify/ProductVariant/41554330255463' },
+                { color: 'Cream', shopifyVariantId: 'gid://shopify/ProductVariant/41554330288231' },
+                { color: 'Green', shopifyVariantId: 'gid://shopify/ProductVariant/41554330320999' }
+            ] // Added missing closing curly brace for the product object
+        }
     ];
 
     let cart = JSON.parse(localStorage.getItem('awakenCart')) || [];
@@ -1390,7 +1408,9 @@
             const selectedVariant = product.variants.find(v => v.shopifyVariantId === selectedShopifyVariantId);
             if (selectedVariant) {
                 // Modify name to include size for display in cart
-                itemToAdd.name = `${product.name} (${selectedVariant.size})`;
+                // Check if the variant has a 'size' property or a 'color' property
+                const variantOption = selectedVariant.size || selectedVariant.color;
+                itemToAdd.name = `${product.name} (${variantOption})`;
                 // If variants have different prices, update price here:
                 // itemToAdd.price = selectedVariant.price || product.price; 
             }
@@ -1474,7 +1494,8 @@
         product.variants.forEach(variant => {
             const button = document.createElement('button');
             button.className = 'size-option-btn';
-            button.textContent = variant.size;
+            // Determine the text for the button based on whether it's a size or color variant
+            button.textContent = variant.size || variant.color;
             button.dataset.shopifyVariantId = variant.shopifyVariantId;
             button.addEventListener('click', () => {
                 // Remove 'selected' class from all buttons
@@ -1492,7 +1513,7 @@
                 addItemToCart(currentProductForModal, selectedVariantInModal.shopifyVariantId);
                 hideSizeSelectionModal();
             } else {
-                showCustomAlert('Please select a size.');
+                showCustomAlert('Please select an option.'); // Changed message to be more general
             }
         };
 
