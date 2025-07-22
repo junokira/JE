@@ -1554,6 +1554,8 @@
         quantity: item.quantity
       }));
 
+      console.log('Line items being sent to Shopify:', JSON.stringify(lineItems, null, 2));
+
       const query = `
         mutation checkoutCreate($input: CheckoutCreateInput!) {
           checkoutCreate(input: $input) {
@@ -1585,11 +1587,15 @@
           body: JSON.stringify({ query, variables }),
         });
 
+        console.log('Shopify API response status:', response.status);
+
         const data = await response.json();
+        console.log('Shopify API response data:', JSON.stringify(data, null, 2));
 
         if (data.errors) {
           console.error('Shopify GraphQL Errors:', data.errors);
-          showCustomAlert('Error creating checkout: ' + data.errors[0].message);
+          const errorMessage = data.errors.map(err => err.message).join(', ') || 'Unknown GraphQL error.';
+          showCustomAlert('Error creating checkout: ' + errorMessage);
           return;
         }
 
@@ -1597,8 +1603,9 @@
         const errors = data.data.checkoutCreate?.checkoutUserErrors;
 
         if (errors && errors.length > 0) {
-          console.error('Shopify Checkout Errors:', errors);
-          showCustomAlert('Checkout error: ' + errors[0].message);
+          console.error('Shopify Checkout User Errors:', errors);
+          const errorMessage = errors.map(err => `${err.field ? err.field + ': ' : ''}${err.message}`).join(', ') || 'Unknown checkout error.';
+          showCustomAlert('Checkout error: ' + errorMessage);
           return;
         }
 
@@ -1618,12 +1625,12 @@
           showCustomAlert('Redirecting to Shopify checkout...');
           window.location.href = finalCheckoutUrl; // Redirect to Shopify
         } else {
-          showCustomAlert('Failed to get Shopify checkout URL.');
+          showCustomAlert('Failed to get Shopify checkout URL. No checkout object or webUrl found.');
         }
 
       } catch (error) {
-        console.error('Network error during Shopify checkout creation:', error);
-        showCustomAlert('Network error. Please check your connection and try again.');
+        console.error('Network or unexpected error during Shopify checkout creation:', error);
+        showCustomAlert('Network error or unexpected issue. Please check your connection and console for details.');
       }
     }
 
