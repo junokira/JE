@@ -313,7 +313,7 @@
       align-items: center;
       margin-top: 1.5rem;
       font-size: 0.75rem;
-      border: 1px solid black; /* Added border */
+      border: 1px solid black;
       padding: 0.75rem;
       flex-grow: 1;
       margin-bottom: 0;
@@ -340,7 +340,7 @@
     }
 
     /* Apply aspect-square only on large screens and up */
-    @media (min-width: 1024px) { /* Desktop screens and up */
+    @media (min-width: 1024px) {
       .shop-product-card {
         aspect-ratio: 1 / 1;
       }
@@ -357,7 +357,7 @@
       flex-grow: 1;
     }
 
-    @media (min-width: 1024px) { /* Desktop screens and up */
+    @media (min-width: 1024px) {
       .shop-product-card .product-image-container {
         height: 16rem;
         min-height: unset;
@@ -395,8 +395,8 @@
         text-transform: uppercase;
         letter-spacing: 0.1em;
         padding: 0.75rem 1.5rem;
-        font-size: 1rem; /* Adjust font size to fit on one line */
-        white-space: nowrap; /* Prevent text from wrapping */
+        font-size: 1rem;
+        white-space: nowrap;
         width: calc(100% - 2rem);
         max-width: 150px;
         display: block;
@@ -412,10 +412,9 @@
     /* Editorial Shots Section */
     .editorial-shot-card {
       border: 1px solid black;
-      /* Removed padding from here to allow image to fill edges */
       text-align: center;
       transition: background-color 0.3s ease;
-      display: flex; /* Use flexbox to stack image and text */
+      display: flex;
       flex-direction: column;
     }
     .editorial-shot-card:hover {
@@ -425,29 +424,28 @@
 
     .editorial-shot-card .editorial-image-container {
       width: 100%;
-      /* Removed fixed height here to allow image aspect ratio to dictate height */
-      display: flex; /* To center the image within this container */
+      display: flex;
       justify-content: center;
       align-items: center;
-      overflow: hidden; /* Hide any overflow if image doesn't perfectly fit */
+      overflow: hidden;
     }
 
     .editorial-shot-card .editorial-image-container img {
-      width: 100%; /* Make image fill the width of its container */
-      height: auto; /* Let height adjust to maintain aspect ratio */
-      object-fit: contain; /* Ensures the entire image is visible, no cropping */
-      display: block; /* Ensures it behaves as a block element */
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      display: block;
     }
 
     .editorial-shot-card .editorial-text-content {
-      padding: 0.75rem; /* Apply padding only to the text content */
-      padding-top: 0.5rem; /* Small top padding for separation from image */
+      padding: 0.75rem;
+      padding-top: 0.5rem;
     }
 
     .editorial-shot-card p {
       font-size: 0.75rem;
       line-height: 1.3;
-      margin-bottom: 0; /* Remove default paragraph bottom margin */
+      margin-bottom: 0;
     }
 
     /* Newsletter Section */
@@ -595,7 +593,7 @@
     }
 
     /* Responsive adjustments for header (Mobile/Tablet view) */
-    @media (max-width: 1023px) { /* All screens smaller than desktop */
+    @media (max-width: 1023px) {
       .header-top-row {
         flex-direction: column;
         padding: 0.5rem 1rem;
@@ -690,7 +688,7 @@
       height: 100vh;
     }
 
-    @media (min-width: 768px) { /* md breakpoint */
+    @media (min-width: 768px) {
       .md\:h-screen {
         height: 100vh;
       }
@@ -772,6 +770,9 @@
       cursor: pointer;
       border-radius: 0;
     }
+    .cart-item-remove:hover {
+      background-color: #b92a1e;
+    }
     .cart-summary {
       padding: 1rem;
       border-top: 2px solid black;
@@ -808,11 +809,11 @@
     /* New style for ASCII art */
     .empty-cart-ascii {
         font-family: 'monospace', 'Courier New', Courier, monospace;
-        white-space: pre; /* Preserve whitespace and line breaks */
-        font-size: 0.8rem; /* Smaller font for ASCII art */
-        line-height: 1; /* Tight line height for ASCII art */
-        margin: 1rem auto; /* Center it */
-        color: #555; /* Slightly darker than default empty message */
+        white-space: pre;
+        font-size: 0.8rem;
+        line-height: 1;
+        margin: 1rem auto;
+        color: #555;
     }
     @media (max-width: 767px) {
       .cart-overlay {
@@ -829,34 +830,31 @@
   <!-- Header -->
   <header>
     <div class="header-top-row">
-      <a href="/" class="header-logo">AWAKEN</a> <!-- Changed href to "/" for homepage -->
+      <a href="/" class="header-logo">AWAKEN</a>
       <nav>
         <a href="shop.html">Shop</a>
         <a href="manifesto.html">Manifesto</a>
         <a href="join-us.html">Join Us</a>
-        <a href="archives.html">Archive</a> <!-- Changed Campaign to Archive -->
-        <a href="#about">About</a> <!-- Moved About after Archive -->
+        <a href="archives.html">Archive</a>
+        <a href="#about">About</a>
         <div class="cart-icon-container" onclick="toggleCart()">
           <i class="fas fa-shopping-cart"></i>
           <span class="cart-count" id="cart-count">0</span>
         </div>
       </nav>
     </div>
-    <!-- Top Scrolling Bar - Moved inside header -->
+    <!-- Top Scrolling Bar -->
     <div class="marquee-container">
       <div class="marquee-content-wrapper">
-        <!-- Removed leading space from content -->
         <span class="marquee-text">ENLIGHTENMENT IS A CHOICE • JOIN THE CULT • AWAKEN • THE NEW WORLD ORDER IS HERE • BUY THE MESSAGE • BURN THE MASK • REVEAL THE TRUTH •</span>
       </div>
     </div>
   </header>
 
   <!-- Hero News Grid Section -->
-  <section class="content-section hero-news-section"> <!-- Added hero-news-section for specific max-width -->
+  <section class="content-section hero-news-section">
     <div class="hero-news-grid">
-      <!-- Middle Column (Main Story) - Now first in source order, order-2 on desktop -->
       <div class="lg:col-span-1 flex flex-col justify-between lg:order-2">
-        <!-- Cult Picture Exclusive Header -->
         <div class="cult-exclusive-header">
           <a href="eye.html">
             <div class="eye-logo-container">
@@ -874,12 +872,10 @@
             Whispers of a New World Order are spreading like wildfire, fueled by cryptic messages and unsettling imagery appearing across the metropolis. Citizens report a growing unease, a sense that the reality they know is merely a carefully constructed illusion. The AWAKEN cult claims to hold the key to true enlightenment, promising liberation from the 'cage' of modern existence. Are these just fringe theories, or is there a deeper, more profound truth waiting to be uncovered? The time to question everything is now.
           </p>
         </div>
-        <!-- "Smile Surveillance Live" moved above "Portrait and Text" and given grid styling -->
         <div class="icon-text-block mt-4" onclick="window.location.href='game.html'">
           <img src="https://i.ibb.co/M5xjjWqM/3rd-eye-smiley.png" alt="Smiley" />
           <p class="font-roboto-condensed text-xs"><strong>Smile Surveillance Live</strong><br/>Witnesses report sightings of this icon throughout the city. Stay aware.</p>
         </div>
-        <!-- Breaking News Card - Now links to breaking-news.html -->
         <a href="breaking-news.html" class="news-card mt-4 block no-underline text-black">
           <div class="news-card-content">
             <strong class="uppercase">Breaking News:</strong><br/>
@@ -888,7 +884,6 @@
         </a>
       </div>
 
-      <!-- Left Column - Now second in source order, order-1 on desktop -->
       <div class="hero-news-column lg:order-1">
         <a href="https://instagram.com/awakencult" target="_blank" class="news-card block no-underline text-black">
           <img src="https://i.ibb.co/fYLGm3Cy/mcga.png" alt="Make Cults Great Again Poster" class="w-full h-auto" />
@@ -905,7 +900,6 @@
         </a>
       </div>
 
-      <!-- Right Column - Now third in source order, order-3 on desktop -->
       <div class="hero-news-column lg:order-3">
         <a href="shop.html" class="news-card block no-underline text-black">
           <div class="news-card-content">
@@ -927,7 +921,7 @@
   <!-- Shop Section -->
   <section id="shop" class="content-section">
     <h2 class="text-3xl font-anton text-center mb-8 uppercase">Underground Market</h2>
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6"> <!-- grid-cols-1 for mobile/tablet, lg:grid-cols-3 for desktop -->
+    <div id="product-grid" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <!-- Product 1: MCGA Cap -->
       <div class="shop-product-card lg:aspect-square group">
         <a href="product-detail.html?id=p6" class="product-image-container block">
@@ -935,7 +929,7 @@
         </a>
         <h3 class="text-xl font-bold mt-3">MCGA Cap</h3>
         <p class="text-sm mb-2">R 250.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart(0)">Add to cart</button>
+        <button class="add-to-cart-btn" data-product-index="0">Add to cart</button>
       </div>
 
       <!-- Product 2: Fake News Hoodie -->
@@ -945,7 +939,7 @@
         </a>
         <h3 class="text-xl font-bold mt-3">Fake News Hoodie</h3>
         <p class="text-sm mb-2">R 550.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart(1)">Add to cart</button>
+        <button class="add-to-cart-btn" data-product-index="1">Add to cart</button>
       </div>
 
       <!-- Product 3: XTCY Tee -->
@@ -955,7 +949,7 @@
         </a>
         <h3 class="text-xl font-bold mt-3">XTCY Tee</h3>
         <p class="text-sm mb-2">R 300.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart(2)">Add to cart</button>
+        <button class="add-to-cart-btn" data-product-index="2">Add to cart</button>
       </div>
 
       <!-- Product 4: Vision Jacket -->
@@ -965,7 +959,7 @@
         </a>
         <h3 class="text-xl font-bold mt-3">Vision Jacket</h3>
         <p class="text-sm mb-2">R 800.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart(3)">Add to cart</button>
+        <button class="add-to-cart-btn" data-product-index="3">Add to cart</button>
       </div>
 
       <!-- Product 5: Balaclava -->
@@ -975,7 +969,7 @@
         </a>
         <h3 class="text-xl font-bold mt-3">AWAKEN Balaclava</h3>
         <p class="text-sm mb-2">R 350.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart(4)">Add to cart</button>
+        <button class="add-to-cart-btn" data-product-index="4">Add to cart</button>
       </div>
 
       <!-- Product 6: Awaken Tee -->
@@ -985,7 +979,7 @@
         </a>
         <h3 class="text-xl font-bold mt-3">Awaken Tee</h3>
         <p class="text-sm mb-2">R 280.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart(5)">Add to cart</button>
+        <button class="add-to-cart-btn" data-product-index="5">Add to cart</button>
       </div>
     </div>
     <div class="text-center mt-16 mb-4">
@@ -993,17 +987,18 @@
     </div>
   </section>
 
-  <!-- Quote above video section - Now links to manifesto.html -->
+  <!-- Quote above video section -->
   <section class="video-quote content-section">
       <a href="manifesto.html" class="block text-inherit no-underline">
         <p>"The flesh is weak. The mind is moldable. <strong>Awaken is the path.</strong>"</p>
       </a>
   </section>
 
-  <!-- Fullscreen Video Section - Now links to YouTube -->
+  <!-- Fullscreen Video Section -->
   <div class="video-section" onclick="window.open('https://www.youtube.com/@awakencult', '_blank')" style="cursor: pointer;">
     <video id="backgroundVideo" autoplay loop muted playsinline class="w-full h-full object-cover">
-      <source src="https://raw.githubusercontent.com/junokira/NWO/main/nwo%20web%20w-2.mp4" type="video/mp4" />
+      <source src="https://raw.githubusercontent.com/junokira/NWO/main/nwo%20web%20w-2.mp4" type="video/mp4" media="(min-width: 768px)" />
+      <source src="YOUR_MOBILE_VERTICAL_VIDEO_URL_HERE.mp4" type="video/mp4" media="(max-width: 767px)" />
       Your browser does not support the video tag.
     </video>
   </div>
@@ -1085,7 +1080,7 @@
     <!-- End MailerLite Form Integration -->
   </section>
 
-  <!-- Editorial Shots Section - Updated with content and links -->
+  <!-- Editorial Shots Section -->
   <section class="editorial-shots-grid content-section">
     <h2 class="text-3xl font-anton text-center mb-8">Dispatches from the Archives</h2>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -1135,7 +1130,6 @@
   <div id="fullscreenModal" class="modal-overlay">
     <div class="modal-content">
       <img id="fullscreenImage" src="" alt="Full Screen Poster">
-      <!-- Removed the close button from HTML as requested -->
     </div>
   </div>
 
@@ -1146,7 +1140,6 @@
       <button class="cart-close-button" onclick="toggleCart()">&times;</button>
     </div>
     <div id="cart-items" class="cart-items">
-      <!-- Cart items will be injected here by JavaScript -->
       <p class="empty-cart-message" id="empty-cart-message">
         <pre class="empty-cart-ascii">
   .------.
@@ -1161,42 +1154,75 @@
     </div>
     <div class="cart-summary">
       <p>Total: <span id="cart-total">$0.00</span></p>
-      <button class="cart-checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout</button>
+      <button class="cart-checkout-btn" onclick="proceedToShopifyCheckout()">Proceed to Checkout</button>
     </div>
   </div>
 
   <script>
+    // --- Shopify API Configuration ---
+    const SHOPIFY_STORE_DOMAIN = 'awakencult.myshopify.com'; 
+    const SHOPIFY_STOREFRONT_ACCESS_TOKEN = '9b83f6c258ceecdaed8978baaa28498cd'; // Your Storefront API Public Access Token
+    const SHOPIFY_GRAPHQL_ENDPOINT = `https://${SHOPIFY_STORE_DOMAIN}/api/2023-01/graphql.json`;
+
     // Define product data with Shopify Variant IDs
-    // IMPORTANT: Replace the 'shopifyVariantId' values with your actual Shopify product variant IDs.
-    // You can find these in your Shopify Admin by going to Products, clicking a product,
-    // and then if it has variants, clicking on a variant. The ID will be in the URL.
+    // IMPORTANT: Ensure these 'shopifyVariantId' values are correct for your Shopify products.
     const products = [
-        { id: 'p6', name: 'MCGA Cap', price: 250.00, image: 'https://i.ibb.co/GvhVTBTc/MCGA-CAP.webp', shopifyVariantId: '44796300435751' },
-        { id: 'p2', name: 'Fake News Hoodie', price: 550.00, image: 'https://i.ibb.co/mrTy6Mhw/fake-news-hoodie.webp', shopifyVariantId: '44796300468512' },
-        { id: 'p1', name: 'XTCY Tee', price: 300.00, image: 'https://i.ibb.co/twNrP2xF/XTCYYYY.webp', shopifyVariantId: '44796300501273' },
-        { id: 'p4', name: 'Vision Jacket', price: 800.00, image: 'https://i.ibb.co/JFyXsdVv/vzn-jacket.webp', shopifyVariantId: '44796300534034' },
-        { id: 'p5', name: 'AWAKEN Balaclava', price: 350.00, image: 'https://i.ibb.co/V0FTWqC1/oberyyy.webp', shopifyVariantId: '44796300566805' },
-        { id: 'p3', name: 'Awaken Tee', price: 280.00, image: 'https://i.ibb.co/JRsBZr2d/BURN-BALACLAVAAA.webp', shopifyVariantId: '44796300599576' }
+        { id: 'p6', name: 'MCGA Cap', price: 250.00, image: 'https://i.ibb.co/GvhVTBTc/MCGA-CAP.webp', shopifyVariantId: 'gid://shopify/ProductVariant/41554201346151' }, // Updated with provided ID
+        { id: 'p2', name: 'Fake News Hoodie', price: 550.00, image: 'https://i.ibb.co/mrTy6Mhw/fake-news-hoodie.webp', shopifyVariantId: 'YOUR_VARIANT_ID_HERE' },
+        { id: 'p1', name: 'XTCY Tee', price: 300.00, image: 'https://i.ibb.co/twNrP2xF/XTCYYYY.webp', shopifyVariantId: 'YOUR_VARIANT_ID_HERE' },
+        { id: 'p4', name: 'Vision Jacket', price: 800.00, image: 'https://i.ibb.co/JFyXsdVv/vzn-jacket.webp', shopifyVariantId: 'YOUR_VARIANT_ID_HERE' },
+        { id: 'p5', name: 'AWAKEN Balaclava', price: 350.00, image: 'https://i.ibb.co/V0FTWqC1/oberyyy.webp', shopifyVariantId: 'YOUR_VARIANT_ID_HERE' },
+        { id: 'p3', name: 'Awaken Tee', price: 280.00, image: 'https://i.ibb.co/JRsBZr2d/BURN-BALACLAVAAA.webp', shopifyVariantId: 'YOUR_VARIANT_ID_HERE' }
     ];
 
     let cart = JSON.parse(localStorage.getItem('awakenCart')) || [];
+    let refParam = ''; // For the ?ref= parameter
 
+    // --- DOM Elements ---
     const cartOverlay = document.getElementById('cart-overlay');
-    let cartCountSpan, cartItemsDiv, cartTotalSpan, emptyCartMessage;
+    const cartCountSpan = document.getElementById('cart-count');
+    const cartItemsDiv = document.getElementById('cart-items');
+    const cartTotalSpan = document.getElementById('cart-total');
+    const emptyCartMessage = document.getElementById('empty-cart-message');
 
-    if (cartOverlay) {
-        cartCountSpan = document.getElementById('cart-count');
-        cartItemsDiv = document.getElementById('cart-items');
-        cartTotalSpan = document.getElementById('cart-total');
-        emptyCartMessage = document.getElementById('empty-cart-message');
+    // --- Utility Functions ---
+    function showCustomAlert(message) {
+      const alertBox = document.createElement('div');
+      alertBox.style.cssText = `
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: black;
+          color: white;
+          padding: 20px 30px;
+          border-radius: 8px;
+          box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+          z-index: 10000;
+          font-family: 'Roboto Condensed', sans-serif;
+          font-size: 1.1rem;
+          text-align: center;
+          opacity: 0;
+          transition: opacity 0.3s ease-in-out;
+      `;
+      alertBox.textContent = message;
+      document.body.appendChild(alertBox);
+
+      setTimeout(() => {
+          alertBox.style.opacity = 1;
+      }, 10);
+
+      setTimeout(() => {
+          alertBox.style.opacity = 0;
+          alertBox.addEventListener('transitionend', () => alertBox.remove());
+      }, 3000);
     }
 
-    function toggleCart() {
-      if (cartOverlay) {
-        cartOverlay.classList.toggle('active');
-      }
-    }
-
+    /**
+     * Adds a product to the local cart and updates display.
+     * This function now uses the pre-defined 'products' array.
+     * @param {number} productIndex The index of the product in the 'products' array.
+     */
     function addToCart(productIndex) {
       const product = products[productIndex];
       const existingItemIndex = cart.findIndex(item => item.id === product.id);
@@ -1217,11 +1243,18 @@
       showCustomAlert(`${product.name} added to cart!`);
     }
 
+    /**
+     * Removes a product from the local cart.
+     * @param {number} index The index of the item in the local 'cart' array.
+     */
     function removeFromCart(index) {
       cart.splice(index, 1);
       updateCartDisplay();
     }
 
+    /**
+     * Updates the visual display of the cart (count, total, and items).
+     */
     function updateCartDisplay() {
       if (!cartItemsDiv || !cartCountSpan || !cartTotalSpan || !emptyCartMessage) {
         return;
@@ -1231,6 +1264,7 @@
       let total = 0;
 
       if (cart.length === 0) {
+        // Only append if it's not already there
         if (!cartItemsDiv.querySelector('.empty-cart-message')) {
             cartItemsDiv.appendChild(emptyCartMessage);
             emptyCartMessage.style.display = 'block';
@@ -1258,99 +1292,110 @@
       localStorage.setItem('awakenCart', JSON.stringify(cart));
     }
 
-    // Function to proceed to Shopify checkout
-    function proceedToCheckout() {
+    /**
+     * Creates a Shopify checkout and redirects to its webUrl.
+     */
+    async function proceedToShopifyCheckout() {
       if (cart.length === 0) {
         showCustomAlert('Your cart is empty. Please add some artifacts before checking out.');
         return;
       }
 
-      const shopifyStoreDomain = 'awakencult.myshopify.com'; // Your Shopify store domain
-      const cartPath = cart
-        .map(item => `${item.shopifyVariantId}:${item.quantity}`)
-        .join(',');
+      showCustomAlert('Preparing your checkout...');
 
-      const checkoutUrl = `https://${shopifyStoreDomain}/cart/${cartPath}`;
-      window.location.href = checkoutUrl; // Redirect to Shopify checkout
+      // Build line items for Shopify checkout
+      const lineItems = cart.map(item => ({
+        variantId: item.shopifyVariantId,
+        quantity: item.quantity
+      }));
+
+      const query = `
+        mutation checkoutCreate($input: CheckoutCreateInput!) {
+          checkoutCreate(input: $input) {
+            checkout {
+              id
+              webUrl
+            }
+            checkoutUserErrors {
+              code
+              field
+              message
+            }
+          }
+        }
+      `;
+      const variables = {
+        input: {
+          lineItems: lineItems
+        }
+      };
+
+      try {
+        const response = await fetch(SHOPIFY_GRAPHQL_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Shopify-Storefront-Access-Token': SHOPIFY_STOREFRONT_ACCESS_TOKEN, 
+          },
+          body: JSON.stringify({ query, variables }),
+        });
+
+        const data = await response.json();
+
+        if (data.errors) {
+          console.error('Shopify GraphQL Errors:', data.errors);
+          showCustomAlert('Error creating checkout: ' + data.errors[0].message);
+          return;
+        }
+
+        const checkoutResult = data.data.checkoutCreate?.checkout;
+        const errors = data.data.checkoutCreate?.checkoutUserErrors;
+
+        if (errors && errors.length > 0) {
+          console.error('Shopify Checkout Errors:', errors);
+          showCustomAlert('Checkout error: ' + errors[0].message);
+          return;
+        }
+
+        if (checkoutResult && checkoutResult.webUrl) {
+          let finalCheckoutUrl = checkoutResult.webUrl;
+          if (refParam) {
+            const url = new URL(finalCheckoutUrl);
+            url.searchParams.set('ref', refParam);
+            finalCheckoutUrl = url.toString();
+          }
+          
+          // Clear local cart and storage after successful checkout creation
+          cart = [];
+          localStorage.removeItem('awakenCart');
+          updateCartDisplay(); // Update UI to reflect empty cart
+
+          showCustomAlert('Redirecting to Shopify checkout...');
+          window.location.href = finalCheckoutUrl; // Redirect to Shopify
+        } else {
+          showCustomAlert('Failed to get Shopify checkout URL.');
+        }
+
+      } catch (error) {
+        console.error('Network error during Shopify checkout creation:', error);
+        showCustomAlert('Network error. Please check your connection and try again.');
+      }
     }
 
-    // Custom Alert Function (replaces window.alert)
-    function showCustomAlert(message) {
-        const alertBox = document.createElement('div');
-        alertBox.style.cssText = `
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: black;
-            color: white;
-            padding: 20px 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            z-index: 10000;
-            font-family: 'Roboto Condensed', sans-serif;
-            font-size: 1.1rem;
-            text-align: center;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-        `;
-        alertBox.textContent = message;
-        document.body.appendChild(alertBox);
 
-        setTimeout(() => {
-            alertBox.style.opacity = 1;
-        }, 10);
-
-        setTimeout(() => {
-            alertBox.style.opacity = 0;
-            alertBox.addEventListener('transitionend', () => alertBox.remove());
-        }, 3000);
-    }
-
+    // --- Event Listeners and Initial Load ---
     document.addEventListener('DOMContentLoaded', () => {
-      const posterWrappers = document.querySelectorAll('.poster-item-wrapper');
-      const fullscreenModal = document.getElementById('fullscreenModal');
-      const fullscreenImage = document.getElementById('fullscreenImage');
-
-      const openModal = (imageSrc) => {
-        fullscreenImage.src = imageSrc;
-        if (fullscreenModal) {
-          fullscreenModal.classList.add('active');
-          document.body.style.overflow = 'hidden';
-        }
-      };
-
-      const closeModal = () => {
-        if (fullscreenModal) {
-          fullscreenModal.classList.remove('active');
-          document.body.style.overflow = '';
-          fullscreenImage.src = '';
-        }
-      };
-
-      posterWrappers.forEach(wrapper => {
-        wrapper.addEventListener('click', () => {
-          const img = wrapper.querySelector('img');
-          if (img && img.src) {
-            openModal(img.src);
-          }
-        });
-      });
-
-      if (fullscreenModal) {
-        fullscreenModal.addEventListener('click', (event) => {
-          if (event.target === fullscreenModal) {
-            closeModal();
-          }
-        });
+      // Handle ?ref= parameter
+      const urlParams = new URLSearchParams(window.location.search);
+      const ref = urlParams.get('ref');
+      if (ref) {
+        localStorage.setItem('awakenRef', ref);
+        refParam = ref;
+      } else {
+        refParam = localStorage.getItem('awakenRef') || '';
       }
 
-      document.addEventListener('keydown', (event) => {
-        if (fullscreenModal && event.key === 'Escape' && fullscreenModal.classList.contains('active')) {
-          closeModal();
-        }
-      });
-
+      // Initialize marquee
       const marqueeContentWrapper = document.querySelector('.marquee-container .marquee-content-wrapper');
       const originalMarqueeText = document.querySelector('.marquee-container .marquee-text');
 
@@ -1376,18 +1421,41 @@
         });
       }
 
+      // Autoplay video
       const backgroundVideo = document.getElementById('backgroundVideo');
       if (backgroundVideo) {
           backgroundVideo.play().catch(error => {
               // Autoplay was prevented. This is common if video is not muted or user hasn't interacted.
-              // console.log("Video autoplay prevented:", error);
+              console.warn("Video autoplay prevented:", error);
           });
       }
 
-      if (cartOverlay) {
-        updateCartDisplay();
-      }
+      // Attach event listeners to "Add to cart" buttons
+      document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+        button.addEventListener('click', (event) => {
+          const productIndex = parseInt(event.target.dataset.productIndex);
+          if (!isNaN(productIndex)) {
+            addToCart(productIndex);
+          } else {
+            showCustomAlert('Error: Product index not found.');
+          }
+        });
+      });
+
+      // Initial cart display update based on local storage
+      updateCartDisplay(); 
     });
+
+    // Global functions for HTML onclick
+    function toggleCart() {
+      if (cartOverlay) {
+        cartOverlay.classList.toggle('active');
+        // Update cart display every time it's opened to ensure fresh data
+        if (cartOverlay.classList.contains('active')) {
+            updateCartDisplay();
+        }
+      }
+    }
   </script>
 </body>
 </html>
