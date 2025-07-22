@@ -1342,6 +1342,7 @@
     let refParam = ''; // For the ?ref= parameter
     let currentProductForModal = null; // Stores the product object currently being viewed in the modal
     let selectedVariantInModal = null; // Stores the selected variant object from the modal
+    let processingCheckout = false; // New flag to prevent multiple checkout attempts
 
     // --- DOM Elements ---
     const cartOverlay = document.getElementById('cart-overlay');
@@ -1349,6 +1350,7 @@
     const cartItemsDiv = document.getElementById('cart-items');
     const cartTotalSpan = document.getElementById('cart-total');
     const emptyCartMessage = document.getElementById('empty-cart-message');
+    const checkoutButton = document.querySelector('.cart-checkout-btn'); // Get the checkout button
 
     const sizeSelectionModal = document.getElementById('size-selection-modal');
     const modalProductName = document.getElementById('modal-product-name');
@@ -1555,11 +1557,18 @@
      * Creates a Shopify cart and redirects to its checkoutUrl.
      */
     async function proceedToShopifyCheckout() {
+      if (processingCheckout) {
+        console.log('Checkout already in progress. Ignoring multiple clicks.');
+        return;
+      }
+
       if (cart.length === 0) {
         showCustomAlert('Your cart is empty. Please add some artifacts before checking out.');
         return;
       }
 
+      processingCheckout = true; // Set flag to true
+      checkoutButton.disabled = true; // Disable the button
       showCustomAlert('Preparing your checkout...');
 
       const lines = cart.map(item => ({
@@ -1670,6 +1679,8 @@
           // Clear local cart and storage after successful checkout creation
           cart = [];
           localStorage.removeItem('awakenCart');
+          // Also clear the Shopify cart ID from local storage so a new cart is created next time
+          localStorage.removeItem('shopifyCartId'); 
           updateCartDisplay(); // Update UI to reflect empty cart
 
           showCustomAlert('Redirecting to Shopify checkout...');
@@ -1681,6 +1692,9 @@
       } catch (error) {
         console.error('Network or unexpected error during Shopify cart operation:', error);
         showCustomAlert('Network error or unexpected issue. Please check your connection and console for details.');
+      } finally {
+          processingCheckout = false; // Reset flag
+          checkoutButton.disabled = false; // Re-enable the button
       }
     }
 
