@@ -64,7 +64,7 @@
     /* General section padding and max-width - Consistent with main site */
     .content-section {
       padding: 3rem 1rem; /* Default vertical padding for sections */
-      max-width: 1280px; /* Max width for content */
+      max-width: 1400px; /* Adjusted to match index-10.html */
       margin-left: auto;
       margin-right: auto;
     }
@@ -163,10 +163,10 @@
       padding-top: 3rem;
     }
 
-    /* Product Card Styles - NOW EXACTLY MATCHING DUMMY.HTML */
+    /* Product Card Styles - NOW MATCHING index-10.html */
     .product-card {
       border: 1px solid black;
-      padding: 0.75rem; /* Adjusted to match dummy.html's tighter padding */
+      padding: 1rem; /* Adjusted to match index-10.html's shop-product-card padding */
       text-align: center;
       display: flex;
       flex-direction: column;
@@ -180,14 +180,13 @@
     @media (min-width: 1024px) { /* Desktop screens and up */
       .product-card {
         aspect-ratio: 1 / 1; /* Make cards square on desktop */
-        padding: 1rem; /* Slightly more padding on desktop */
       }
     }
 
     .product-card .product-image-container {
       width: 100%;
       height: auto; /* Allow height to adjust */
-      min-height: 10rem; /* Reduced min-height for mobile to fit dummy.html */
+      min-height: 12rem; /* Adjusted min-height to match index-10.html */
       display: flex;
       align-items: center;
       justify-content: center;
@@ -212,18 +211,18 @@
     }
 
     .product-card h3 {
-      font-family: 'Arial Black', sans-serif;
-      font-size: 1rem; /* Adjusted to match dummy.html's smaller font size */
+      font-family: 'Roboto Slab', serif; /* Changed to Roboto Slab as in index-10.html */
+      font-size: 1.25rem; /* Adjusted to match index-10.html's larger font size */
       font-weight: bold;
-      margin-top: 0.5rem; /* Tighter margin */
+      margin-top: 0.75rem; /* Tighter margin */
       margin-bottom: 0.25rem;
     }
     .product-card p.price {
-      font-family: 'Arial Black', sans-serif;
-      font-size: 0.9rem; /* Adjusted to match dummy.html's smaller font size */
+      font-family: 'Roboto Condensed', sans-serif; /* Changed to Roboto Condensed as in index-10.html */
+      font-size: 1rem; /* Adjusted to match index-10.html's larger font size */
       font-weight: bold;
       color: black;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem; /* Adjusted margin */
     }
     .product-card p {
         margin: 0.25rem 0; /* Tighter spacing for general paragraphs */
@@ -235,15 +234,15 @@
     .product-card .add-to-cart-btn {
       background-color: black;
       color: white;
-      padding: 0.4rem 1rem; /* Adjusted to match dummy.html's smaller button padding */
+      padding: 0.75rem 1.5rem; /* Adjusted to match index-10.html's larger button padding */
       font-weight: bold;
       text-transform: uppercase;
-      font-size: 0.8rem; /* Adjusted to match dummy.html's smaller button font size */
+      font-size: 1rem; /* Adjusted to match index-10.html's larger button font size */
       border: none;
       cursor: pointer;
       transition: background-color 0.2s;
-      width: fit-content; /* Make button width fit content as in dummy.html */
-      max-width: 150px; /* Keep max width to prevent it from getting too wide */
+      width: calc(100% - 2rem); /* Match index-10.html's width behavior (padding 1rem on each side) */
+      max-width: 150px; /* Keep max width to prevent it from getting too wide, as in index-10.html */
       margin: 0.5rem auto 0 auto; /* Center button */
       display: block;
     }
@@ -797,15 +796,15 @@
     #add-to-cart-modal-btn {
       background-color: black; /* Ensure it's black */
       color: white;
-      padding: 0.5rem 1rem; /* Adjust padding as needed */
+      padding: 0.75rem 1.5rem; /* Adjusted to match index-10.html's button style */
       font-weight: bold;
       text-transform: uppercase;
-      font-size: 0.875rem; /* Adjust font size as needed */
+      font-size: 1rem; /* Adjusted to match index-10.html's button style */
       border: none;
       cursor: pointer;
       transition: background-color 0.2s;
-      width: 100%; /* Full width within modal */
-      max-width: 200px; /* Optional: constrain max width */
+      width: calc(100% - 2rem); /* Full width within modal, accounting for padding */
+      max-width: 150px; /* Optional: constrain max width */
       margin: 1rem auto 0 auto; /* Center button and add top margin */
       display: block;
     }
@@ -870,7 +869,7 @@
         grid-template-columns: 1fr; /* Single column for mobile */
       }
       .product-card {
-        padding: 0.75rem; /* Matches dummy.html .shop-item padding */
+        padding: 1rem; /* Matches index-10.html's shop-product-card padding */
         width: 100%; /* Take full width of its container */
         margin: 0 auto; /* Center the card */
         aspect-ratio: auto; /* Remove fixed aspect ratio for mobile */
@@ -882,17 +881,17 @@
         margin-bottom: 0.5rem; /* More space below image */
       }
       .product-card h3 {
-        font-size: 1rem; /* Matches dummy.html .shop-item p font size */
+        font-size: 1.25rem; /* Matches index-10.html's font size */
         margin-bottom: 0.25rem; /* Adjusted margin */
       }
       .product-card .price {
-        font-size: 1rem; /* Matches dummy.html .shop-item p font size */
+        font-size: 1rem; /* Matches index-10.html's font size */
         margin-bottom: 0.5rem; /* Adjusted margin */
       }
       .product-card .add-to-cart-btn {
-        font-size: 0.9rem; /* Matches dummy.html button font size */
-        padding: 0.4rem 1rem; /* Matches dummy.html button padding */
-        width: fit-content; /* Make button width fit content */
+        font-size: 1rem; /* Matches index-10.html button font size */
+        padding: 0.75rem 1.5rem; /* Matches index-10.html button padding */
+        width: calc(100% - 2rem); /* Make button width fit content */
       }
       /* Archive covers on mobile */
       .shop-archive-grid {
@@ -925,20 +924,20 @@
       }
     }
 
-    /* Very small mobile adjustments (matching dummy.html 480px breakpoint) */
+    /* Very small mobile adjustments (matching index-10.html 480px breakpoint) */
     @media (max-width: 480px) {
       .product-card {
-        padding: 0.5rem; /* Matches dummy.html .shop-item padding */
+        padding: 0.75rem; /* Matches index-10.html .shop-item padding */
       }
       .product-card h3 {
-        font-size: 0.9rem; /* Matches dummy.html .shop-item p font size */
+        font-size: 1.1rem; /* Adjusted to be slightly smaller than 1.25rem */
       }
       .product-card .price {
-        font-size: 0.9rem; /* Matches dummy.html .shop-item p font size */
+        font-size: 0.9rem; /* Adjusted to be slightly smaller than 1rem */
       }
       .product-card .add-to-cart-btn {
-        font-size: 0.8rem; /* Matches dummy.html button font size */
-        padding: 0.4rem 1rem; /* Matches dummy.html button padding */
+        font-size: 0.9rem; /* Adjusted to be slightly smaller than 1rem */
+        padding: 0.6rem 1.2rem; /* Adjusted padding */
       }
     }
   </style>
@@ -1121,7 +1120,7 @@
       <p class="empty-cart-message" id="empty-cart-message">
         <pre class="empty-cart-ascii">
   .------.
- /  o   o \
+ /  o   o \\
 |    ---   |
  \  '---'  /
   `------'
@@ -1155,9 +1154,9 @@
   </div>
 
   <!-- Footer - Consistent with main site -->
-  <footer class="bg-[#f3f0e7] border-t border-black text-xs font-roboto-condensed text-center py-4">
+  <footer class="bg-[#f3f0e7] border-t border-black font-roboto-condensed text-center py-4">
     <div class="max-w-6xl mx-auto px-4">
-      <p class="mb-2">© 2025 AWAKEN CULT. Contact: <a href="mailto:info@awakencult.com" class="underline">info@awakencult.com</a></p>
+      <p class="mb-2 text-xs">© 2025 AWAKEN CULT. Contact: <a href="mailto:info@awakencult.com" class="underline">info@awakencult.com</a></p>
       <div class="social-icons">
         <a href="https://instagram.com/awakencult" class="hover:text-gray-600" target="_blank"><i class="fab fa-instagram"></i></a>
         <a href="https://x.com/awakencult" class="hover:text-gray-600" target="_blank"><i class="fab fa-twitter"></i></a>
