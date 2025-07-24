@@ -698,8 +698,8 @@
     .empty-cart-ascii {
         font-family: 'monospace', 'Courier New', Courier, monospace;
         white-space: pre;
-        font-size: 0.8rem;
-        line-height: 1;
+        font-size: 1.2rem; /* Increased font size for better visibility */
+        line-height: 1.2; /* Adjusted line height */
         margin: 1rem auto;
         color: #555;
     }
@@ -835,8 +835,8 @@
       }
       header .header-logo {
           font-size: 4rem;
-          margin-left: 0;
           margin-bottom: 0.5rem;
+          margin-left: 0;
       }
       header nav {
           text-align: center;
@@ -939,6 +939,21 @@
         font-size: 0.9rem; /* Adjusted to be slightly smaller than 1rem */
         padding: 0.6rem 1.2rem; /* Adjusted padding */
       }
+    }
+    /* Social icons in footer */
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 0.75rem;
+      font-size: 1.25rem; /* Explicitly set font size for icons */
+    }
+    /* Featured Product Button Alignment */
+    .featured-product-button-container {
+        display: flex;
+        justify-content: center; /* Center the button horizontally */
+        width: 100%; /* Ensure it takes full width to center effectively */
+        margin-top: 1.5rem; /* Add some space above the button */
     }
   </style>
 </head>
@@ -1061,7 +1076,9 @@
         <p class="font-roboto-condensed text-base mb-4">
           In an era saturated with manufactured narratives, the "Fake News" Hoodie stands as a defiant emblem of critical thought. Crafted for comfort in the coming storm, its bold declaration is a shield against deception and a beacon for those who question. Join the ranks of the discerning.
         </p>
-        <button class="bg-black text-white px-6 py-3 font-bold uppercase hover:bg-gray-800 transition-colors" onclick="window.location.href='product-detail.html?id=p2'">Unveil This Truth</button>
+        <div class="featured-product-button-container">
+            <button class="bg-black text-white px-6 py-3 font-bold uppercase hover:bg-gray-800 transition-colors" onclick="window.location.href='product-detail.html?id=p2'">Unveil This Truth</button>
+        </div>
       </div>
     </div>
   </section>
@@ -1070,37 +1087,37 @@
   <section class="content-section mt-12">
     <h2 class="text-3xl font-anton text-center mb-8">Propaganda Dispatches</h2>
     <div class="propaganda-poster-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div class="propaganda-poster-card">
+      <div class="propaganda-poster-card" onclick="window.location.href='product-detail.html?id=poster1'">
         <div class="image-wrapper">
           <img src="https://i.ibb.co/Yrm6S69/awaken-new-1.webp" alt="Propaganda Poster 1" />
         </div>
         <p class="caption-text">"The Hand of Truth" - Circulated in Sector 7, 2025.</p>
       </div>
-      <div class="propaganda-poster-card">
+      <div class="propaganda-poster-card" onclick="window.location.href='product-detail.html?id=poster2'">
         <div class="image-wrapper">
           <img src="https://i.ibb.co/K1p3Mhr/awakewn-needs-you.webp" alt="Propaganda Poster 2" />
         </div>
         <p class="caption-text">"They Need You Blind" - Found near the Central Spire, 2024.</p>
       </div>
-      <div class="propaganda-poster-card">
+      <div class="propaganda-poster-card" onclick="window.location.href='product-detail.html?id=poster3'">
         <div class="image-wrapper">
           <img src="https://i.ibb.co/N2ZQQh1F/mcga-v8.webp" alt="Propaganda Poster 3" />
         </div>
         <p class="caption-text">"Wake Up Now" - Discovered in the Old World Archives, 2023.</p>
       </div>
-      <div class="propaganda-poster-card">
+      <div class="propaganda-poster-card" onclick="window.location.href='product-detail.html?id=poster4'">
         <div class="image-wrapper">
           <img src="https://i.ibb.co/0pxj2wXM/new-world.png" alt="Propaganda Poster 4" />
         </div>
         <p class="caption-text">"The All-Seeing Eye" - A timeless symbol of vigilance.</p>
       </div>
-      <div class="propaganda-poster-card">
+      <div class="propaganda-poster-card" onclick="window.location.href='product-detail.html?id=poster5'">
         <div class="image-wrapper">
           <img src="https://i.ibb.co/600vhk2J/wake-up.webp" alt="Propaganda Poster 5" />
         </div>
         <p class="caption-text">"Cult of Truth" - Embrace the collective consciousness.</p>
       </div>
-      <div class="propaganda-poster-card">
+      <div class="propaganda-poster-card" onclick="window.location.href='product-detail.html?id=poster6'">
         <div class="image-wrapper">
           <img src="https://i.ibb.co/1jmQJ8X/mmm.png" alt="Propaganda Poster 6" />
         </div>
@@ -1119,14 +1136,12 @@
       <!-- Cart items will be injected here by JavaScript -->
       <p class="empty-cart-message" id="empty-cart-message">
         <pre class="empty-cart-ascii">
-  .------.
- /  o   o \\
-|    ---   |
- \  '---'  /
-  `------'
-  NO ITEMS
-  IN CART
-        </pre>
+  ____|   \  |   _ \ __ __| \ \   / 
+  __|    |\/ |  |   |   |    \   /  
+  |      |   |  ___/    |       |   
+ _____| _|  _| _|      _|      _|   
+            </pre>
+            <p>YOUR CART IS EMPTY.<br>ACQUIRE SOME TRUTH.</p>
       </p>
     </div>
     <div class="cart-summary">
@@ -1469,16 +1484,13 @@
       if (cart.length === 0) {
         // Only append if it's not already there
         if (!cartItemsDiv.querySelector('.empty-cart-message')) {
-            const asciiArt = `
-  .------.
- /  o   o \\
-|    ---   |
- \  '---'  /
-  \`------'
-  NO ITEMS
-  IN CART
-            `;
-            emptyCartMessage.innerHTML = `<pre class="empty-cart-ascii">${asciiArt}</pre>Your cart is empty. Acquire some truth.`;
+            emptyCartMessage.innerHTML = `<pre class="empty-cart-ascii">
+  ____|   \\  |   _ \\ __ __| \\ \\   / 
+  __|    |\\/ |  |   |   |    \\   /  
+  |      |   |  ___/    |       |   
+ _____| _|  _| _|      _|      _|   
+            </pre>
+            <p>YOUR CART IS EMPTY.<br>ACQUIRE SOME TRUTH.</p>`;
             cartItemsDiv.appendChild(emptyCartMessage);
             emptyCartMessage.style.display = 'block';
         }
@@ -1547,7 +1559,6 @@
             // This case should ideally not be hit if handleAddToCart is working correctly
             // but as a fallback, if a product without variants somehow triggers this modal,
             // we can show a default "One Size" button or just directly add it.
-            // For now, let's just log an error and hide the modal.
             console.error("showSizeSelectionModal called for product without variants:", product);
             showCustomAlert("Product has no selectable options.");
             hideSizeSelectionModal();
